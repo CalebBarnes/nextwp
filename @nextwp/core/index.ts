@@ -8,6 +8,7 @@ export { revalidate } from "./src/next-app-functions/revalidate";
 export { NextWordPressPreview } from "./src/draft/draft-route-handler";
 
 // rest api functions
+export { getSiteSettings } from "./src/api/get-site-settings";
 export { getPageData } from "./src/api/get-page-data/get-page-data";
 export { getMenuItems } from "./src/api/get-menu-items";
 export { getSingleItem } from "./src/api/get-single-item";

@@ -1,0 +1,20 @@
+{
+  "name": "@nextwp/stackbit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nextwp/core": "workspace:*",
+    "@stackbit/types": "^0.10.19"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
