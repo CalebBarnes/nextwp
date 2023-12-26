@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   getVersion,
   type ContentSourceInterface,
@@ -7,21 +6,23 @@ import {
   type Document,
   type Asset,
   type Model,
-  ContentChanges,
-  ContentEngineConfig,
-  DocumentVersion,
-  DocumentVersionWithDocument,
-  ScheduledAction,
-  ScheduledActionActionType,
-  UpdateOperation,
-  UpdateOperationField,
-  User,
-  ValidationError,
+  // ContentChanges,
+  // ContentEngineConfig,
+  // DocumentVersion,
+  // DocumentVersionWithDocument,
+  // ScheduledAction,
+  // ScheduledActionActionType,
+  // UpdateOperation,
+  // UpdateOperationField,
+  // User,
+  // ValidationError,
 } from "@stackbit/types";
 import { getSiteSettings } from "./api/get-site-settings";
 import { getAllItems } from "./api/get-all-items";
 import { getPostTypes } from "./api/get-post-types";
 import { convertPostStatusToDocumentStatus } from "./utils/convert-post-status";
+import { getAuthHeaders } from "./api/get-auth-headers";
+import { generateStackbitFieldsFromACF } from "./utils/generate-stackbit-acf-fields";
 
 interface DocumentContext {
   customProp: string;
@@ -110,14 +111,24 @@ export class WpContentSource
 
     for (const key in postTypes) {
       if (this.postTypes.includes(postTypes[key].rest_base)) {
-        activePostTypes.push(postTypes[key]);
+        const sampleItem = await fetch(
+          `${this.wpUrl}/wp-json/wp/v2/${postTypes[key].rest_base}?per_page=1&acf_format=standard`,
+          {
+            method: "OPTIONS",
+            headers: getAuthHeaders(this.wpApplicationPassword),
+          }
+        );
+
+        const sampleItemData = await sampleItem.json();
+        const acfStackbitFields = generateStackbitFieldsFromACF(sampleItemData);
+
+        activePostTypes.push({ ...postTypes[key], acfStackbitFields });
       }
     }
 
     const models: Model[] = activePostTypes?.map((item) => {
       return {
         name: item.slug,
-        // @ts-expect-error -- asdasd
         label: item.labels?.singular_name || item.rest_base,
         type: "page",
         urlPath: `{id}`,
@@ -133,6 +144,32 @@ export class WpContentSource
             readOnly: true,
             label: "Url Path",
           },
+          ...item.acfStackbitFields,
+          // {
+          //   type: "list",
+          //   name: "blocks",
+          //   label: "Blocks",
+          //   items: {
+          //     type: "object",
+          //     fields: [
+          //       {
+          //         type: "string",
+          //         name: "title",
+          //         label: "Title",
+          //       },
+          //       {
+          //         type: "string",
+          //         name: "content",
+          //         label: "Content",
+          //       },
+          //       {
+          //         type: "string",
+          //         name: "image",
+          //         label: "Image",
+          //       },
+          //     ],
+          //   },
+          // },
         ],
       };
     });
