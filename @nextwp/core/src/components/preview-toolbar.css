@@ -1,0 +1,139 @@
+.previewToolbar {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 0 10px 10px 0;
+}
+
+.previewToolbar > .icon-button {
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+.previewToolbar > .icon-button:hover {
+  background-color: #ddd;
+}
+
+.preview-tooltip-exit-draft-mode {
+  position: relative;
+}
+
+.preview-tooltip-exit-draft-mode:hover::after {
+  display: block;
+}
+
+.preview-tooltip-exit-draft-mode::after {
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+  background-color: #333;
+  border-radius: 10px;
+  color: #fff;
+  display: none;
+  padding: 10px 15px;
+  position: absolute;
+  text-align: center;
+  z-index: 999;
+  width: 150px;
+}
+
+.preview-tooltip-exit-draft-mode.right::after {
+  content: "Exit draft mode";
+  top: 0;
+  right: 0;
+  transform: translateX(calc(100% + 10px));
+}
+
+.preview-tooltip-edit-page {
+  position: relative;
+}
+
+.preview-tooltip-edit-page:hover::after {
+  display: block;
+}
+
+.preview-tooltip-edit-page::after {
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+  background-color: #333;
+  border-radius: 10px;
+  color: #fff;
+  display: none;
+  padding: 10px 15px;
+  position: absolute;
+  text-align: center;
+  z-index: 999;
+  width: 150px;
+}
+
+.preview-tooltip-edit-page.right::after {
+  content: "Edit page";
+  top: 0;
+  right: 0;
+  transform: translateX(calc(100% + 10px));
+}
+
+.preview-tooltip-no-content-warning {
+  position: relative;
+  color: red;
+  /* animate over 300ms 3 times */
+  /* animation: tilt-n-move-shaking 300ms 3; */
+  animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+.preview-tooltip-no-content-warning:hover::after {
+  display: block;
+}
+
+.preview-tooltip-no-content-warning::after {
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+  background-color: #333;
+  border-radius: 10px;
+  color: #fff;
+  display: none;
+  padding: 10px 15px;
+  position: absolute;
+  text-align: center;
+  z-index: 999;
+  width: 300px;
+}
+
+.preview-tooltip-no-content-warning.right::after {
+  content: "No preview data found for this page. Try clicking preview again and check that post revisions are enabled in your WordPress site.";
+  top: 0;
+  right: 0;
+  transform: translateX(calc(100% + 10px));
+}
+
+@keyframes shake-horizontal {
+  0%,
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+    -webkit-transform: translateX(-5px);
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60% {
+    -webkit-transform: translateX(5px);
+    transform: translateX(5px);
+  }
+  80% {
+    -webkit-transform: translateX(5px);
+    transform: translateX(5px);
+  }
+  90% {
+    -webkit-transform: translateX(-5px);
+    transform: translateX(-5px);
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter next-wordpress-starter dev",
+    "build": "pnpm --filter next-wordpress-starter build",
+    "start": "pnpm --filter next-wordpress-starter start"
+  }
+}
