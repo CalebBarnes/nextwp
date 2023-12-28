@@ -8,14 +8,13 @@ type OptionsPageResponse = {
 
 /**
  * Get an options page from WordPress.
- * This function requires the '@nextwp/core Next WP' plugin to be installed and activated on your WordPress site.
+ * This function requires the 'NextWP - Toolkit' plugin to be installed and activated on your WordPress site.
  * The user for the 'WP_APPLICATION_PASSWORD' environment variable must also have administrator permissions.
  *
  * @example
  * ```ts
  * const options = await getOptionsPage({ slug: "theme-options" });
  * ```
- * @see https://github.com/@nextwp/core/@nextwp/core-next-wp-plugin for more information.
  */
 export async function getOptionsPage(
   args: {
@@ -39,7 +38,7 @@ You can generate an application password in your WordPress admin under Users > Y
   }
 
   const req = await fetch(
-    `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/@nextwp/core/v1/options/${slug}`,
+    `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/nextwp/v1/options/${slug}`,
     {
       headers: getAuthHeaders(),
     }
@@ -72,10 +71,10 @@ ${msg}`);
   return data;
 }
 
-const msg = `'getOptionsPage' requires the '@nextwp/core Next WP' plugin to be installed and activated on your WordPress site.
+const msg = `'getOptionsPage' requires the 'NextWP - Toolkit' plugin to be installed and activated on your WordPress site.
 
 The user for the 'WP_APPLICATION_PASSWORD' environment variable must also have administrator permissions.
 
-See https://github.com/@nextwp/core/@nextwp/core-next-wp-plugin for more information.
+See https://github.com/CalebBarnes/nextwp for more information.
 
 `;
