@@ -1,8 +1,23 @@
 # @nextwp/core
 
-Welcome to `@nextwp/core` v2. This package facilitates building Next.js sites using headless WordPress as the CMS.
+Welcome to `@nextwp/core`
 
-It is built on the WP REST API and has additional functions designed to work with the [@nextwp/core Headless WordPress plugin](https://github.com/@nextwp/core/@nextwp/core-next-wp-plugin).
+This package facilitates building Next.js sites using headless WordPress as the CMS.
+
+It is built on the WP REST API and has additional functions designed to work with the [NextWP - Headless Toolkit](https://github.com/CalebBarnes/nextwp/@nextwp/wp-plugin) WordPress plugin.
+
+Why use the REST API instead of GraphQL?
+@todo: write about this - link to another page
+
+- simplicity
+- reliability
+- performance
+- caching
+- ease of use
+- familiarity
+- extensibility - most WP plugins support REST API by default
+- GraphQL is not a standard in WP
+- GraphQL is not good by default in Next.js app dir - REST API GET requests are cached by default in Next.js RSC
 
 ## Features
 
@@ -10,25 +25,31 @@ It is built on the WP REST API and has additional functions designed to work wit
 - **Enhanced Caching**: GET requests are cached at the WP server and in NextJS.
 - **Speedy Development**: Reduces development time by eliminating the need for writing extensive queries.
 
+## WordPress Theme
+
+The easiest way to get started is to install [NextWP Headless Theme](https://github.com/CalebBarnes/nextwp/@nextwp/wp-theme) in your WordPress site. This will install the required plugins and offer optional recommended plugins to improve the headless WP experience.
+
 ## Prerequisites
 
-Before you begin, ensure you have the following WordPress plugins installed:
+Ensure you have the following WordPress plugins installed:
 
 - **Advanced Custom Fields PRO**: Enables custom fields in WordPress.
 - **Yoast SEO**: Provides SEO features for WordPress sites.
-- **@nextwp/core Next WP Plugin**: Essential for CMS previews in NextJS. [Plugin link](https://github.com/@nextwp/core/@nextwp/core-next-wp-plugin)
+- **NextWP - Headless Toolkit**: Essential for CMS previews in NextJS. [Plugin link](https://github.com/CalebBarnes/nextwp/@nextwp/wp-plugin)
 
 ## Installation
 
-Install `@nextwp/core@beta` via npm:
+Install `@nextwp/core` in your Next.js project:
 
 ```bash
-npm install @nextwp/core@beta
+npm install @nextwp/core
 ```
 
 ## Quick Start
 
-Here's a basic example to get started:
+The fastest way to get up and running is to start a new project with the [next-wordpress-starter](https://github.com/CalebBarnes/nextwp/examples/next-wordpress-starter) project in the examples folder.
+
+Here's a basic example to get started in an existing project:
 
 ```tsx
 // src/app/[[...paths]]/page.tsx
@@ -61,6 +82,8 @@ The following environment variables are required for configuring `@nextwp/core`:
 - `NEXT_PREVIEW_SECRET`: The secret key for preview mode.
 
 Make sure to set these environment variables in your project's configuration.
+
+@todo: move some of this stuff below over to other docs files and link to them instead
 
 ## Usage
 
@@ -177,7 +200,7 @@ export { revalidate as PUT } from "@nextwp/core";
 
 Handles preview routes in Next.js draft mode to preview changes to WordPress content instantly.
 
-⚠ This draft mode function is used with the [@nextwp/core Headless WordPress plugin](https://github.com/@nextwp/core/@nextwp/core-next-wp-plugin) to replace the default WordPress preview with an iframe of the Next.js preview route.
+⚠ This draft mode function is used with the [NextWP - Headless Toolkit](https://github.com/CalebBarnes/nextwp/@nextwp/wp-plugin) to replace the default WordPress preview with an iframe of the Next.js preview route.
 
 - **Parameters**:
   - `request`: Request - The request object.
@@ -241,7 +264,7 @@ Retrieves menu items from a WordPress site.
 
 Fetches data from an options page created in WordPress.
 
-⚠ This function requires the [@nextwp/core Headless WordPress plugin](https://github.com/@nextwp/core/@nextwp/core-next-wp-plugin) to register the REST API endpoint for fetching options pages.
+⚠ This function requires the [NextWP - Headless Toolkit](https://github.com/CalebBarnes/nextwp/@nextwp/wp-plugin) to register the REST API endpoint for fetching options pages.
 
 - **Parameters**:
   - `slug`: `String` - The slug of the options page.
@@ -305,9 +328,3 @@ A component for rendering WordPress templates in a Next.js app.
 
   export { generateMetadata, generateStaticParams } from "@nextwp/core";
   ```
-
-### Deprecated Functions
-
-#### `getData` and `getSeedData`
-
-These functions have been deprecated and removed in v2. Please use `getPageData` instead. They were removed due to the migration to REST API from GraphQL.
