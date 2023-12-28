@@ -1,7 +1,12 @@
 # @nextwp/core
+<img width="1104" alt="image" src="https://github.com/CalebBarnes/nextwp/assets/24890515/cbecbc2a-e170-41a1-a0a6-2d3f3e69f1d8">
 
-Welcome to `@nextwp/core`
+[![npm version](https://badge.fury.io/js/@nextwp%2Fcore.svg)](https://badge.fury.io/js/@nextwp%2Fcore) ![npm](https://img.shields.io/npm/dw/@nextwp%2Fcore)
 
+# Welcome to NextWP
+A new era for WordPress development
+
+### What does it do? 
 This package facilitates building Next.js sites using headless WordPress as the CMS.
 
 It is built on the WP REST API and has additional functions designed to work with the [NextWP - Headless Toolkit](https://github.com/CalebBarnes/nextwp/@nextwp/wp-plugin) WordPress plugin.
@@ -19,7 +24,7 @@ Why use the REST API instead of GraphQL?
 - GraphQL is not a standard in WP
 - GraphQL is not good by default in Next.js app dir - REST API GET requests are cached by default in Next.js RSC
 
-## Features
+## Key Features
 
 - **WP REST API Integration**: Leverages WP REST API for optimized performance.
 - **Enhanced Caching**: GET requests are cached at the WP server and in NextJS.
