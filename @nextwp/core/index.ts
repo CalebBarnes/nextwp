@@ -13,7 +13,7 @@ export { getPageData } from "./src/api/get-page-data/get-page-data";
 export { getMenuItems } from "./src/api/get-menu-items";
 export { getSingleItem } from "./src/api/get-single-item";
 
-// custom rest api functions implemented in @nextwp/core-next-wp-plugin v2.1.0 (https://github.com/@nextwp/core/@nextwp/core-next-wp-plugin)
+// custom rest endpoints - registered by the 'NextWP - Toolkit' wp plugin (@nextwp/wp-plugin)
 export { getOptionsPage } from "./src/api/get-options-page";
 
 // react components
