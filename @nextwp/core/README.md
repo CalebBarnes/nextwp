@@ -1,6 +1,8 @@
 # @nextwp/core
 <img width="1104" alt="image" src="https://github.com/CalebBarnes/nextwp/assets/24890515/cbecbc2a-e170-41a1-a0a6-2d3f3e69f1d8">
 
+[![npm version](https://badge.fury.io/js/@nextwp%2Fcore.svg)](https://badge.fury.io/js/@nextwp%2Fcore) ![npm](https://img.shields.io/npm/dw/@nextwp%2Fcore)
+
 # Welcome to NextWP
 A new era for WordPress development
 
