@@ -8,7 +8,7 @@ export function RouteParamsDebug(props: {
 
   return (
     <div className="bg-red-500">
-      <h1>Route Params</h1>
+      <h3>Route Params</h3>
 
       <span>
         uri: <code>{uri}</code>
