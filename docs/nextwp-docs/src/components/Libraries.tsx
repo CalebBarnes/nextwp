@@ -196,14 +196,14 @@ const plugins = [
     href: '#',
     name: 'NextWP Headless Theme',
     description:
-      'A NextJS theme for headless WordPress sites built with NextWP.',
+      'A WordPress theme with some good defaults that automatically installs the recommended headless plugins.',
     logo: logoPhp,
   },
   {
     href: '#',
-    name: 'NextWP Headless Theme',
+    name: 'NextWP Toolkit',
     description:
-      'A NextJS theme for headless WordPress sites built with NextWP.',
+      'A WordPress plugin that adds NextWP specific features to your WordPress site.',
     logo: logoPhp,
   },
 ]
