@@ -1,0 +1,28 @@
+
+> @nextwp/stackbit@1.0.0 build /Users/caleb/cookie-work/nextwp/packages/stackbit-wp
+> tsc
+
+../../node_modules/.pnpm/content-engine@0.0.19/node_modules/content-engine/dist/reporter/reporter.d.ts(26,25): error TS7016: Could not find a declaration file for module 'common-tags'. '/Users/caleb/cookie-work/nextwp/node_modules/.pnpm/common-tags@1.8.2/node_modules/common-tags/lib/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/common-tags` if it exists or add a new declaration (.d.ts) file containing `declare module 'common-tags';`
+../core/index.ts(20,33): error TS6142: Module './src/components/flexible-content' was resolved to '/Users/caleb/cookie-work/nextwp/packages/core/src/components/flexible-content.tsx', but '--jsx' is not set.
+../core/index.ts(21,35): error TS6142: Module './src/components/wordpress-template' was resolved to '/Users/caleb/cookie-work/nextwp/packages/core/src/components/wordpress-template.tsx', but '--jsx' is not set.
+../core/src/api/get-items.ts(21,7): error TS7034: Variable 'allData' implicitly has type 'any[]' in some locations where its type cannot be determined.
+../core/src/api/get-items.ts(31,45): error TS2345: Argument of type '{ per_page: string; page: number; }' is not assignable to parameter of type 'string | Record<string, string> | URLSearchParams | string[][] | undefined'.
+  Type '{ per_page: string; page: number; }' is not assignable to type 'Record<string, string>'.
+    Property 'page' is incompatible with index signature.
+      Type 'number' is not assignable to type 'string'.
+../core/src/api/get-items.ts(55,17): error TS7005: Variable 'allData' implicitly has an 'any[]' type.
+../core/src/api/get-menu-items.ts(75,65): error TS18046: 'err' is of type 'unknown'.
+../core/src/api/get-menu-items.ts(114,60): error TS18046: 'err' is of type 'unknown'.
+../core/src/api/get-menu-items.ts(146,9): error TS18048: 'parentItem.childItems' is possibly 'undefined'.
+../core/src/api/get-options-page.ts(67,58): error TS18046: 'err' is of type 'unknown'.
+../core/src/api/get-page-data/get-archive-page.ts(1,35): error TS6142: Module '../../components/wordpress-template' was resolved to '/Users/caleb/cookie-work/nextwp/packages/core/src/components/wordpress-template.tsx', but '--jsx' is not set.
+../core/src/api/get-page-data/get-page-data.ts(2,35): error TS6142: Module '../../components/wordpress-template' was resolved to '/Users/caleb/cookie-work/nextwp/packages/core/src/components/wordpress-template.tsx', but '--jsx' is not set.
+../core/src/next-app-functions/generate-meta-data.ts(53,11): error TS2339: Property 'page' does not exist on type 'WpPage | ArchivePageData'.
+  Property 'page' does not exist on type 'WpPage'.
+../core/src/next-app-functions/generate-meta-data.ts(54,14): error TS2339: Property 'yoast_head_json' does not exist on type 'PostType'.
+../core/src/next-app-functions/generate-meta-data.ts(69,53): error TS7006: Parameter 'ogImg' implicitly has an 'any' type.
+../core/src/next-app-functions/revalidate.ts(32,51): error TS18046: 'err' is of type 'unknown'.
+src/wp-content-source.ts(22,14): error TS2420: Class 'WpContentSource' incorrectly implements interface 'ContentSourceInterface<SchemaContext, DocumentContext, unknown, unknown, unknown>'.
+  Type 'WpContentSource' is missing the following properties from type 'ContentSourceInterface<SchemaContext, DocumentContext, unknown, unknown, unknown>': getProjectEnvironment, reset, destroy, hasAccess, and 6 more.
+ ELIFECYCLE  Command failed with exit code 2.
