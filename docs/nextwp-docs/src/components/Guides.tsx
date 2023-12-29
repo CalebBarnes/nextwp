@@ -3,27 +3,32 @@ import { Heading } from '@/components/Heading'
 
 const guides = [
   {
-    href: '/authentication',
-    name: 'Authentication',
-    description: 'Learn how to authenticate your API requests.',
+    href: '/quickstart',
+    name: 'Quickstart',
+    description: 'Get up and running with NextWP in minutes.',
   },
   {
-    href: '/pagination',
-    name: 'Pagination',
-    description: 'Understand how to work with paginated responses.',
+    href: '/packages',
+    name: 'Packages',
+    description: 'Learn about the NextWP packages.',
   },
-  {
-    href: '/errors',
-    name: 'Errors',
-    description:
-      'Read about the different types of errors returned by the API.',
-  },
-  {
-    href: '/webhooks',
-    name: 'Webhooks',
-    description:
-      'Learn how to programmatically configure webhooks for your app.',
-  },
+  // {
+  //   href: '/pagination',
+  //   name: 'Pagination',
+  //   description: 'Understand how to work with paginated responses.',
+  // },
+  // {
+  //   href: '/errors',
+  //   name: 'Errors',
+  //   description:
+  //     'Read about the different types of errors returned by the API.',
+  // },
+  // {
+  //   href: '/webhooks',
+  //   name: 'Webhooks',
+  //   description:
+  //     'Learn how to programmatically configure webhooks for your app.',
+  // },
 ]
 
 export function Guides() {

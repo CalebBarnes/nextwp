@@ -162,7 +162,6 @@ const libraries = [
     name: '@nextwp/stackbit',
     description:
       'A WordPress content source interface that allows you to use the Stackbit Visual Editor with WordPress.',
-    // logo: logoNode,
     svg: (
       <svg
         className="logo"
