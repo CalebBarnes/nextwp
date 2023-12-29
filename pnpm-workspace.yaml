@@ -1,4 +1,3 @@
 packages:
-  - "@nextwp/core"
-  - "@nextwp/stackbit"
-  - "examples/next-wordpress-starter"
+  - "apps/*"
+  - "packages/*"

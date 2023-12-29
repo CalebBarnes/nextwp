@@ -1,0 +1,18 @@
+{
+  "extends": ["//"],
+  "pipeline": {
+    "dev": {
+      "cache": false
+    },
+    "build": {
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": [
+        "NEXT_PUBLIC_WP_URL",
+        "NEXT_SITE_URL",
+        "REVALIDATE_SECRET_KEY",
+        "WP_APPLICATION_PASSWORD",
+        "NEXT_PREVIEW_SECRET"
+      ]
+    }
+  }
+}
