@@ -1,0 +1,22 @@
+{
+  "name": "@nextwp/addons",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "pnpm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "0.0.0-experimental-c5b937576-20231219",
+    "react-dom": "0.0.0-experimental-c5b937576-20231219"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.10",
+    "@types/react": "^18.2.33",
+    "@types/react-dom": "^18.2.14"
+  }
+}

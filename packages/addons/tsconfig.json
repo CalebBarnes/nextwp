@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "es5",
+    "jsx": "react",
+    "strict": true,
+    "moduleResolution": "node"
+  },
+  "types": ["react-dom/experimental"],
+  "include": ["src"]
+}

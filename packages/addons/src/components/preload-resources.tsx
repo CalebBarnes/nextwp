@@ -1,6 +1,7 @@
 "use client";
+
 import type { PreloadAs } from "react-dom";
-import ReactDOM from "react-dom";
+import * as ReactDOM from "react-dom";
 
 interface Resource {
   /**
@@ -13,19 +14,20 @@ interface Resource {
    * "video"
    * <link rel="preload" href="https://example.com/video.mp4" as="video" />
    */
-  as:
-    | "object"
-    | "audio"
-    | "document"
-    | "embed"
-    | "fetch"
-    | "font"
-    | "image"
-    | "track"
-    | "script"
-    | "style"
-    | "video"
-    | "worker";
+  as: PreloadAs;
+  // as:
+  //   | "object"
+  //   | "audio"
+  //   | "document"
+  //   | "embed"
+  //   | "fetch"
+  //   | "font"
+  //   | "image"
+  //   | "track"
+  //   | "script"
+  //   | "style"
+  //   | "video"
+  //   | "worker";
 
   /**
    * The fetch priority of the resource.
@@ -36,7 +38,7 @@ interface Resource {
 export function PreloadResources({ resources }: { resources: Resource[] }) {
   for (const resource of resources) {
     ReactDOM.preload(resource.href, {
-      as: resource.as as PreloadAs,
+      as: resource.as,
       fetchPriority: resource.fetchPriority || "high",
     });
   }

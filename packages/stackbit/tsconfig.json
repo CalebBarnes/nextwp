@@ -5,6 +5,6 @@
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "noEmitOnError": false
+    "noEmitOnError": true
   }
 }
