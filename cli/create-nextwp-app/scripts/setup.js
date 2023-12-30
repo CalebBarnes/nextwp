@@ -42,8 +42,8 @@ try {
     console.log("destFile: ", destFile);
   }
 
-  if (fs.existsSync(destFile)) {
-    fs.unlinkSync(destFile);
+  if (fs.existsSync("./bin/create-nextwp-app")) {
+    fs.unlinkSync("./bin/create-nextwp-app");
   }
 
   fs.copyFileSync(sourceFile, destFile);
