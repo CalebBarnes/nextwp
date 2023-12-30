@@ -33,7 +33,7 @@ func main() {
 				}
 			}
 
-			fmt.Printf("Creating project: %s\n", projectName)
+			fmt.Printf("Initializing nextwp project: %s\n", projectName)
 
 			// Check if the WORKING_DIR environment variable is set
 			workingDir := os.Getenv("WORKING_DIR")
@@ -50,7 +50,6 @@ func main() {
 			projectDir := fmt.Sprintf("%s/%s", workingDir, projectName)
 
 			cmd := exec.Command("git", "clone", "--depth", "1", "--filter=blob:none", repoURL, projectDir)
-			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 			if err := cmd.Run(); err != nil {
 				return err
@@ -70,7 +69,6 @@ func main() {
 
 			// remove the old .git directory
 			cmd = exec.Command("rm", "-rf", ".git")
-			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 			if err := cmd.Run(); err != nil {
 				return err
@@ -78,23 +76,21 @@ func main() {
 
 			// make temp dir
 			cmd = exec.Command("mkdir", "temp")
-			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 			if err := cmd.Run(); err != nil {
 				return err
 			}
 
 			// list the contents of the new project directory
-			cmd = exec.Command("ls", "-la")
-			cmd.Stdout = os.Stdout
-			cmd.Stderr = os.Stderr
-			if err := cmd.Run(); err != nil {
-				return err
-			}
+			// cmd = exec.Command("ls", "-la")
+			// cmd.Stdout = os.Stdout
+			// cmd.Stderr = os.Stderr
+			// if err := cmd.Run(); err != nil {
+			// 	return err
+			// }
 
 			// move subdirectory dir to root/temp
 			cmd = exec.Command("sh", "-c", "mv "+starterProjectSubDir+"/* temp/")
-			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 			if err := cmd.Run(); err != nil {
 				return err
@@ -102,7 +98,6 @@ func main() {
 
 			// remove all files from project root except for temp dir
 			cmd = exec.Command("find", ".", "!", "-name", ".", "-prune", "!", "-name", "temp", "-exec", "rm", "-rf", "{}", "+")
-			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 			if err := cmd.Run(); err != nil {
 				return err
@@ -110,7 +105,6 @@ func main() {
 
 			// move temp files to project root, and then delete temp dir
 			cmd = exec.Command("sh", "-c", "mv temp/* . && rm -rf temp")
-			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 			if err := cmd.Run(); err != nil {
 				return err
@@ -118,15 +112,30 @@ func main() {
 
 			// update package.json name
 			cmd = exec.Command("sh", "-c", "sed -i '' 's/next-wordpress-starter/"+projectName+"/g' package.json")
+			cmd.Stderr = os.Stderr
+			if err := cmd.Run(); err != nil {
+				return err
+			}
+
+			// log the location of the new project
+			fmt.Printf("Initialized project at: %s\n", projectDir)
+			fmt.Println("cd " + projectName)
+
+			// init new git repo
+			cmd = exec.Command("git", "init")
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 			if err := cmd.Run(); err != nil {
 				return err
 			}
 
-			// init new git repo
-			cmd = exec.Command("git", "init")
-			cmd.Stdout = os.Stdout
+			cmd = exec.Command("git", "add", ".")
+			cmd.Stderr = os.Stderr
+			if err := cmd.Run(); err != nil {
+				return err
+			}
+
+			cmd = exec.Command("git", "commit", "-m", "Initial commit")
 			cmd.Stderr = os.Stderr
 			if err := cmd.Run(); err != nil {
 				return err

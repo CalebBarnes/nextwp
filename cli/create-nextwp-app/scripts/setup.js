@@ -2,16 +2,19 @@ const os = require("os");
 const fs = require("fs");
 
 try {
-  console.log("Current Working Directory:", process.cwd());
-  console.log("Current Directory:", __dirname);
+  const verbose = process.argv.includes("--verbose");
+  if (verbose) {
+    console.log("Current Working Directory:", process.cwd());
+    console.log("Current Directory:", __dirname);
+    console.log("os Platform: ", os.platform());
+  }
+
   if (!fs.existsSync("./bin")) {
     fs.mkdirSync("./bin");
   }
 
   let sourceFile;
   let destFile;
-
-  console.log("os Platform: ", os.platform());
 
   switch (os.platform()) {
     case "darwin":
@@ -33,14 +36,14 @@ try {
       process.exit(1);
   }
 
-  console.log("Copying binary for", os.platform());
-  console.log("sourceFile: ", sourceFile);
-  console.log("destFile: ", destFile);
+  if (verbose) {
+    console.log("Copying binary for", os.platform());
+    console.log("sourceFile: ", sourceFile);
+    console.log("destFile: ", destFile);
+  }
 
   fs.copyFileSync(sourceFile, destFile);
-  console.log("Copied binary for", os.platform());
   fs.chmodSync(destFile, "755");
-  console.log("Changed permissions for", os.platform());
 } catch (error) {
   console.error("Error:", error);
   process.exit(1);
