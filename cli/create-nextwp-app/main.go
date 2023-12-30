@@ -81,14 +81,6 @@ func main() {
 				return err
 			}
 
-			// list the contents of the new project directory
-			// cmd = exec.Command("ls", "-la")
-			// cmd.Stdout = os.Stdout
-			// cmd.Stderr = os.Stderr
-			// if err := cmd.Run(); err != nil {
-			// 	return err
-			// }
-
 			// move subdirectory dir to root/temp
 			cmd = exec.Command("sh", "-c", "mv "+starterProjectSubDir+"/* temp/")
 			cmd.Stderr = os.Stderr
