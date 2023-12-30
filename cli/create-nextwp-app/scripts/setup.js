@@ -2,6 +2,10 @@ const os = require("os");
 const fs = require("fs");
 
 try {
+  if (!fs.existsSync("./bin")) {
+    fs.mkdirSync("./bin");
+  }
+
   let sourceFile;
   let destFile;
 
