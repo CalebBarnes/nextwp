@@ -5,7 +5,8 @@
   "bin": "./dist/create-nextwp-app",
   "scripts": {
     "dev": "air",
-    "build": "go build -o ./dist/create-nextwp-app"
+    "build": "go build -o ./dist/create-nextwp-app",
+    "prepublish": "npm run build"
   },
   "keywords": [],
   "author": "",
