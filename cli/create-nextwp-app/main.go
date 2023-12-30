@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/urfave/cli/v2"
@@ -68,44 +69,72 @@ func main() {
 			fmt.Printf("Current working directory: %s\n", cwd)
 
 			// remove the old .git directory
-			cmd = exec.Command("rm", "-rf", ".git")
-			cmd.Stderr = os.Stderr
-			if err := cmd.Run(); err != nil {
+			if err := os.RemoveAll(".git"); err != nil {
 				return err
 			}
 
 			// make temp dir
-			cmd = exec.Command("mkdir", "temp")
-			cmd.Stderr = os.Stderr
-			if err := cmd.Run(); err != nil {
+			if err := os.Mkdir("temp", 0755); err != nil {
 				return err
 			}
 
 			// move subdirectory dir to root/temp
-			cmd = exec.Command("sh", "-c", "mv "+starterProjectSubDir+"/* temp/")
-			cmd.Stderr = os.Stderr
-			if err := cmd.Run(); err != nil {
+			files, err := os.ReadDir(starterProjectSubDir)
+			if err != nil {
 				return err
+			}
+			for _, file := range files {
+				oldPath := filepath.Join(starterProjectSubDir, file.Name())
+				newPath := filepath.Join("temp", file.Name())
+				err := os.Rename(oldPath, newPath)
+				if err != nil {
+					return err
+				}
 			}
 
 			// remove all files from project root except for temp dir
-			cmd = exec.Command("find", ".", "!", "-name", ".", "-prune", "!", "-name", "temp", "-exec", "rm", "-rf", "{}", "+")
-			cmd.Stderr = os.Stderr
-			if err := cmd.Run(); err != nil {
+			files, err = os.ReadDir(".")
+			if err != nil {
 				return err
+			}
+			for _, file := range files {
+				if file.Name() != "temp" {
+					err := os.RemoveAll(file.Name())
+					if err != nil {
+						return err
+					}
+				}
 			}
 
 			// move temp files to project root, and then delete temp dir
-			cmd = exec.Command("sh", "-c", "mv temp/* . && rm -rf temp")
-			cmd.Stderr = os.Stderr
-			if err := cmd.Run(); err != nil {
+			files, err = os.ReadDir("temp")
+			if err != nil {
+				return err
+			}
+			for _, file := range files {
+				oldPath := filepath.Join("temp", file.Name())
+				newPath := filepath.Join(".", file.Name())
+				err := os.Rename(oldPath, newPath)
+				if err != nil {
+					return err
+				}
+			}
+			err = os.RemoveAll("temp")
+			if err != nil {
 				return err
 			}
 
 			// update package.json name
-			cmd = exec.Command("sh", "-c", "sed -i '' 's/next-wordpress-starter/"+projectName+"/g' package.json")
-			cmd.Stderr = os.Stderr
-			if err := cmd.Run(); err != nil {
+			// Read the file
+			content, err := os.ReadFile("package.json")
+			if err != nil {
+				return err
+			}
+			// Replace the string
+			newContent := strings.Replace(string(content), "next-wordpress-starter", projectName, -1)
+			// Write the updated content back to the file
+			err = os.WriteFile("package.json", []byte(newContent), 0644)
+			if err != nil {
 				return err
 			}
 
