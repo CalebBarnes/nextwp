@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "turbo run dev --scope='next-wordpress-starter'",
+    "dev:docs": "turbo run dev --scope='nextwp-docs'",
     "build": "turbo run build --scope='next-wordpress-starter'",
     "start": "turbo run start",
     "stackbit-dev": "pnpm --filter next-wordpress-starter stackbit-dev"
