@@ -1,12 +1,13 @@
 {
   "name": "create-nextwp-app",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "",
-  "bin": "./dist/create-nextwp-app",
+  "bin": "./bin/create-nextwp-app",
   "scripts": {
     "dev": "air",
-    "build": "go build -o ./dist/create-nextwp-app",
-    "prepublish": "npm run build"
+    "build": "GOOS=darwin GOARCH=amd64 go build -o ./dist/create-nextwp-app-mac && GOOS=linux GOARCH=amd64 go build -o ./dist/create-nextwp-app-linux && GOOS=windows GOARCH=amd64 go build -o ./dist/create-nextwp-app.exe",
+    "prepublish": "npm run build",
+    "postinstall": "node ./scripts/setup.js"
   },
   "keywords": [],
   "author": "",
