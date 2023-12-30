@@ -2,6 +2,8 @@ const os = require("os");
 const fs = require("fs");
 
 try {
+  console.log("Current Working Directory:", process.cwd());
+  console.log("Current Directory:", __dirname);
   if (!fs.existsSync("./bin")) {
     fs.mkdirSync("./bin");
   }
