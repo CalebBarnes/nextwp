@@ -1,0 +1,15 @@
+{
+  "name": "go-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "air",
+    "build": "go build -o ./dist/ai-dev",
+    "start": "pnpm run build && ./dist/ai-dev --service openai init"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "swpm": "pnpm"
+}
