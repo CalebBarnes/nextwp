@@ -28,7 +28,7 @@ try {
       break;
     case "win32":
       sourceFile = "./dist/create-nextwp-app.exe";
-      destFile = "./bin/create-nextwp-app.exe";
+      destFile = "./bin/create-nextwp-app";
 
       break;
     default:
