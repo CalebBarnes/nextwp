@@ -42,6 +42,10 @@ try {
     console.log("destFile: ", destFile);
   }
 
+  if (fs.existsSync(destFile)) {
+    fs.unlinkSync(destFile);
+  }
+
   fs.copyFileSync(sourceFile, destFile);
   fs.chmodSync(destFile, "755");
 } catch (error) {
