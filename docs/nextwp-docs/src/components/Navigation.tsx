@@ -243,6 +243,27 @@ export const navigation: Array<NavGroup> = [
     ],
   },
   {
+    title: 'Packages',
+    links: [
+      { title: '@nextwp/core', href: '/packages/nextwp/core' },
+      { title: '@nextwp/addons', href: '/packages/nextwp/addons' },
+      { title: '@nextwp/stackbit', href: '/packages/nextwp/stackbit' },
+    ],
+  },
+  {
+    title: 'WordPress Plugins',
+    links: [
+      {
+        title: 'NextWP Headless Theme',
+        href: '/packages/wordpress/nextwp-headless-theme',
+      },
+      {
+        title: 'NextWP Toolkit',
+        href: '/packages/wordpress/nextwp-toolkit-plugin',
+      },
+    ],
+  },
+  {
     title: 'Reference',
     links: [
       { title: 'Contacts', href: '/contacts' },
