@@ -20,8 +20,6 @@ func main() {
 		Usage: "Create a new NextWP project",
 		Action: func(c *cli.Context) error {
 			projectName := c.Args().First()
-			fmt.Printf("Project name: %s\n", projectName)
-
 			if projectName == "" {
 				fmt.Print("Enter your project name: ")
 				reader := bufio.NewReader(os.Stdin)
