@@ -40,7 +40,12 @@ func main() {
 			// Check if the WORKING_DIR environment variable is set
 			workingDir := os.Getenv("WORKING_DIR")
 			if workingDir == "" {
-				return fmt.Errorf("WORKING_DIR environment variable is not set")
+				// If not, use the current working directory
+				cwd, err := os.Getwd()
+				if err != nil {
+					return err
+				}
+				workingDir = cwd
 			}
 
 			// Create a path for the new project directory

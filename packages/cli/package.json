@@ -1,15 +1,13 @@
 {
-  "name": "go-cli",
+  "name": "create-nextwp-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "bin": "./dist/create-nextwp-app",
   "scripts": {
     "dev": "air",
-    "build": "go build -o ./dist/ai-dev",
-    "start": "pnpm run build && ./dist/ai-dev --service openai init"
+    "build": "go build -o ./dist/create-nextwp-app"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "swpm": "pnpm"
+  "license": "ISC"
 }
