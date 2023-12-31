@@ -11,7 +11,13 @@ React components for rendering Wordpress data.
 
 A component for rendering Wordpress pages.
 
-Add to an existing project with the cli
+You can quickly add WordpressTemplate to an existing project with the cli tool
+
+<div className="not-prose">
+  <Button href="/environment-variables" variant="text" arrow="right">
+    <>Install the CLI</>
+  </Button>
+</div>
 
 <CodeGroup>
 
@@ -21,7 +27,18 @@ nextwp generate --wordpress-template
 
 </CodeGroup>
 
-https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes#optional-catch-all-segments
+Or, you can add it manually as an optional catch all dynamic route segment
+
+<div className="not-prose">
+  <Button
+    href="https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes#optional-catch-all-segments"
+    variant="text"
+    arrow="right"
+    target="_blank"
+  >
+    <>Read more about dynamic routing in Next.js</>
+  </Button>
+</div>
 
 ```javascript {{title:"src/app/[[...paths]]/page.tsx"}}
 import { WordpressTemplate } from "@nextwp/core";

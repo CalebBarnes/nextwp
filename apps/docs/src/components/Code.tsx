@@ -194,16 +194,29 @@ function CodePanelHeader({ tag, label }: { tag?: string; label?: string }) {
 }
 
 function highlightPortions(code: string): React.ReactNode {
-  const regex = /{#(highlight|dimmed)}([\s\S]*?){#}/g
+  const regex = /{#(string|comment|keyword)}([\s\S]*?){#}/g
 
   const parts = []
   let lastIndex = 0
 
-  code.replace(regex, (match, tagType, p1, offset) => {
-    const className =
-      tagType === 'highlight'
-        ? 'font-semibold text-emerald-400 shadow-glow'
-        : 'text-gray-400'
+  for (const match of code.matchAll(regex)) {
+    const [fullMatch, tagType, p1] = match
+    const offset = match.index!
+
+    let className = ''
+
+    switch (tagType) {
+      case 'string':
+        className = 'font-semibold text-[var(--shiki-token-string-expression)]'
+        break
+      case 'comment':
+        className = 'text-[var(--shiki-token-comment)]'
+        break
+      case 'keyword':
+        className = 'text-[var(--shiki-token-keyword)]'
+        break
+    }
+
     // Add text before the matched pattern
     parts.push(code.substring(lastIndex, offset))
     // Add the highlighted part
@@ -212,13 +225,13 @@ function highlightPortions(code: string): React.ReactNode {
         {p1}
       </span>,
     )
-    lastIndex = offset + match.length
-  })
+    lastIndex = offset + fullMatch.length
+  }
 
   // Add any remaining text after the last match
   parts.push(code.substring(lastIndex))
 
-  return <>{parts}</>
+  return parts
 }
 
 function CodePanel({
@@ -249,13 +262,14 @@ function CodePanel({
   }
 
   const highlightedCode = highlightPortions(code)
+  const isHighlighted = code?.includes('{#}')
 
   return (
     <div className="group dark:bg-white/2.5">
       <CodePanelHeader tag={tag} label={label} />
       <div className="relative">
         <pre className="overflow-x-auto p-4 text-xs text-white">
-          {highlightedCode}
+          {isHighlighted ? highlightedCode : children}
         </pre>
 
         <div className="group absolute right-12 top-3.5 flex h-[80%] flex-col space-y-2 opacity-0 transition group-hover:opacity-100">
