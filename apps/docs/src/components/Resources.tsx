@@ -54,31 +54,31 @@ const resources: Array<Resource> = [
       ],
     },
   },
-  {
-    href: '/messages',
-    name: 'Messages',
-    description:
-      'Learn about the message model and how to create, retrieve, update, delete, and list messages.',
-    icon: EnvelopeIcon,
-    pattern: {
-      y: 32,
-      squares: [
-        [0, 2],
-        [1, 4],
-      ],
-    },
-  },
-  {
-    href: '/groups',
-    name: 'Groups',
-    description:
-      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
-    icon: UsersIcon,
-    pattern: {
-      y: 22,
-      squares: [[0, 1]],
-    },
-  },
+  // {
+  //   href: '/messages',
+  //   name: 'Messages',
+  //   description:
+  //     'Learn about the message model and how to create, retrieve, update, delete, and list messages.',
+  //   icon: EnvelopeIcon,
+  //   pattern: {
+  //     y: 32,
+  //     squares: [
+  //       [0, 2],
+  //       [1, 4],
+  //     ],
+  //   },
+  // },
+  // {
+  //   href: '/groups',
+  //   name: 'Groups',
+  //   description:
+  //     'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
+  //   icon: UsersIcon,
+  //   pattern: {
+  //     y: 22,
+  //     squares: [[0, 1]],
+  //   },
+  // },
 ]
 
 function ResourceIcon({ icon: Icon }: { icon: Resource['icon'] }) {
