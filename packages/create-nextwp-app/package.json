@@ -5,9 +5,8 @@
   "bin": "./bin/create-nextwp-app.js",
   "scripts": {
     "dev": "air",
-    "build": "GOOS=darwin GOARCH=amd64 go build -o ./dist/create-nextwp-app-mac && GOOS=linux GOARCH=amd64 go build -o ./dist/create-nextwp-app-linux && GOOS=windows GOARCH=amd64 go build -o ./dist/create-nextwp-app.exe",
-    "prepublish": "npm run build",
-    "postinstall": "node ./scripts/setup.js"
+    "build": "GOOS=darwin GOARCH=amd64 go build -o ./bin/create-nextwp-app && GOOS=linux GOARCH=amd64 go build -o ./bin/create-nextwp-app-linux && GOOS=windows GOARCH=amd64 go build -o ./bin/create-nextwp-app.exe",
+    "prepublish": "npm run build"
   },
   "keywords": [],
   "author": "",
