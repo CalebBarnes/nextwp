@@ -1,0 +1,45 @@
+import Link from 'next/link'
+import { RevalidateEnvDescription } from './revalidate-env-description'
+
+export const metadata = {
+  title: 'Environment Variables',
+  description: 'Environment variables used by @nextwp/core',
+}
+
+# Environment Variables
+
+NextWP requires environment variables to be set in order to connect to WordPress.
+These variables can be added to a `.env.local` file located in the root directory of your project.
+
+You can quickly copy these variables to your `.env.local`
+
+```bash {{ title: '.env.local' }}
+NEXT_PUBLIC_WP_URL=
+WP_APPLICATION_PASSWORD=
+NEXT_PREVIEW_SECRET=
+REVALIDATE_SECRET_KEY=
+```
+
+<Properties>
+  <Property name="NEXT_PUBLIC_WP_URL" type="string">
+    The URL of your WordPress site used to fetch the WP REST API. <br />
+    Example: `https://example-wordpress.com`
+  </Property>
+  <Property name="WP_APPLICATION_PASSWORD" type="string">
+    The application password used to authenticate with WordPress when fetching
+    things like menus and options. <br />
+    You can generate an application password in WordPress admin dashboard under Users
+    {'>'} Your Profile > Application Passwords. <br />
+    Example: `username: IXdM LkSK EysQ F5Cs 9TbA pvvt`
+  </Property>
+  <Property name="NEXT_PREVIEW_SECRET" type="string">
+    The secret used to authenticate WordPress page previews to the Next.js draft
+    mode preview route. <br />
+    This should match the value set for preview secret in the <Link href="/packages/wordpress/nextwp-toolkit-plugin">
+      NextWP Toolkit Plugin
+    </Link> settings.
+  </Property>
+  <Property name="REVALIDATE_SECRET_KEY" type="string">
+    <RevalidateEnvDescription />
+  </Property>
+</Properties>

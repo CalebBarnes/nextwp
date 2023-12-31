@@ -6,7 +6,7 @@ import logoPhp from '@/images/logos/php.svg'
 
 const libraries = [
   {
-    href: '/package/nextwp/core',
+    href: '/packages/nextwp/core',
     name: '@nextwp/core',
     description:
       'A Next.js package that allows you to use WordPress as a headless CMS.',
@@ -82,7 +82,7 @@ const libraries = [
     ),
   },
   {
-    href: '/package/nextwp/addons',
+    href: '/packages/nextwp/addons',
     name: '@nextwp/addons',
     description: 'Addons for @nextwp/core additional components and features.',
 
@@ -158,7 +158,7 @@ const libraries = [
     ),
   },
   {
-    href: '/package/nextwp/stackbit',
+    href: '/packages/nextwp/stackbit',
     name: '@nextwp/stackbit',
     description:
       'A WordPress content source interface that allows you to use the Stackbit Visual Editor with WordPress.',
@@ -193,14 +193,14 @@ const libraries = [
 
 const plugins = [
   {
-    href: '#',
+    href: '/packages/wordpress/nextwp-headless-theme',
     name: 'NextWP Headless Theme',
     description:
       'A WordPress theme with some good defaults that automatically installs the recommended headless plugins.',
     logo: logoPhp,
   },
   {
-    href: '#',
+    href: '/packages/wordpress/nextwp-toolkit-plugin',
     name: 'NextWP Toolkit',
     description:
       'A WordPress plugin that adds NextWP specific features to your WordPress site.',

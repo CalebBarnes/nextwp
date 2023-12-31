@@ -12,6 +12,11 @@ const guides = [
     name: 'Packages',
     description: 'Learn about the NextWP packages.',
   },
+  {
+    href: '/environment-variables',
+    name: 'Environment Variables',
+    description: 'Learn about the NextWP environment variables.',
+  },
   // {
   //   href: '/pagination',
   //   name: 'Pagination',

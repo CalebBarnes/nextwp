@@ -52,36 +52,10 @@ npm install @nextwp/core
 
 ## Add Environment Variables
 
-NextWP requires certain environment variables to be set in order to connect to WordPress.
-These variables can be added to a `.env.local` file located in the root directory of your project. The following variables are mandatory:
+NextWP requires environment variables to be set in order to connect to WordPress.
+These variables can be added to a `.env.local` file located in the root directory of your project.
 
-<Row>
-  <Col>
-    <Properties>
-      <Property name="NEXT_PUBLIC_WP_URL" type="string">
-        The URL of your WordPress site. <br />
-        Example: `https://example-wordpress.com`
-      </Property>
-      {/* <Property name="NEXT_SITE_URL" type="string">
-        The URL of your Next.js site. <br/>
-        Example: `https://example-frontend.com`
-      </Property> */}
-      <Property name="WP_APPLICATION_PASSWORD" type="string">
-        The application password used to authenticate with WordPress.
-      </Property>
-      <Property name="NEXT_PREVIEW_SECRET" type="string">
-        The secret used to authenticate WordPress page previews. <br />
-        Previews require the NextWP Toolkit Plugin installed in WordPress.
-      </Property>
-      <Property name="REVALIDATE_SECRET_KEY" type="string">
-        A secret key used to revalidate pages.
-      </Property>
-    </Properties>
-  </Col>
-
-<Col>
-
-You can add these variables to your `.env.local` file like so:
+You can quickly copy these variables to your `.env.local`
 
 ```bash {{ title: '.env.local' }}
 NEXT_PUBLIC_WP_URL=
@@ -89,9 +63,6 @@ WP_APPLICATION_PASSWORD=
 NEXT_PREVIEW_SECRET=
 REVALIDATE_SECRET_KEY=
 ```
-
-</Col>
-</Row>
 
 <div className="not-prose">
   <Button href="/environment-variables" variant="text" arrow="right">
