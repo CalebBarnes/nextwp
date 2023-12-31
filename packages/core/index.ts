@@ -1,7 +1,7 @@
 // nextjs app functions
 export { generateMetadata } from "./src/next-app-functions/generate-meta-data";
 export { generateStaticParams } from "./src/next-app-functions/generate-static-params";
-export { generateSiteMap } from "./src/next-app-functions/generate-site-map";
+export { generateSitemap } from "./src/next-app-functions/generate-sitemap";
 export { revalidate } from "./src/next-app-functions/revalidate";
 
 // draft mode preview route handler

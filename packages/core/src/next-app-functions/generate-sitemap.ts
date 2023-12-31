@@ -15,7 +15,7 @@ import { getAllItems } from "../api/get-all-items";
  *
  * @see https://developer.wordpress.org/rest-api/reference/
  */
-export async function generateSiteMap({
+export async function generateSitemap({
   postTypes = ["pages", "posts"],
 }): Promise<MetadataRoute.Sitemap> {
   const allItems = await getAllItems(postTypes);
@@ -28,4 +28,12 @@ export async function generateSiteMap({
       priority: 0.5,
     };
   });
+}
+
+export function generateSiteMap() {
+  console.warn(
+    "Warning: generateSiteMap is deprecated. Please use generateSitemap instead."
+  );
+
+  return generateSitemap;
 }
