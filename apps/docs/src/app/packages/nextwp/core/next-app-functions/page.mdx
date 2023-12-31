@@ -64,6 +64,14 @@ The `generateMetadata` function can be used in combination with [dynamic route s
 
 This requires the [YoastSEO](https://en-ca.wordpress.org/plugins/wordpress-seo/) plugin to be installed and activated in WordPress.
 
+### Usage
+
+You can generate metadata for all pages and post types by simply re-exporting the function from your [dynamic route segment](/packages/nextwp/core/components#wordpress-template) page.tsx file.
+
+```tsx {{title: 'src/app/[[...paths]]/page.tsx'}}
+export { generateMetadata } from '@nextwp/core'
+```
+
 <div className="not-prose">
   <Button
     href="https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function"
@@ -75,19 +83,11 @@ This requires the [YoastSEO](https://en-ca.wordpress.org/plugins/wordpress-seo/)
   </Button>
 </div>
 
-### Usage
-
-You can generate metadata for all pages and post types by simply re-exporting the function from your [dynamic route segment](/packages/nextwp/core/components#wordpress-template) page.tsx file.
-
-```tsx {{title: 'src/app/[[...paths]]/page.tsx'}}
-export { generateMetadata } from '@nextwp/core'
-```
-
 ### Parameters
 
 <Properties>
   <Property name="params" type="object">
-    The params object containing the dynamic route param `paths` provided by Next.js
+    The params object containing the dynamic route param `paths` provided by Next.js <br/>
     Example value: `{ paths: ['path', 'to', 'page'] }`
   </Property>
 
@@ -121,17 +121,6 @@ export { generateMetadata } from '@nextwp/core'
 
 This function generates a sitemap.xml file, essential for search engine optimization (SEO), by fetching data from the WordPress REST API.
 
-<div className="not-prose">
-  <Button
-    href="https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap#generating-a-sitemap-using-code-js-ts"
-    target="_blank"
-    variant="text"
-    arrow="right"
-  >
-    <>Read more about sitemap generation in Next.js</>
-  </Button>
-</div>
-
 ### Usage
 
 You can generate a sitemap for the default post types (pages and posts) by simply re-exporting the function from your sitemap.ts file.
@@ -149,6 +138,17 @@ export default generateSitemap({
   postTypes: ['pages', 'posts', 'my_custom_type'],
 })
 ```
+
+<div className="not-prose">
+  <Button
+    href="https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap#generating-a-sitemap-using-code-js-ts"
+    target="_blank"
+    variant="text"
+    arrow="right"
+  >
+    <>Read more about sitemap generation in Next.js</>
+  </Button>
+</div>
 
 ### Parameters
 

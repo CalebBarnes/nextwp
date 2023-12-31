@@ -11,44 +11,14 @@ A collection of components for use in NextWP projects. {{ className:"lead"}}
 
 A component used in a dynamic route to render Wordpress pages and posts.
 
-### Props
-
-<Properties>
-  <Property name="params" type="object">
-    The params object from a Next.js dynamic route.
-  </Property>
-  <Property name="searchParams" type="object">
-    The searchParams object from a Next.js dynamic route.
-  </Property>
-  <Property name="templates" type="object">
-    Object of React components to be rendered for each Wordpress page template.
-  </Property>
-  <Property name="supressWarnings" type="boolean (optional)">
-    Supresses warnings in the console when a template component is missing.
-  </Property>
-</Properties>
-
 <Note>
-  Using the CLI tool, you can quickly add the `WordpressTemplate` dynamic route
-  and scaffold a starter `templates` directory in an existing project.
+  The CLI generator is a planned feature and not yet implemented: Using the [CLI
+  tool](/packages/nextwp/cli), you can quickly add the `WordpressTemplate`
+  dynamic route and scaffold a starter `templates` directory in an existing
+  project.
 </Note>
 
-<div className="not-prose">
-  <Button href="/environment-variables" variant="text" arrow="right">
-    <>Install the CLI</>
-  </Button>
-</div>
-
 <CodeGroup>
-
-```bash
-nextwp generate --wordpress-template
-```
-
-</CodeGroup>
-
-Or, you can add a dynamic route manually
-
 ```javascript {{title:"src/app/[[...paths]]/page.tsx"}}
 import { WordpressTemplate, type RouteParams, type SearchParams } from "@nextwp/core";
 import templates from "@/templates";
@@ -69,6 +39,12 @@ export default function PageRoute(props: {
 export { generateMetadata, generateStaticParams } from "@nextwp/core";
 ```
 
+```bash {{ title: 'add with CLI' }}
+nextwp generate --templates
+```
+
+</CodeGroup>
+
 <div className="not-prose">
   <Button
     href="https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes#optional-catch-all-segments"
@@ -80,9 +56,100 @@ export { generateMetadata, generateStaticParams } from "@nextwp/core";
   </Button>
 </div>
 
+### Props
+
+<Properties>
+  <Property name="params" type="object">
+    The params object passed from a Next.js optional catch all dynamic route.<br/>
+    Example: `{ paths: ['path', 'to', 'page'] }`
+  </Property>
+  <Property name="searchParams" type="object">
+    The URL searchParams object passed from a Next.js dynamic route.<br/>
+    Example: `{ searchParams: { foo: 'bar' } }`
+  </Property>
+  <Property name="templates" type="object">
+    Object of React components to be rendered for each Wordpress page template.<br/>
+    Example: 
+```ts
+const templates = {
+  page: {
+    default: DefaultPageTemplate,
+    home: HomePageTemplate,
+    contact: ContactPageTemplate,
+  },
+  post: {
+    default: DefaultPostTemplate,
+    special: SpecialPostTemplate,
+  },
+  archive:{
+    post: PostArchiveTemplate,
+    // custom post type archive
+    movie: MovieArchiveTemplate,
+  },
+  // custom post type
+  movie: {
+    default: MovieTemplate,
+  },
+}
+
+export { templates as default }
+
+````
+  </Property>
+  <Property name="supressWarnings" type="boolean (optional)">
+    Supresses warnings in the console when a template component is missing.
+  </Property>
+</Properties>
+
 ## FlexibleContent
 
 A React component for rendering ACF flexible content blocks.
+
+### Usage
+
+Export your block components from a single file, or construct an object of block components however you want.
+The component's export name must match the ACF flexible content layout name.
+
+```ts {{ title: 'src/components/blocks/index.ts' }}
+export { Hero } from './hero'
+export { Text } from './text'
+export { FeaturedPosts } from './featured-posts'
+````
+
+Import your block components and pass them to `FlexibleContent` as the `blocks` prop.
+
+<CodeGroup>
+
+```tsx {{ title: 'JavaScript' }}
+import { FlexibleContent } from '@nextwp/core'
+import * as blocks from '@/components/blocks'
+
+export default function DefaultPageTemplate({ data }) {
+  return <FlexibleContent rows={data?.acf?.modules} blocks={blocks} />
+}
+```
+
+```tsx {{ title: 'TypeScript' }}
+import { FlexibleContent, type WpPage } from '@nextwp/core'
+import * as blocks from '@/components/blocks'
+
+import { type HeroProps } from '@/components/blocks/hero'
+import { type TextProps } from '@/components/blocks/text'
+import { type FeaturedPostsProps } from '@/components/blocks/featured-posts'
+
+type Block = HeroProps | TextProps | FeaturedPostsProps
+interface PageData extends WpPage {
+  acf?: {
+    modules?: Block[]
+  }
+}
+
+export default function DefaultPageTemplate({ data }: { data: PageData }) {
+  return <FlexibleContent rows={data?.acf?.modules} blocks={blocks} />
+}
+```
+
+</CodeGroup>
 
 ### Properties
 
@@ -102,30 +169,6 @@ A React component for rendering ACF flexible content blocks.
     Supresses warnings in the console when a component is missing.
   </Property>
 </Properties>
-
-### Usage
-
-Export your block components from a single file, or construct an object of block components however you want.
-The component's export name must match the ACF flexible content layout name.
-
-```ts {{ title: 'src/components/blocks/index.ts' }}
-export { Hero } from './hero'
-export { Text } from './text'
-export { FeaturedPosts } from './featured-posts'
-```
-
-Import your block components and pass them to `FlexibleContent` as the `blocks` prop.
-
-```tsx {{ title: 'src/templates/page/default.tsx' }}
-import { FlexibleContent, type WpPage } from '@nextwp/core'
-import * as blocks from '@/components/blocks'
-
-export default async function DefaultPageTemplate({ data }: { data: WpPage }) {
-  return (
-    <FlexibleContent rows={data?.acf?.my_flexible_content} blocks={blocks} />
-  )
-}
-```
 
 When using the `FlexibleContent` component, the `acf_fc_layout` property in the data will be converted from snake_case to PascalCase. This converted value will be used to find the corresponding component in the `blocks` object. The `FlexibleContent` component will then render the appropriate block component for each row of data.
 
@@ -195,6 +238,8 @@ The icon uploaded in WordPress will be used as the favicon and app icon.
 
 ### Usage
 
+<CodeGroup>
+
 ```tsx {{ title: 'src/app/icon.tsx' }}
 export { Icon as default } from '@nextwp/core'
 
@@ -205,6 +250,12 @@ export const sizes = {
   height: 32,
 }
 ```
+
+```bash {{ title: 'add with CLI' }}
+nextwp generate --icon
+```
+
+</CodeGroup>
 
 <div className="not-prose">
   <Button
@@ -227,8 +278,10 @@ The icon uploaded in WordPress will be used as the favicon and app icon.
 
 ### Usage
 
+<CodeGroup>
+
 ```tsx {{ title: 'src/app/apple-icon.tsx' }}
-export { AppleIcon as default } from '@nextwp/core/src/components/apple-icon'
+export { AppleIcon as default } from '@nextwp/core'
 
 export const runtime = 'edge'
 export const contentType = 'image/png'
@@ -237,6 +290,12 @@ export const sizes = {
   height: 180,
 }
 ```
+
+```bash {{ title: 'add with CLI' }}
+nextwp generate --apple-icon
+```
+
+</CodeGroup>
 
 <div className="not-prose">
   <Button

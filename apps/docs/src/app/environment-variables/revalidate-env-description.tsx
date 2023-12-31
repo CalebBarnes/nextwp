@@ -12,10 +12,7 @@ export function RevalidateEnvDescription() {
       >
         On-Demand Revalidation
       </Link>{' '}
-      plugin by{' '}
-      <Link href="https://gdidentity.sk/" target="_blank">
-        GD IDENTITY
-      </Link>
+      plugin.
     </div>
   )
 }

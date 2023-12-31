@@ -1,9 +1,65 @@
 export const metadata = {
-  title: '@nextwp/core',
-  description:
-    'Protocol offers fine-tuned JavaScript, Ruby, PHP, Python, and Go libraries to make your life easier and give you the best experience when consuming the API.',
+  title: '@nextwp/addons',
+  description: 'Addons for NextWP',
 }
 
-# @nextwp packages
+# @nextwp/addons
 
-These are the main @nextwp packages. They are all open source and available on [GitHub](#github). {{ className: 'lead' }}
+Additional components and features for NextWP {{ className: "lead" }}
+
+## PreloadResources
+
+PreloadResources is a component that allows you to preload resources (video, images, fonts, etc.) in the head of your page.
+
+### Usage
+
+```jsx
+import { PreloadResources } from '@nextwp/addons'
+
+export function PageTemplate() {
+  return (
+    <div>
+      <PreloadResources
+        resources={[
+          {
+            as: 'video',
+            href: 'https://example.com/video.mp4',
+          },
+        ]}
+      />
+
+      {/* ... use the preloaded asset */}
+      <video autoPlay loop>
+        <source src="https://example.com/video.mp4" type="video/mp4" />
+      </video>
+    </div>
+  )
+}
+```
+
+## GravityForm
+
+<Note>
+  This is a planned feature: GravityForm component is not yet implemented in
+  `@nextwp/addons`.
+</Note>
+
+GravityForm is a component that allows you to render a Gravity Form.
+
+### Props
+
+<Properties>
+  <Property name="formId" type="string (required)">
+    The ID of the form to render.
+  </Property>
+</Properties>
+
+### Usage
+
+```tsx {{ title: 'src/templates/page/default.tsx' }}
+import { GravityForm } from '@nextwp/addons'
+
+export function DefaultPageTemplate() {
+  return <GravityForm formId="1" />
+}
+```

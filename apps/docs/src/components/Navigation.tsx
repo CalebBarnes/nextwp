@@ -236,10 +236,13 @@ export const navigation: Array<NavGroup> = [
       { title: 'Introduction', href: '/' },
       { title: 'Quickstart', href: '/quickstart' },
       {
-        title: 'Add Page Template Components',
+        title: 'Adding New Page Templates',
         href: '/guide/add-page-template-components',
       },
-      { title: 'Add Custom Post Types', href: '/guide/add-custom-post-types' },
+      {
+        title: 'Using Custom Post Types',
+        href: '/guide/add-custom-post-types',
+      },
     ],
   },
   {

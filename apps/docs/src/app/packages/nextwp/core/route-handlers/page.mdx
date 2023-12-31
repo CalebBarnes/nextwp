@@ -5,6 +5,62 @@ export const metadata = {
 
 # Route Handlers
 
+The route handlers included in `@nextwp/core` add endpoints in your Next.js project's app router to handle things like preview and revalidation. <br/> {{ className: "lead" }}
+
+These route handlers are included by default in the starter project generated with [create-nextwp-app](/packages/create-nextwp-app). {{ className: "lead" }}
+
+<div className="not-prose">
+  <Button
+    href="https://nextjs.org/docs/app/building-your-application/routing/route-handlers"
+    target="_blank"
+    variant="text"
+    arrow="right"
+  >
+    <>Read more route handlers in Next.js</>
+  </Button>
+</div>
+
 ## revalidate
 
-## NextWordPressPreview
+<Note>
+  @todo: think about combining revalidate and preview into a single catch all
+  route handler? <br />
+  Example: `src/app/api/[...nextwp]/route.ts`
+</Note>
+
+The revalidate route handler in Next.js allows for instant content updates without triggering a full site build. When a post is updated in WordPress, the specific page(s) in Next.js are regenerated, ensuring that the latest content is displayed.
+
+To use the revalidate route handler, you need to install the [On-Demand Revalidation](https://wordpress.org/plugins/on-demand-revalidation/) WordPress plugin.
+
+```ts {{ title: "src/app/api/revalidate/route.ts" }}
+export { revalidate as PUT } from '@nextwp/core'
+```
+
+## preview
+
+<Note>
+  @todo: rename NextWordPressPreview to "preview" in the codebase, add
+  deprecation warning for old import
+</Note>
+
+The `preview` route handler is used to preview posts in WordPress.
+
+You can use preview with default settings by simply re-exporting the handler.
+
+```ts {{ title: "src/app/api/draft/[...preview]/route.ts" }}
+export { preview as GET } from '@nextwp/core'
+```
+
+Or you can customize the preview handler by passing options to the `preview` function.
+
+```ts {{ title: "src/app/api/draft/[...preview]/route.ts" }}
+import { preview } from '@nextwp/core'
+
+const previewOptions = {
+  toolbar: true, // Shows the preview toolbar on the left side of the screen
+}
+
+const previewHandler = preview(previewOptions)
+
+export { previewHandler as GET }
+```
