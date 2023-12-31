@@ -1,6 +1,6 @@
 # NextWP
 
-Welcome to NextWP
+A new era of WordPress development.
 
 ## What is it?
 
