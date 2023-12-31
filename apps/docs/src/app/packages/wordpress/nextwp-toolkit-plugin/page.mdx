@@ -1,9 +1,66 @@
 export const metadata = {
-  title: '@nextwp/core',
-  description:
-    'Protocol offers fine-tuned JavaScript, Ruby, PHP, Python, and Go libraries to make your life easier and give you the best experience when consuming the API.',
+  title: 'NextWP Toolkit Plugin for WordPress',
+  description: '',
 }
 
-# @nextwp packages
+# NextWP - Headless Toolkit
 
-These are the main @nextwp packages. They are all open source and available on [GitHub](#github). {{ className: 'lead' }}
+The NextWP Headless Toolkit is an essential WordPress plugin for developers building headless WordPress sites using Next.js.
+It complements the `@nextwp/core` package by adding enhanced features and functionalities to streamline the development process.
+
+<div className="not-prose mb-16 mt-6 flex gap-3">
+  <Button href="/quickstart" arrow="right">
+    <>Download</>
+  </Button>
+  <Button
+    href="https://github.com/CalebBarnes/nextwp/tree/main/wordpress/plugins/nextwp-toolkit"
+    target="_blank"
+    variant="outline"
+  >
+    <>Visit Repo</>
+  </Button>
+</div>
+
+## Key Features added by NextWP Toolkit
+
+- **CMS Preview**: Preview headless site content directly in the WP admin.
+- **Decapitate WP**: Removes WordPress's built-in frontend, focusing on headless CMS capabilities.
+- **Flexible Content Modules**: Automatically creates and manages content modules for dynamic content structuring.
+- **Additional Menu Locations**: Allows for the addition of extra menu locations for improved site navigation.
+- **REST Endpoints**: Adds specific REST endpoints for ACF options pages and integrates ACF data into menu items for efficient data handling.
+
+This toolkit is designed to optimize your workflow, making it easier and more efficient to create feature-rich headless WordPress sites with Next.js.
+
+# Endpoints
+
+NextWP Toolkit adds the following REST endpoints to your WordPress site. These endpoints are used by the `@nextwp/core` package to retrieve data from your WordPress site.
+
+---
+
+## Retrieve an ACF options page {{ tag: 'GET', label: '/nextwp/v1/options/:slug' }}
+
+<Row>
+  <Col>
+    This endpoint allows you to retrieve a specific ACF options page by its slug. 
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/nextwp/v1/options/my-options-page">
+
+    ```js
+    const res = await fetch('/wp-json/nextwp/v1/options/my-options-page')
+    const data = await res.json()
+    ```
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "",
+
+    }
+    ```
+
+  </Col>
+</Row>
+
+---

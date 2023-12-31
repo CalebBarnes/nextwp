@@ -236,30 +236,25 @@ export const navigation: Array<NavGroup> = [
       { title: 'Introduction', href: '/' },
       { title: 'Quickstart', href: '/quickstart' },
       { title: 'Environment Variables', href: '/environment-variables' },
-      { title: 'Packages', href: '/packages' },
-      // { title: 'Authentication', href: '/authentication' },
-      // { title: 'Pagination', href: '/pagination' },
-      // { title: 'Errors', href: '/errors' },
-      // { title: 'Webhooks', href: '/webhooks' },
     ],
   },
   {
     title: 'Packages',
     links: [
+      { title: 'Packages Overview', href: '/packages' },
+      {
+        title: 'create-nextwp-app',
+        href: '/packages/create-nextwp-app',
+      },
       { title: '@nextwp/core', href: '/packages/nextwp/core' },
       { title: '@nextwp/addons', href: '/packages/nextwp/addons' },
       { title: '@nextwp/stackbit', href: '/packages/nextwp/stackbit' },
-    ],
-  },
-  {
-    title: 'WordPress Plugins',
-    links: [
       {
         title: 'NextWP Headless Theme',
         href: '/packages/wordpress/nextwp-headless-theme',
       },
       {
-        title: 'NextWP Toolkit',
+        title: 'NextWP Headless Toolkit',
         href: '/packages/wordpress/nextwp-toolkit-plugin',
       },
     ],

@@ -1,4 +1,7 @@
 import { Libraries } from '@/components/Libraries'
+import { NpmPackages } from './npm-packages'
+import { CliTools } from './cli-tools'
+import { WordPressPluginsThemes } from './wordpress-plugins-themes'
 
 export const metadata = {
   title: 'Packages',
@@ -7,12 +10,23 @@ export const metadata = {
 }
 
 export const sections = [
-  { title: 'NPM Packages', id: 'official-libraries' },
-  { title: 'WordPress Themes & Plugins', id: 'resources' },
+  { title: 'NPM Packages', id: 'npm-packages' },
+  { title: 'CLI Tools', id: 'cli-tools' },
+  { title: 'WordPress Themes & Plugins', id: 'word-press-themes-and-plugins' },
 ]
 
-# @nextwp packages
+# Packages
 
-These are the main @nextwp packages. They are all open source and available on [GitHub](#). {{ className: 'lead' }}
+These are the main NextWP packages and plugins. They are all open source and available on [GitHub](https://github.com/CalebBarnes/nextwp). {{ className: 'lead' }}
 
-<Libraries />
+## NPM Packages
+
+<NpmPackages />
+
+## CLI Tools
+
+<CliTools />
+
+## WordPress Themes & Plugins
+
+<WordPressPluginsThemes />
