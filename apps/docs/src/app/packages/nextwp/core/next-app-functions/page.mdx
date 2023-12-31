@@ -5,34 +5,137 @@ export const metadata = {
 
 # Next App Functions
 
-## generateMetadata
+Utility functions provided by `@nextwp/core` that are used in the Next.js app router to generate static routes (SSG), SEO metadata, and a sitemap.xml file. {{ className: "lead" }}
 
 ## generateStaticParams
 
-## generateSitemap
+This function generates static routes (SSG) for a Next.js site based on results from the WordPress REST API.
 
-The generateSitemap function is a utility provided by the @nextwp/core package.
-This function generates a sitemap.xml file, essential for search engine optimization (SEO), by fetching data from the WordPress REST API.
+<div className="not-prose">
+  <Button
+    href="https://nextjs.org/docs/app/api-reference/functions/generate-static-params"
+    target="_blank"
+    variant="text"
+    arrow="right"
+  >
+    <>Read more about generateStaticParams in Next.js</>
+  </Button>
+</div>
 
-Read more about sitemap generation in Next.js [here](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap#generating-a-sitemap-using-code-js-ts).
+### Parameters
+
+<Properties>
+  <Property name="wpUrl" type="string (optional)">
+    A string representing the WordPress URL. <br />
+    Defaults to the `NEXT_PUBLIC_WP_URL` [environment variable](/environment-variables).
+  </Property>
+  <Property name="postTypes" type="string[] (optional)">
+    An array of strings representing the custom post types in your WordPress
+    setup. Each string should match the rest_base of the post type in the
+    WordPress REST API. <br />
+    Default value: `["pages", "posts"]` <br />
+    Example values: `["pages", "posts", "custom-post-type"]`
+  </Property>
+</Properties>
 
 ### Usage
 
-You can use this with the default settings by simply re-exporting the function from your sitemap.ts file.
+You can use this with the default settings by simply re-exporting the function from your page.tsx file.
 
-```ts {{title: 'src/app/sitemap.ts'}}
-export { generateSitemap as default } from '@nextwp/core'
+```typescript {{ title: 'src/app/[[...paths]]/page.tsx' }}
+// with default post types (pages and posts)
+export { generateStaticParams } from '@nextwp/core'
+```
+
+Or you can customize the function by importing it and passing in more options, like additional post types that you want to generate.
+
+```typescript {{ title: 'src/app/[[...paths]]/page.tsx' }}
+// with additional custom post types
+const staticParams = generateStaticParams({
+  postTypes: ['pages', 'posts', 'movie'],
+})
+export { staticParams as generateStaticParams }
+```
+
+## generateMetadata
+
+This function generates SEO metadata for the page, such as the page title, description, and og image by fetching YoastSEO data from the WordPress REST API.
+
+The `generateMetadata` function provided by `@nextwp/core` requires the [YoastSEO](https://en-ca.wordpress.org/plugins/wordpress-seo/) plugin to be installed and activated in WordPress.
+
+### Parameters
+
+<Properties>
+  <Property name="params" type="object">
+    The params object containing the dynamic route param `paths` provided by Next.js
+    Example value: `{ paths: ['path', 'to', 'page'] }`
+  </Property>
+
+<Property name="params.paths" type="string[]">
+  An array of strings representing path segments.
+</Property>
+
+<Property name="wpUrl" type="string (optional)">
+  A string representing the WordPress URL. <br />
+  Defaults to the `NEXT_PUBLIC_WP_URL` [environment variable](/environment-variables).
+</Property>
+
+</Properties>
+
+### Returns
+
+Promise&lt;Metadata&gt;: The function returns a promise that resolves to a Metadata object.
+
+### Usage
+
+You can use this with the default settings by simply re-exporting the function from your page.tsx file.
+
+```tsx {{title: 'src/app/[[...paths]]/page.tsx'}}
+export { generateMetadata } from '@nextwp/core'
 ```
 
 You can also customize the function by importing it and passing in your own settings.
 
-```ts {{title: 'src/app/sitemap.ts'}}
-import { generateSitemap } from '@nextwp/core'
+```tsx {{title: 'src/app/[[...paths]]/page.tsx'}}
+import { generateMetadata as nextWpGenerateMetadata } from '@nextwp/core'
 
-export default generateSitemap({
-  postTypes: ['pages', 'posts', 'my_custom_type'],
+export const generateMetadata = nextWpGenerateMetadata({
+  titleTemplate: '%s | My Site',
+  description: 'My site description',
+  image: 'https://example.com/image.jpg',
+  twitter: {
+    handle: '@handle',
+    site: '@site',
+    cardType: 'summary_large_image',
+  },
 })
 ```
+
+<div className="not-prose">
+  <Button
+    href="https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function"
+    target="_blank"
+    variant="text"
+    arrow="right"
+  >
+    <>Read more about generating metadata in Next.js</>
+  </Button>
+</div>
+
+## generateSitemap
+
+This function generates a sitemap.xml file, essential for search engine optimization (SEO), by fetching data from the WordPress REST API.
+
+<div className="not-prose">
+  <Button
+    href="https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap#generating-a-sitemap-using-code-js-ts"
+    target="_blank"
+    variant="text"
+    arrow="right"
+  >
+    <>Read more about sitemap generation in Next.js</>
+  </Button>
+</div>
 
 ### Parameters
 
@@ -67,6 +170,24 @@ A promise that resolves to an array of sitemap entries. Each entry is an object 
     to 0.5.
   </Property>
 </Properties>
+
+### Usage
+
+You can use this with the default settings by simply re-exporting the function from your sitemap.ts file.
+
+```ts {{title: 'src/app/sitemap.ts'}}
+export { generateSitemap as default } from '@nextwp/core'
+```
+
+You can also customize the function by importing it and passing in your own settings.
+
+```ts {{title: 'src/app/sitemap.ts'}}
+import { generateSitemap } from '@nextwp/core'
+
+export default generateSitemap({
+  postTypes: ['pages', 'posts', 'my_custom_type'],
+})
+```
 
 ```json {{ title: 'Example Result' }}
 [

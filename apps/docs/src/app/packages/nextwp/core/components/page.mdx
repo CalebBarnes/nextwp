@@ -5,13 +5,33 @@ export const metadata = {
 
 # Components
 
-React components for rendering Wordpress data.
+A collection of components for use in NextWP projects. {{ className:"lead"}}
 
 ## WordpressTemplate
 
-A component for rendering Wordpress pages.
+A component used in a dynamic route to render Wordpress pages and posts.
 
-You can quickly add WordpressTemplate to an existing project with the cli tool
+### Props
+
+<Properties>
+  <Property name="params" type="object">
+    The params object from a Next.js dynamic route.
+  </Property>
+  <Property name="searchParams" type="object">
+    The searchParams object from a Next.js dynamic route.
+  </Property>
+  <Property name="templates" type="object">
+    Object of React components to be rendered for each Wordpress page template.
+  </Property>
+  <Property name="supressWarnings" type="boolean (optional)">
+    Supresses warnings in the console when a template component is missing.
+  </Property>
+</Properties>
+
+<Note>
+  Using the CLI tool, you can quickly add the `WordpressTemplate` dynamic route
+  and scaffold a starter `templates` directory in an existing project.
+</Note>
 
 <div className="not-prose">
   <Button href="/environment-variables" variant="text" arrow="right">
@@ -27,18 +47,7 @@ nextwp generate --wordpress-template
 
 </CodeGroup>
 
-Or, you can add it manually as an optional catch all dynamic route segment
-
-<div className="not-prose">
-  <Button
-    href="https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes#optional-catch-all-segments"
-    variant="text"
-    arrow="right"
-    target="_blank"
-  >
-    <>Read more about dynamic routing in Next.js</>
-  </Button>
-</div>
+Or, you can add a dynamic route manually
 
 ```javascript {{title:"src/app/[[...paths]]/page.tsx"}}
 import { WordpressTemplate } from "@nextwp/core";
@@ -60,28 +69,182 @@ export default function PageRoute(props: {
 export { generateMetadata, generateStaticParams } from "@nextwp/core";
 ```
 
+<div className="not-prose">
+  <Button
+    href="https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes#optional-catch-all-segments"
+    variant="text"
+    arrow="right"
+    target="_blank"
+  >
+    <>Read more about dynamic routing in Next.js</>
+  </Button>
+</div>
+
 ## FlexibleContent
 
 A React component for rendering ACF flexible content blocks.
 
-- **Props**:
-  - `blocks`: `Object` - Map of React components to be rendered for each ACF flexible content layout.
-  - `rows`: `Array` - Array of row data from an acf flexible content field.
-  - `data`: `Object` - Extra data passed to each component (optional).
-- **Usage**:
+### Properties
 
-  ```tsx
-  import { FlexibleContent } from '@nextwp/core'
-  ```
+<Properties>
+  <Property name="blocks" type="object">
+    Object of React components to be rendered for each ACF flexible content layout.
 
-  ```tsx
-  import * as blocks from '@/components/blocks'
+  </Property>
+  <Property name="rows" type="array">
+    Array of row data from an acf flexible content field.
+  </Property>
 
-  export default async function DefaultPageTemplate({ data }) {
-    return <FlexibleContent rows={data?.acf?.modules} blocks={blocks} />
+  <Property name="data" type="object (optional)">
+    Extra data passed to each component.
+  </Property>
+  <Property name="supressWarnings" type="boolean (optional)">
+    Supresses warnings in the console when a component is missing.
+  </Property>
+</Properties>
+
+### Usage
+
+Export your block components from a single file, or construct an object of block components however you want.
+The component's export name must match the ACF flexible content layout name.
+
+```ts {{ title: 'src/components/blocks/index.ts' }}
+export { Hero } from './hero'
+export { Text } from './text'
+export { FeaturedPosts } from './featured-posts'
+```
+
+Import your block components and pass them to `FlexibleContent` as the `blocks` prop.
+
+```tsx {{ title: 'src/templates/page/default.tsx' }}
+import { FlexibleContent, type WpPage } from '@nextwp/core'
+import * as blocks from '@/components/blocks'
+
+export default async function DefaultPageTemplate({ data }: { data: WpPage }) {
+  return (
+    <FlexibleContent rows={data?.acf?.my_flexible_content} blocks={blocks} />
+  )
+}
+```
+
+When using the `FlexibleContent` component, the `acf_fc_layout` property in the data will be converted from snake_case to PascalCase. This converted value will be used to find the corresponding component in the `blocks` object. The `FlexibleContent` component will then render the appropriate block component for each row of data.
+
+```json {{title:"Example ACF data from WP REST API"}}
+{
+  "acf": {
+    "my_flexible_content": [
+      {
+        "acf_fc_layout": "hero",
+        "title": "Hello World"
+      },
+      {
+        "acf_fc_layout": "text",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      },
+      {
+        "acf_fc_layout": "featured_posts",
+        "links": [
+          {
+            "link": {
+              "title": "Post 1",
+              "url": "https://example.com/post-1"
+            }
+          },
+          {
+            "link": {
+              "title": "Post 2",
+              "url": "https://example.com/post-2"
+            }
+          }
+        ]
+      }
+    ]
   }
-  ```
+}
+```
+
+With this example data, the `FlexibleContent` component would render the following components
+
+```tsx {{title:"Example rendered components"}}
+<Hero firstItem title="Hello World" />
+<Text content="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+<FeaturedPosts
+  links={[
+    {
+      link: {
+        title: "Post 1",
+        url: "https://example.com/post-1",
+      },
+    },
+    {
+      link: {
+        title: "Post 2",
+        url: "https://example.com/post-2",
+      },
+    },
+  ]}
+/>
+```
 
 ## Icon
 
+Generates an app icon and favicon from the icon added in the WordPress Appearance menu.
+
+In WordPress, you can set an icon for your site by going to Appearance > Customize > Site Identity.
+The icon uploaded in WordPress will be used as the favicon and app icon.
+
+### Usage
+
+```tsx {{ title: 'src/app/icon.tsx' }}
+export { Icon as default } from '@nextwp/core'
+
+export const runtime = 'edge'
+export const contentType = 'image/png'
+export const sizes = {
+  width: 32,
+  height: 32,
+}
+```
+
+<div className="not-prose">
+  <Button
+    href="https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons#generate-icons-using-code-js-ts-tsx"
+    variant="text"
+    arrow="right"
+    target="_blank"
+  >
+    <>Read more about generating icons in Next.js</>
+  </Button>
+</div>
+
 ## AppleIcon
+
+Generates an apple icon from the icon added in the WordPress Appearance menu.
+It is recommended to use both icon and apple-icon.
+
+In WordPress, you can set an icon for your site by going to Appearance > Customize > Site Identity.
+The icon uploaded in WordPress will be used as the favicon and app icon.
+
+### Usage
+
+```tsx {{ title: 'src/app/apple-icon.tsx' }}
+export { AppleIcon as default } from '@nextwp/core/src/components/apple-icon'
+
+export const runtime = 'edge'
+export const contentType = 'image/png'
+export const sizes = {
+  width: 180,
+  height: 180,
+}
+```
+
+<div className="not-prose">
+  <Button
+    href="https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons#generate-icons-using-code-js-ts-tsx"
+    variant="text"
+    arrow="right"
+    target="_blank"
+  >
+    <>Read more about generating icons in Next.js</>
+  </Button>
+</div>

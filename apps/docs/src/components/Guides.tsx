@@ -5,35 +5,30 @@ const guides = [
   {
     href: '/quickstart',
     name: 'Quickstart',
-    description: 'Get up and running with NextWP in minutes.',
+    description: 'Get up and running with NextWP in minutes',
+  },
+
+  {
+    href: '/packages/nextwp/core/components#wordpress-template',
+    name: 'Dynamic Routes',
+    description:
+      'Learn how to add a catch all dynamic route to render your WordPress pages in Next.js',
   },
   {
-    href: '/packages',
-    name: 'Packages',
-    description: 'Learn about the NextWP packages.',
+    href: '/guide/add-page-template-components',
+    name: 'Page Template Components',
+    description: 'Learn how to add custom page template components',
   },
   {
-    href: '/environment-variables',
-    name: 'Environment Variables',
-    description: 'Learn about the NextWP environment variables.',
+    href: '/guide/add-custom-post-types',
+    name: 'Custom Post Types',
+    description: 'Learn how to add custom post types',
   },
-  // {
-  //   href: '/pagination',
-  //   name: 'Pagination',
-  //   description: 'Understand how to work with paginated responses.',
-  // },
-  // {
-  //   href: '/errors',
-  //   name: 'Errors',
-  //   description:
-  //     'Read about the different types of errors returned by the API.',
-  // },
-  // {
-  //   href: '/webhooks',
-  //   name: 'Webhooks',
-  //   description:
-  //     'Learn how to programmatically configure webhooks for your app.',
-  // },
+  {
+    href: '/guide/add-custom-post-types',
+    name: 'Flexible Content',
+    description: 'Learn how to add ACF flexible content to a page template',
+  },
 ]
 
 export function Guides() {

@@ -28,10 +28,10 @@ interface Resource {
 
 const resources: Array<Resource> = [
   {
-    href: '/contacts',
-    name: 'Contacts',
+    href: '/packages',
+    name: 'Packages',
     description:
-      'Learn about the contact model and how to create, retrieve, update, delete, and list contacts.',
+      'Learn about the NextWP packages and how to use them in your project.',
     icon: UserIcon,
     pattern: {
       y: 16,
@@ -42,10 +42,9 @@ const resources: Array<Resource> = [
     },
   },
   {
-    href: '/conversations',
-    name: 'Conversations',
-    description:
-      'Learn about the conversation model and how to create, retrieve, update, delete, and list conversations.',
+    href: '/environment-variables',
+    name: 'Environment Variables',
+    description: 'Learn about the NextWP environment variables.',
     icon: ChatBubbleIcon,
     pattern: {
       y: -6,
