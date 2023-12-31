@@ -25,7 +25,7 @@ const guides = [
     description: 'Learn how to add custom post types',
   },
   {
-    href: '/guide/add-custom-post-types',
+    href: '/packages/nextwp/core/components#flexible-content',
     name: 'Flexible Content',
     description: 'Learn how to add ACF flexible content to a page template',
   },
