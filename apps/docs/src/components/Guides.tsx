@@ -14,16 +14,16 @@ const guides = [
     description:
       'Learn how to add a catch all dynamic route to render your WordPress pages in Next.js',
   },
-  {
-    href: '/guide/add-page-template-components',
-    name: 'Page Template Components',
-    description: 'Learn how to add custom page template components',
-  },
-  {
-    href: '/guide/add-custom-post-types',
-    name: 'Custom Post Types',
-    description: 'Learn how to add custom post types',
-  },
+  // {
+  //   href: '/guide/add-page-template-components',
+  //   name: 'Page Template Components',
+  //   description: 'Learn how to add custom page template components',
+  // },
+  // {
+  //   href: '/guide/add-custom-post-types',
+  //   name: 'Custom Post Types',
+  //   description: 'Learn how to add custom post types',
+  // },
   {
     href: '/packages/nextwp/core/components#flexible-content',
     name: 'Flexible Content',
