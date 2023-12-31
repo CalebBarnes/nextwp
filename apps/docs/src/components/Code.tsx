@@ -58,6 +58,67 @@ function ClipboardIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   )
 }
 
+export function CodeButton({
+  onClick,
+  clickedLabel = 'Clicked!',
+  children,
+  ...rest
+}: {
+  onClick?: () => void
+  [key: string]: any
+}) {
+  let [clickCount, setClickCount] = useState(0)
+  let clicked = clickCount > 0
+
+  useEffect(() => {
+    if (clickCount > 0) {
+      let timeout = setTimeout(() => setClickCount(0), 1000)
+      return () => {
+        clearTimeout(timeout)
+      }
+    }
+  }, [clickCount])
+
+  return (
+    <button
+      type="button"
+      className={clsx(
+        'overflow-hidden rounded-full py-1 pl-2 pr-3 text-2xs font-medium backdrop-blur transition',
+        // 'group/button absolute right-4 top-3.5 overflow-hidden rounded-full py-1 pl-2 pr-3 text-2xs font-medium opacity-0 backdrop-blur transition focus:opacity-100 group-hover:opacity-100',
+        clicked
+          ? 'bg-emerald-400/10 ring-1 ring-inset ring-emerald-400/20'
+          : 'bg-white/5 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5',
+      )}
+      onClick={() => {
+        setClickCount((count) => count + 1)
+        onClick?.()
+      }}
+      {...rest}
+    >
+      <span
+        aria-hidden={clicked}
+        className={clsx(
+          'pointer-events-none flex items-center gap-0.5 text-zinc-400 transition duration-300',
+          clicked && '-translate-y-1.5 opacity-0',
+        )}
+      >
+        <ClipboardIcon className="h-5 w-5 fill-zinc-500/20 stroke-zinc-500 transition-colors group-hover/button:stroke-zinc-400" />
+
+        {children}
+      </span>
+      <span
+        aria-hidden={!clicked}
+        className={clsx(
+          'pointer-events-none absolute inset-0 flex items-center justify-center text-emerald-400 transition duration-300',
+          !clicked && 'translate-y-1.5 opacity-0',
+        )}
+      >
+        {clickedLabel}
+      </span>
+    </button>
+  )
+}
+
 function CopyButton({ code }: { code: string }) {
   let [copyCount, setCopyCount] = useState(0)
   let copied = copyCount > 0
@@ -75,7 +136,8 @@ function CopyButton({ code }: { code: string }) {
     <button
       type="button"
       className={clsx(
-        'group/button absolute right-4 top-3.5 overflow-hidden rounded-full py-1 pl-2 pr-3 text-2xs font-medium opacity-0 backdrop-blur transition focus:opacity-100 group-hover:opacity-100',
+        'overflow-hidden rounded-full py-1 pl-2 pr-3 text-2xs font-medium backdrop-blur transition',
+        // 'group/button absolute right-12 top-3.5 overflow-hidden rounded-full py-1 pl-2 pr-3 text-2xs font-medium opacity-0 backdrop-blur transition focus:opacity-100 group-hover:opacity-100',
         copied
           ? 'bg-emerald-400/10 ring-1 ring-inset ring-emerald-400/20'
           : 'bg-white/5 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5',
@@ -131,16 +193,46 @@ function CodePanelHeader({ tag, label }: { tag?: string; label?: string }) {
   )
 }
 
+function highlightPortions(code: string): React.ReactNode {
+  const regex = /{#(highlight|dimmed)}([\s\S]*?){#}/g
+
+  const parts = []
+  let lastIndex = 0
+
+  code.replace(regex, (match, tagType, p1, offset) => {
+    const className =
+      tagType === 'highlight'
+        ? 'font-semibold text-emerald-400 shadow-glow'
+        : 'text-gray-400'
+    // Add text before the matched pattern
+    parts.push(code.substring(lastIndex, offset))
+    // Add the highlighted part
+    parts.push(
+      <span key={offset} className={className}>
+        {p1}
+      </span>,
+    )
+    lastIndex = offset + match.length
+  })
+
+  // Add any remaining text after the last match
+  parts.push(code.substring(lastIndex))
+
+  return <>{parts}</>
+}
+
 function CodePanel({
   children,
   tag,
   label,
   code,
+  extraButton,
 }: {
   children: React.ReactNode
   tag?: string
   label?: string
   code?: string
+  extraButton?: React.ReactNode
 }) {
   let child = Children.only(children)
 
@@ -156,12 +248,20 @@ function CodePanel({
     )
   }
 
+  const highlightedCode = highlightPortions(code)
+
   return (
     <div className="group dark:bg-white/2.5">
       <CodePanelHeader tag={tag} label={label} />
       <div className="relative">
-        <pre className="overflow-x-auto p-4 text-xs text-white">{children}</pre>
-        <CopyButton code={code} />
+        <pre className="overflow-x-auto p-4 text-xs text-white">
+          {highlightedCode}
+        </pre>
+
+        <div className="group absolute right-12 top-3.5 flex h-[80%] flex-col space-y-2 opacity-0 transition group-hover:opacity-100">
+          <CopyButton code={code} />
+          {extraButton}
+        </div>
       </div>
     </div>
   )
@@ -309,6 +409,7 @@ const CodeGroupContext = createContext(false)
 export function CodeGroup({
   children,
   title,
+  extraButton,
   ...props
 }: React.ComponentPropsWithoutRef<typeof CodeGroupPanels> & { title: string }) {
   let languages =
@@ -325,7 +426,11 @@ export function CodeGroup({
       {children}
     </CodeGroupHeader>
   )
-  let panels = <CodeGroupPanels {...props}>{children}</CodeGroupPanels>
+  let panels = (
+    <CodeGroupPanels {...props} extraButton={extraButton}>
+      {children}
+    </CodeGroupPanels>
+  )
 
   return (
     <CodeGroupContext.Provider value={true}>

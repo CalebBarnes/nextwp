@@ -1,0 +1,70 @@
+export const metadata = {
+  title: 'Components',
+  description: '',
+}
+
+# Components
+
+React components for rendering Wordpress data.
+
+## WordpressTemplate
+
+A component for rendering Wordpress pages.
+
+Add to an existing project with the cli
+
+<CodeGroup>
+
+```bash
+nextwp generate --wordpress-template
+```
+
+</CodeGroup>
+
+https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes#optional-catch-all-segments
+
+```javascript {{title:"src/app/[[...paths]]/page.tsx"}}
+import { WordpressTemplate } from "@nextwp/core";
+import templates from "@/templates";
+
+export default function PageRoute(props: {
+  params: { paths: string[] };
+  searchParams?: Record<string, string | string[] | undefined>;
+}) {
+  return (
+    <WordpressTemplate
+      params={props.params}
+      searchParams={props.searchParams}
+      templates={templates}
+    />
+  );
+}
+
+export { generateMetadata, generateStaticParams } from "@nextwp/core";
+```
+
+## FlexibleContent
+
+A React component for rendering ACF flexible content blocks.
+
+- **Props**:
+  - `blocks`: `Object` - Map of React components to be rendered for each ACF flexible content layout.
+  - `rows`: `Array` - Array of row data from an acf flexible content field.
+  - `data`: `Object` - Extra data passed to each component (optional).
+- **Usage**:
+
+  ```tsx
+  import { FlexibleContent } from '@nextwp/core'
+  ```
+
+  ```tsx
+  import * as blocks from '@/components/blocks'
+
+  export default async function DefaultPageTemplate({ data }) {
+    return <FlexibleContent rows={data?.acf?.modules} blocks={blocks} />
+  }
+  ```
+
+## Icon
+
+## AppleIcon

@@ -1,0 +1,106 @@
+export const metadata = {
+  title: 'Next App Functions',
+  description: '',
+}
+
+# Next App Functions
+
+## generateMetadata
+
+## generateStaticParams
+
+## generateSitemap
+
+The generateSitemap function is a utility provided by the @nextwp/core package.
+This function generates a sitemap.xml file, essential for search engine optimization (SEO), by fetching data from the WordPress REST API.
+
+Read more about sitemap generation in Next.js [here](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap#generating-a-sitemap-using-code-js-ts).
+
+### Usage
+
+You can use this with the default settings by simply re-exporting the function from your sitemap.ts file.
+
+```ts {{title: 'src/app/sitemap.ts'}}
+export { generateSitemap as default } from '@nextwp/core'
+```
+
+You can also customize the function by importing it and passing in your own settings.
+
+```ts {{title: 'src/app/sitemap.ts'}}
+import { generateSitemap } from '@nextwp/core'
+
+export default generateSitemap({
+  postTypes: ['pages', 'posts', 'my_custom_type'],
+})
+```
+
+### Parameters
+
+<Properties>
+  <Property name="postTypes" type="string[]">
+    An array of strings representing the custom post types in your WordPress
+    setup. Each string should match the rest_base of the post type in the
+    WordPress REST API. <br />
+    Default value: `["pages", "posts"]` <br />
+    Example values: `["pages", "posts", "custom-post-type"]`
+  </Property>
+</Properties>
+
+### Returns
+
+**Promise&lt;MetadataRoute.Sitemap&gt;**<br/>
+A promise that resolves to an array of sitemap entries. Each entry is an object with the following properties:
+
+<Properties>
+  <Property name="url" type="string">
+    The full URL to the page or post.
+  </Property>
+  <Property name="lastModified" type="string">
+    The last modification date of the item in GMT, reflecting content updates.
+  </Property>
+  <Property name="changeFrequency" type="string">
+    Indicates how frequently the content at the URL is likely to change. Default
+    is set to "daily".
+  </Property>
+  <Property name="priority" type="number">
+    The priority of this URL relative to other URLs on your site. Default is set
+    to 0.5.
+  </Property>
+</Properties>
+
+```json {{ title: 'Example Result' }}
+[
+  {
+    "url": "https://example.com",
+    "lastModified": "2021-08-04T14:00:00.000Z",
+    "changeFrequency": "daily",
+    "priority": 0.5
+  },
+  {
+    "url": "https://example.com/page-2",
+    "lastModified": "2021-08-04T14:00:00.000Z",
+    "changeFrequency": "daily",
+    "priority": 0.5
+  }
+]
+```
+
+This result would generate a sitemap.xml file that looks like this:
+
+```xml {{ title: 'Example Sitemap' }}
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+  <loc>https://example.com</loc>
+  <lastmod>2021-08-04T14:00:00.000Z</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+</url>
+<url>
+  <loc>https://example.com/page-2</loc>
+  <lastmod>2021-08-04T14:00:00.000Z</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.5</priority>
+</url>
+</urlset>
+```

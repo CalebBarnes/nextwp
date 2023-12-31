@@ -235,20 +235,44 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'Introduction', href: '/' },
       { title: 'Quickstart', href: '/quickstart' },
+    ],
+  },
+  {
+    title: 'Reference',
+
+    links: [
+      {
+        title: 'Components',
+        href: '/packages/nextwp/core/components',
+      },
+      {
+        title: 'Next App Router Functions',
+        href: '/packages/nextwp/core/next-app-functions',
+      },
+
+      {
+        title: 'Route Handlers',
+        href: '/packages/nextwp/core/route-handlers',
+      },
       { title: 'Environment Variables', href: '/environment-variables' },
+      // { title: 'Contacts', href: '/contacts' },
+      // { title: 'Conversations', href: '/conversations' },
+      // { title: 'Messages', href: '/messages' },
+      // { title: 'Groups', href: '/groups' },
+      // { title: 'Attachments', href: '/attachments' },
     ],
   },
   {
     title: 'Packages',
     links: [
       { title: 'Packages Overview', href: '/packages' },
+      { title: '@nextwp/core', href: '/packages/nextwp/core' },
+      { title: '@nextwp/addons', href: '/packages/nextwp/addons' },
+      { title: '@nextwp/stackbit', href: '/packages/nextwp/stackbit' },
       {
         title: 'create-nextwp-app',
         href: '/packages/create-nextwp-app',
       },
-      { title: '@nextwp/core', href: '/packages/nextwp/core' },
-      { title: '@nextwp/addons', href: '/packages/nextwp/addons' },
-      { title: '@nextwp/stackbit', href: '/packages/nextwp/stackbit' },
       {
         title: 'NextWP Headless Theme',
         href: '/packages/wordpress/nextwp-headless-theme',
@@ -257,16 +281,6 @@ export const navigation: Array<NavGroup> = [
         title: 'NextWP Headless Toolkit',
         href: '/packages/wordpress/nextwp-toolkit-plugin',
       },
-    ],
-  },
-  {
-    title: 'Reference',
-    links: [
-      { title: 'Contacts', href: '/contacts' },
-      { title: 'Conversations', href: '/conversations' },
-      { title: 'Messages', href: '/messages' },
-      { title: 'Groups', href: '/groups' },
-      { title: 'Attachments', href: '/attachments' },
     ],
   },
 ]

@@ -1,3 +1,5 @@
+import { EnvCodeBlock } from '@/components/env-code-block'
+
 export const metadata = {
   title: 'Quickstart',
   description: 'This guide will get you all set up and ready to use NextWP.',
@@ -5,7 +7,7 @@ export const metadata = {
 
 # Quickstart
 
-This guide will get you all set up and ready to use NextWP. We'll cover how to get started with a new project, how to install NextWP in an existing project, and how to set up your environment variables.
+This guide will get you all set up and ready to use NextWP. {{ className: 'lead' }}
 
 ## Create a new project
 
@@ -32,16 +34,16 @@ npx create-nextwp-app my-app
 
 ## Installation
 
-To install @nextwp/core in your Next.js project, run the following command in your terminal:
+If you already have a Next.js project, you can install `@nextwp/core` and `@nextwp/addons` using your preferred package manager.
 
 <CodeGroup>
 
 ```bash {{ title: 'pnpm' }}
-pnpm add @nextwp/core
+pnpm add @nextwp/core @nextwp/addons
 ```
 
 ```bash {{ title: 'yarn' }}
-yarn add @nextwp/core
+yarn add @nextwp/core @nextwp/addons
 ```
 
 ```bash {{ title: 'npm' }}
@@ -57,12 +59,7 @@ These variables can be added to a `.env.local` file located in the root director
 
 You can quickly copy these variables to your `.env.local`
 
-```bash {{ title: '.env.local' }}
-NEXT_PUBLIC_WP_URL=
-WP_APPLICATION_PASSWORD=
-NEXT_PREVIEW_SECRET=
-REVALIDATE_SECRET_KEY=
-```
+<EnvCodeBlock />
 
 <div className="not-prose">
   <Button href="/environment-variables" variant="text" arrow="right">
@@ -74,6 +71,7 @@ REVALIDATE_SECRET_KEY=
 
 Congratulations! You have successfully set up your Next.js site to connect with your WordPress CMS. Now, let's explore some next steps you can take:
 
+- [Add a Dynamic Route Segment with the WordpressTemplate component](/packages/nextwp/core/components#wordpress-template)
 - [Add ACF Flexible Content blocks](#)
 - [Add custom page templates](#)
 - [Add custom post types](#)

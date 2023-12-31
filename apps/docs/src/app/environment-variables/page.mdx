@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { RevalidateEnvDescription } from './revalidate-env-description'
-
+import { EnvCodeBlock } from '@/components/env-code-block'
 export const metadata = {
   title: 'Environment Variables',
   description: 'Environment variables used by @nextwp/core',
@@ -13,13 +13,7 @@ These variables can be added to a `.env.local` file located in the root director
 
 You can quickly copy these variables to your `.env.local`
 
-```bash {{ title: '.env.local' }}
-NEXT_PUBLIC_WP_URL=
-WP_APPLICATION_PASSWORD=
-NEXT_PREVIEW_SECRET=
-REVALIDATE_SECRET_KEY=
-```
-
+<EnvCodeBlock />
 <Properties>
   <Property name="NEXT_PUBLIC_WP_URL" type="string">
     The URL of your WordPress site used to fetch the WP REST API. <br />
