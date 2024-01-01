@@ -1,4 +1,5 @@
 import { EnvCodeBlock } from '@/components/env-code-block'
+import Link from 'next/link'
 
 export const metadata = {
   title: 'Quickstart',
@@ -7,20 +8,36 @@ export const metadata = {
 
 # Quickstart
 
-This quickstart guide will get you all set up and ready to build your headless WordPress site with NextWP. {{ className: 'lead' }}
+Deploy a project in minutes with this quickstart guide. {{ className: 'lead' }}
 
 ## WordPress hosting
 
-If you don't have a WordPress site yet, you can create one using any hosting provider like [WPEngine](https://wpengine.com/?utm_source=nextwp&utm_medium=docs&utm_campaign=nextwp-docs), [DigitalOcean](https://m.do.co/c/8c72c601817b), or [Kinsta](https://kinsta.com/?kaid=ZWZKLOAMLNDP)
-We recommend [WP Engine](https://wpengine.com/?utm_source=nextwp&utm_medium=docs&utm_campaign=nextwp-docs) as they have a great developer experience and reliable hosting.
+Connect to an existing WordPress instance, or create a new WordPress site using any hosting provider such as [WP Engine](https://wpengine.com/?utm_source=nextwp&utm_medium=docs&utm_campaign=nextwp-docs), [DigitalOcean](https://m.do.co/c/8c72c601817b), or [Kinsta](https://kinsta.com/?kaid=ZWZKLOAMLNDP).<br/>
+We recommend [WP Engine](https://wpengine.com/?utm_source=nextwp&utm_medium=docs&utm_campaign=nextwp-docs) as they have a great developer experience, reliable hosting and amazing support.
 
 ## Pre-requisites
 
-NextWP connects with the NextWP Toolkit plugin in your WordPress site for certain features such as the preview mode, and fetching additional data from WordPress that is not included by default in the WP REST API such as the site settings, ACF options pages, post type labels, and more.
-
-To connect your WordPress site to your Next.js project, you will need to install the [NextWP Toolkit](/packages/wordpress/nextwp-toolkit-plugin) plugin on your WordPress site.
+NextWP integrates with the [NextWP Toolkit](/packages/wordpress/nextwp-toolkit-plugin) plugin on your WordPress site to enable features like preview mode and to retrieve additional data not included by default in the WP REST API, such as ACF options pages.
 
 ## Create a new project
+
+You can one click deploy NextWP to Vercel.
+
+<div>
+  <Link
+    href="https://vercel.com/new/clone?repository-url=https://github.com/CalebBarnes/nextwp&env=NEXT_PUBLIC_WP_URL,WP_APPLICATION_PASSWORD,NEXT_PREVIEW_SECRET,REVALIDATE_SECRET_KEY"
+    target="_blank"
+  >
+    <img
+      src="https://vercel.com/button"
+      alt="Deploy with Vercel"
+      width="200"
+      className="w-28"
+    />
+  </Link>
+</div>
+
+Or, you can create a new project using the NextWP CLI tool.
 
 To create a new NextWP project, you can use the `create-nextwp-app` CLI tool to generate a starter project. This tool will automatically set up a new project for you, including all the necessary dependencies and configuration files to get you started with NextWP.
 
@@ -45,7 +62,7 @@ yarn create nextwp-app
 
 </CodeGroup>
 
-## Installation
+## Add to existing project
 
 If you already have a Next.js project, you can install `@nextwp/core` and optionally `@nextwp/addons` using your preferred package manager.
 
@@ -67,16 +84,14 @@ yarn add @nextwp/core
 
 ## Add Environment Variables
 
-NextWP requires environment variables to be set in order to connect to WordPress.
-These variables can be added to a `.env.local` file located in the root directory of your project, or added in your hosting provider's environment variables section.
+Properly configuring environment variables is crucial for enabling the NextWP to WordPress connection.
 
-NextWP requires an application password to be set in order to request certain data from WordPress such as the site settings, options pages, post type labels, and more.
+Generate an application password in WordPress. (Users > Your Profile > Application Passwords)<br/>
+Make sure your `NEXT_PREVIEW_SECRET` and `REVALIDATE_SECRET_KEY` are also added in your [NextWP Toolkit](/packages/wordpress/nextwp-toolkit-plugin) plugin settings.
 
-You can generate an application password in WordPress admin dashboard under Users > Your Profile > Application Passwords.
+## Example .env.local
 
-Make sure to set the preview secret, and revalidate secret to the matching values in the NextWP Toolkit plugin settings in WordPress.
-
-You can quickly copy these randomly generated secrets to your `.env.local` for your convenience.
+You can quickly copy these randomly generated example variables to your `.env.local`.
 
 <EnvCodeBlock />
 

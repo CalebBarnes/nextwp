@@ -235,14 +235,34 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'Introduction', href: '/' },
       { title: 'Quickstart', href: '/quickstart' },
-      {
-        title: 'Adding New Page Templates',
-        href: '/guide/add-page-template-components',
-      },
-      {
-        title: 'Using Custom Post Types',
-        href: '/guide/add-custom-post-types',
-      },
+      // {
+      //   title: 'Adding Dynamic Routes',
+      //   href: '/guide/adding-dynamic-routes',
+      // },
+      // {
+      //   title: 'Resolving Page Templates',
+      //   href: '/guide/resolving-page-templates',
+      // },
+      // {
+      //   title: 'Adding Post Types',
+      //   href: '/guide/add-custom-post-types',
+      // },
+      // {
+      //   title: 'Adding Taxonomies',
+      //   href: '/guide/add-custom-taxonomies',
+      // },
+      // {
+      //   title: 'Adding Custom Fields',
+      //   href: '/guide/add-custom-fields',
+      // },
+      // {
+      //   title: 'Adding Blocks',
+      //   href: '/guide/add-blocks',
+      // },
+      // {
+      //   title: 'Adding Blocks',
+      //   href: '/guide/add-blocks',
+      // },
     ],
   },
 

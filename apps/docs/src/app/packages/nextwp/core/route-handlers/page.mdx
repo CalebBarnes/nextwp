@@ -22,12 +22,6 @@ These route handlers are included by default in the starter project generated wi
 
 ## revalidate
 
-<Note>
-  @todo: think about combining revalidate and preview into a single catch all
-  route handler? <br />
-  Example: `src/app/api/[...nextwp]/route.ts`
-</Note>
-
 The revalidate route handler in Next.js allows for instant content updates without triggering a full site build. When a post is updated in WordPress, the specific page(s) in Next.js are regenerated, ensuring that the latest content is displayed.
 
 To use the revalidate route handler, you need to install the [On-Demand Revalidation](https://wordpress.org/plugins/on-demand-revalidation/) WordPress plugin.

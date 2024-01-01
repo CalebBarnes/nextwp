@@ -4,8 +4,7 @@ import { Code, CodeGroup, CodeButton } from '@/components/Code'
 import { useEffect, useState } from 'react'
 
 export function EnvCodeBlock() {
-  const [code, setCode] =
-    useState(`NEXT_PUBLIC_WP_URL={#comment}https://cms.example.com{#}
+  const [code, setCode] = useState(`NEXT_PUBLIC_WP_URL=
 WP_APPLICATION_PASSWORD=
 NEXT_PREVIEW_SECRET=
 REVALIDATE_SECRET_KEY=`)
@@ -23,7 +22,7 @@ REVALIDATE_SECRET_KEY=`)
       .map(() => chars[Math.floor(Math.random() * chars.length)])
       .join('')
 
-    setCode(`NEXT_PUBLIC_WP_URL={#comment}https://cms.example.com{#}
+    setCode(`NEXT_PUBLIC_WP_URL=
 WP_APPLICATION_PASSWORD=
 NEXT_PREVIEW_SECRET={#string}${NEXT_PREVIEW_SECRET}{#}
 REVALIDATE_SECRET_KEY={#string}${REVALIDATE_SECRET_KEY}{#}`)
@@ -41,7 +40,7 @@ REVALIDATE_SECRET_KEY={#string}${REVALIDATE_SECRET_KEY}{#}`)
           <>
             <CodeButton
               onClick={() =>
-                setCode(`NEXT_PUBLIC_WP_URL={#comment}https://cms.example.com{#}
+                setCode(`NEXT_PUBLIC_WP_URL=
 WP_APPLICATION_PASSWORD=
 NEXT_PREVIEW_SECRET=
 REVALIDATE_SECRET_KEY=`)

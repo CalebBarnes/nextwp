@@ -6,25 +6,28 @@ export const metadata = {
   description: 'Environment variables used by @nextwp/core',
 }
 
+export const sections = [
+  { title: 'Example .env.local', id: 'example-env-local' },
+]
+
 # Environment Variables
 
-NextWP requires environment variables to be set in order to connect to WordPress.
-These variables can be added to a `.env.local` file located in the root directory of your project, or added in your hosting provider's environment variables section.
+Properly configuring environment variables is crucial for enabling the NextWP to WordPress connection. These variables facilitate secure communication and access to specific WordPress functionalities.
 
-NextWP requires an application password to be set in order to request certain data from WordPress such as the site settings, options pages, post type labels, and more.
+- **Setup for Local and Production Environments**: Set these variables in a `.env.local` file in your project's root for local development. For production, configure them in your hosting provider's environment settings.
+- **Application Password for Enhanced Access**: Generate this in WordPress (Users > Your Profile > Application Passwords) to securely access extended features like menus and site settings.
+- **Align Preview and Revalidate Secrets**: Ensure these match the corresponding values in your WordPress's [NextWP Toolkit](/packages/wordpress/nextwp-toolkit-plugin) plugin settings, crucial for draft mode previews and on-demand revalidation.
 
-You can generate an application password in WordPress admin dashboard under Users > Your Profile > Application Passwords.
+Remember to handle these variables, especially in production environments, with strict security measures to prevent unauthorized access.
 
-Make sure to set the preview secret, and revalidate secret to the matching values in the NextWP Toolkit plugin settings in WordPress.
+## Example .env.local
 
-You can quickly copy these randomly generated secrets to your `.env.local` for your convenience.
-
-NextWP requires environment variables to be set in order to connect to WordPress.
-These variables can be added to a `.env.local` file located in the root directory of your project.
-
-You can quickly copy these randomly generated variables to your `.env.local`
+You can quickly copy these randomly generated example variables to your `.env.local`. Make sure to enter the same values in your WordPress's [NextWP Toolkit](/packages/wordpress/nextwp-toolkit-plugin) plugin settings.
 
 <EnvCodeBlock />
+
+## Environment Variables {{ anchor: false}}
+
 <Properties>
   <Property name="NEXT_PUBLIC_WP_URL" type="string">
     The URL of your WordPress site used to fetch the WP REST API. <br />

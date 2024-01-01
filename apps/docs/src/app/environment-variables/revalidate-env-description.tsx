@@ -5,7 +5,11 @@ export function RevalidateEnvDescription() {
     <div>
       A secret key used to revalidate pages in Next.js content updates in WP.
       <br />
-      The revalidate route is designed to work with the{' '}
+      The{' '}
+      <Link href="/packages/nextwp/core/route-handlers#revalidate">
+        revalidate route handler
+      </Link>{' '}
+      is designed to work with the{' '}
       <Link
         href="https://wordpress.org/plugins/on-demand-revalidation/"
         target="_blank"
