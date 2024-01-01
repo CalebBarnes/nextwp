@@ -263,6 +263,10 @@ function CodePanel({
 
   const highlightedCode = highlightPortions(code)
   const isHighlighted = code?.includes('{#}')
+  const cleanedCode = code.replace(
+    /{#(string|comment|keyword)}([\s\S]*?){#}/g,
+    '$2',
+  )
 
   return (
     <div className="group dark:bg-white/2.5">
@@ -273,7 +277,7 @@ function CodePanel({
         </pre>
 
         <div className="group absolute right-12 top-3.5 flex h-[80%] flex-col space-y-2 opacity-0 transition group-hover:opacity-100">
-          <CopyButton code={code} />
+          <CopyButton code={cleanedCode} />
           {extraButton}
         </div>
       </div>

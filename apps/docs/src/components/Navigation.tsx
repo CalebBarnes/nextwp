@@ -245,10 +245,12 @@ export const navigation: Array<NavGroup> = [
       },
     ],
   },
-  {
-    title: 'Reference',
 
+  {
+    title: '@nextwp/core',
     links: [
+      { title: 'Overview', href: '/packages/nextwp/core' },
+
       {
         title: 'Components',
         href: '/packages/nextwp/core/components',
@@ -271,22 +273,29 @@ export const navigation: Array<NavGroup> = [
     ],
   },
   {
-    title: 'Packages',
+    title: 'Reference',
+
     links: [
-      { title: 'Packages Overview', href: '/packages' },
-      { title: '@nextwp/core', href: '/packages/nextwp/core' },
-      { title: '@nextwp/addons', href: '/packages/nextwp/addons' },
-      { title: '@nextwp/stackbit', href: '/packages/nextwp/stackbit' },
+      { title: 'Packages', href: '/packages' },
       {
         title: 'create-nextwp-app',
         href: '/packages/create-nextwp-app',
       },
+      { title: '@nextwp/addons', href: '/packages/nextwp/addons' },
+      { title: '@nextwp/stackbit', href: '/packages/nextwp/stackbit' },
+    ],
+  },
+  {
+    title: 'WordPress',
+    links: [
+      // { title: 'Overview', href: '/packages' },
+
       {
         title: 'NextWP Headless Theme',
         href: '/packages/wordpress/nextwp-headless-theme',
       },
       {
-        title: 'NextWP Headless Toolkit',
+        title: 'NextWP Toolkit',
         href: '/packages/wordpress/nextwp-toolkit-plugin',
       },
     ],

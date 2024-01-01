@@ -9,6 +9,17 @@ export const metadata = {
 # Environment Variables
 
 NextWP requires environment variables to be set in order to connect to WordPress.
+These variables can be added to a `.env.local` file located in the root directory of your project, or added in your hosting provider's environment variables section.
+
+NextWP requires an application password to be set in order to request certain data from WordPress such as the site settings, options pages, post type labels, and more.
+
+You can generate an application password in WordPress admin dashboard under Users > Your Profile > Application Passwords.
+
+Make sure to set the preview secret, and revalidate secret to the matching values in the NextWP Toolkit plugin settings in WordPress.
+
+You can quickly copy these randomly generated secrets to your `.env.local` for your convenience.
+
+NextWP requires environment variables to be set in order to connect to WordPress.
 These variables can be added to a `.env.local` file located in the root directory of your project.
 
 You can quickly copy these randomly generated variables to your `.env.local`

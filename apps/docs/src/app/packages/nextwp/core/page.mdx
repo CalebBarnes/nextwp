@@ -6,6 +6,75 @@ export const metadata = {
 
 # @nextwp/core
 
+Welcome to the new era of Headless WordPress development. {{ className: "lead" }}
+
+Embrace the evolution of Next.js with `@nextwp/core`, your premier choice for creating headless WordPress applications. This library seamlessly integrates with the Next.js App Router, bringing cutting-edge features like Server Components, Streaming, SSG, and ISR into your headless WordPress projects with ease. {{ className: "lead" }}
+
+Choose `@nextwp/core` for its unmatched flexibility, performance, and ease of use, making it a standard-setter in the world of modern WordPress development.
+
+Get started in just a few minutes using the [create-nextwp-app](/quickstart) cli tool and see the difference it makes! It is truly the best way to build headless WordPress applications with Next.js.
+
+<div className="not-prose mb-16 mt-6 flex gap-3">
+  <Button href="/quickstart" arrow="right">
+    Quickstart
+  </Button>
+  <Button href="/packages" variant="outline">
+    Explore all packages
+  </Button>
+</div>
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+
+## Features
+
+- **[Server Side Generation (SSG):](/packages/nextwp/core/next-app-functions#generate-static-params)** Effortlessly pre-render content from WordPress in your Next.js app.
+
+- **[On-Demand Incremental Revalidation](/packages/nextwp/core/route-handlers#revalidate):** Revalidates pages on demand when content updates in WordPress.
+
+- **[CMS Previews with Next.js Draft Mode:](/packages/nextwp/core/route-handlers#preview)** Instantly preview your content changes while you work for a seamless editing experience.
+
+- **[Sitemap Generation:](/packages/nextwp/core/next-app-functions#generate-sitemap)** Automatically generates a `sitemap.xml` for your pages, posts, and optionally custom post types.
+
+- **ACF Support:** Page data automatically includes the acf field from the REST API. Just enable "Show in REST API" for your field group.
+
+- **[Flexible Content Component:](/packages/nextwp/core/components#flexible-content)** Easily render ACF flexible content fields in your Next.js app.
+
+# @nextwp/core
+
+Welcome to the new era of Headless WordPress development. {{ className: "lead" }}
+
+Embrace the evolution of Next.js with `@nextwp/core`, your ideal choice for crafting sophisticated headless WordPress applications.
+This innovative library harnesses the full power of the Next.js App Router, including advanced features like Server Components, Streaming, Static Site Generation (SSG), and on-demand Incremental Static Regeneration (ISR). {{ className: "lead" }}
+
+`@nextwp/core` not only aligns with the latest Next.js advancements but also enriches your web development journey with its seamless integration and powerful capabilities. Anchored in the reliable WP REST API, it delivers unparalleled flexibility, performance, and ease of use. Choose `@nextwp/core` to ensure your Next.js applications not only meet but exceed modern web technology standards, setting a new benchmark in the WordPress development landscape. Explore more and start building today!
+
+<div className="not-prose mb-16 mt-6 flex gap-3">
+  <Button href="/quickstart" arrow="right">
+    <>Quickstart</>
+  </Button>
+  <Button href="/packages" variant="outline">
+    <>Explore other NextWP Packages</>
+  </Button>
+</div>
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+
+## Features
+
+- Pre-renders your content from WP in your Next.js App with Server Side Generation (SSG) utilizing [generateStaticParams](/packages/nextwp/core/next-app-functions#generate-static-params)
+- Revalidates pages on demand with a [revalidate Route Handler](/packages/nextwp/core/route-handlers#revalidate)
+- Generates a `sitemap.xml` including your pages and post routes from WP with [generateSitemap](/packages/nextwp/core/next-app-functions#generate-sitemap)
+- Support for ACF flexible content fields with the [FlexibleContent](/packages/nextwp/core/components#flexible-content) component
+- Preview content changes to your Next.js site directly in WP Admin
+
 ## Installation
 
 <CodeGroup>
@@ -26,4 +95,17 @@ npm install @nextwp/core
 
 ## Usage
 
-<Note>@todo: Add usage instructions</Note>
+Refer to the [documentation](/packages/nextwp/core/components) for usage instructions.
+
+- [Components](/packages/nextwp/core/components)
+
+  - [WordpressTemplate](/packages/nextwp/core/components#wordpress-template)
+  - [FlexibleContent](/packages/nextwp/core/components#flexible-content)
+  - [Icon](/packages/nextwp/core/components#icon)
+  - [AppleIcon](/packages/nextwp/core/components#apple-icon)
+
+- [Next App Router Functions](/packages/nextwp/core/next-app-functions)
+  - [generateStaticParams](/packages/nextwp/core/next-app-functions#generate-static-params)
+  - [generateMetadata](/packages/nextwp/core/next-app-functions#generate-metadata)
+  - [generateSitemap](/packages/nextwp/core/next-app-functions#generate-sitemap)
+- [Route Handlers](/packages/nextwp/core/route-handlers)

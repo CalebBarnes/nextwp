@@ -7,12 +7,18 @@ export const metadata = {
 
 # Quickstart
 
-If you don't have a WordPress site yet, you can create one using any hosting provider. {{ className: 'lead' }} <br/>
-We recommend [WP Engine](https://wpengine.com/?utm_source=nextwp&utm_medium=docs&utm_campaign=nextwp-docs) as they have a great developer experience and reliable hosting. {{ className: 'lead' }}
+This quickstart guide will get you all set up and ready to build your headless WordPress site with NextWP. {{ className: 'lead' }}
 
-## Setup WordPress
+## WordPress hosting
 
-NextWP requires the [NextWP Toolkit](/packages/wordpress/nextwp-toolkit-plugin) plugin to be installed on your WordPress site in order to support some features like [preview](/packages/nextwp/core/route-handlers#next-word-press-preview).
+If you don't have a WordPress site yet, you can create one using any hosting provider like [WPEngine](https://wpengine.com/?utm_source=nextwp&utm_medium=docs&utm_campaign=nextwp-docs), [DigitalOcean](https://m.do.co/c/8c72c601817b), or [Kinsta]
+We recommend [WP Engine](https://wpengine.com/?utm_source=nextwp&utm_medium=docs&utm_campaign=nextwp-docs) as they have a great developer experience and reliable hosting.
+
+## Pre-requisites
+
+NextWP connects with the NextWP Toolkit plugin in your WordPress site for certain features such as the preview mode, and fetching additional data from WordPress that is not included by default in the WP REST API such as the site settings, ACF options pages, post type labels, and more.
+
+To connect your WordPress site to your Next.js project, you will need to install the [NextWP Toolkit](/packages/wordpress/nextwp-toolkit-plugin) plugin on your WordPress site.
 
 ## Create a new project
 
@@ -25,36 +31,36 @@ To create a new NextWP project, you can use the `create-nextwp-app` CLI tool to 
 
 <CodeGroup>
 
+```bash {{ title: 'npm' }}
+npx create-nextwp-app
+```
+
 ```bash {{ title: 'pnpm' }}
-pnpx create-nextwp-app my-app
+pnpx create-nextwp-app
 ```
 
 ```bash {{ title: 'yarn' }}
-yarn create nextwp-app my-app
-```
-
-```bash {{ title: 'npm' }}
-npx create-nextwp-app my-app
+yarn create nextwp-app
 ```
 
 </CodeGroup>
 
 ## Installation
 
-If you already have a Next.js project, you can install `@nextwp/core` and `@nextwp/addons` using your preferred package manager.
+If you already have a Next.js project, you can install `@nextwp/core` and optionally `@nextwp/addons` using your preferred package manager.
 
 <CodeGroup>
 
+```bash {{ title: 'npm' }}
+npm install @nextwp/core
+```
+
 ```bash {{ title: 'pnpm' }}
-pnpm add @nextwp/core @nextwp/addons
+pnpm add @nextwp/core
 ```
 
 ```bash {{ title: 'yarn' }}
-yarn add @nextwp/core @nextwp/addons
-```
-
-```bash {{ title: 'npm' }}
-npm install @nextwp/core
+yarn add @nextwp/core
 ```
 
 </CodeGroup>
@@ -62,9 +68,15 @@ npm install @nextwp/core
 ## Add Environment Variables
 
 NextWP requires environment variables to be set in order to connect to WordPress.
-These variables can be added to a `.env.local` file located in the root directory of your project.
+These variables can be added to a `.env.local` file located in the root directory of your project, or added in your hosting provider's environment variables section.
 
-You can quickly copy these randomly generated variables to your `.env.local`
+NextWP requires an application password to be set in order to request certain data from WordPress such as the site settings, options pages, post type labels, and more.
+
+You can generate an application password in WordPress admin dashboard under Users > Your Profile > Application Passwords.
+
+Make sure to set the preview secret, and revalidate secret to the matching values in the NextWP Toolkit plugin settings in WordPress.
+
+You can quickly copy these randomly generated secrets to your `.env.local` for your convenience.
 
 <EnvCodeBlock />
 

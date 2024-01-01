@@ -1,3 +1,5 @@
+import { Heading } from '@/components/Heading'
+
 export const metadata = {
   title: '@nextwp/addons',
   description: 'Addons for NextWP',
@@ -5,9 +7,18 @@ export const metadata = {
 
 # @nextwp/addons
 
-Additional components and features for NextWP {{ className: "lead" }}
+Enhance your NextWP experience with `@nextwp/addons`, a collection of additional components and features designed to extend the capabilities of your NextWP project. {{ className: "lead" }}
+
+This package is currently a hub of innovation, actively being developed to include a variety of tools and components that streamline your web development process.
 
 ## Installation
+
+<Note>
+  The `@nextwp/addons` package is currently in active development and is not yet
+  ready for production use. It will be made available on NPM soon. To view the
+  current state of the source code, visit the [repo on
+  GitHub](https://github.com/CalebBarnes/nextwp/tree/main/packages/addons).
+</Note>
 
 <CodeGroup>
 
@@ -25,9 +36,57 @@ npm install @nextwp/addons
 
 </CodeGroup>
 
+## NextGravityForm
+
+NextGravityForm is a component tailored for Next.js projects, enabling the effortless rendering of Gravity Forms using data from the [Gravity Forms REST API](https://docs.gravityforms.com/rest-api-v2/).
+
+With its foundation built on the [React Hook Form](https://react-hook-form.com/) library and built-in zod validation, NextGravityForm ensures robust and efficient form handling. This component is not only equipped with fundamental form elements like inputs and checkboxes but also allows for deep customization using your own components. This adaptability makes it ideal for developers looking to create forms that blend seamlessly with their project's design and for users seeking a fluid, intuitive form-filling experience. NextGravityForm is a versatile, user-centric tool, poised to add immense value to your Next.js-based web projects.
+
+{/* The NextGravityForm component significantly enhances Next.js projects by offering seamless integration with Gravity Forms, powered by the React Hook Form library. Equipped with built-in zod validation, it guarantees robust and streamlined form handling, making form setup and management a breeze. This component not only includes essential elements like inputs and checkboxes but also supports extensive customization with your own components. This flexibility empowers developers to craft forms that perfectly align with their design vision and offers end-users a smooth, intuitive form-filling experience. GravityForm stands out as a versatile and user-friendly tool, adding significant value to your web development projects. */}
+
+### Props
+
+<Properties>
+  <Property name="formId" type="string (required)">
+    The ID of the form to render.
+  </Property>
+</Properties>
+
+### Usage
+
+```tsx {{ title: 'src/templates/page/default.tsx' }}
+import { NextGravityForm } from '@nextwp/addons'
+
+export function DefaultPageTemplate() {
+  return <NextGravityForm formId="1" />
+}
+```
+
 ## PreloadResources
 
-PreloadResources is a component that allows you to preload resources (video, images, fonts, etc.) in the head of your page.
+`PreloadResources` is a critical tool in optimizing your Next.js application, particularly for preloading various media types in the page head. It functions similarly to the priority prop in Next Image, which you can read about in more detail [here](https://nextjs.org/docs/app/building-your-application/optimizing/images#priority).
+
+### Purpose and Use
+
+While the priority prop in Next Image is ideal for optimizing the Largest Contentful Paint (LCP) elements (typically large images or text blocks), `PreloadResources` extends this optimization strategy to other key media types like videos. It’s important to note that for images, you should still use Next Image with the priority prop, and for fonts, consider using `next/font`, as detailed in the Next.js docs [here](https://nextjs.org/docs/app/building-your-application/optimizing/fonts).
+
+### Usage Scenario
+
+This component is especially useful for media elements like videos that are critical to your initial viewport but are not images. It ensures these elements are loaded efficiently, thereby enhancing the overall user experience and potentially improving LCP.
+
+### Usage Example
+
+Optimizing your Next.js application's performance is crucial, and PreloadResources plays a key role in this process. This React component allows you to preload various types of media resources in the head of your page, similar to how the [priority prop in Next Image](https://nextjs.org/docs/app/building-your-application/optimizing/images#priority) optimizes image loading.
+
+### What it does
+
+PreloadResources enhances the loading performance of non-image media types like videos and fonts. While Next Image's priority prop is specifically designed for optimizing LCP (Largest Contentful Paint) elements, which are usually large images or text blocks, PreloadResources extends this concept to other media types. This ensures that your application's critical media assets are loaded promptly, contributing positively to your page's LCP and overall user experience.
+
+### Key Features
+
+- **Efficient Preloading**: Strategically load resources in the page's head to minimize loading times.
+- **Media-Ready**: Ideal for optimizing video display, reducing the initial load impact on user experience.
+- **Flexible Resource Management**: Easily manage a variety of resource types including video, images, and fonts.
 
 ### Usage
 
@@ -52,32 +111,5 @@ export function PageTemplate() {
       </video>
     </div>
   )
-}
-```
-
-## GravityForm
-
-<Note>
-  This is a planned feature: GravityForm component is not yet implemented in
-  `@nextwp/addons`.
-</Note>
-
-GravityForm is a component that allows you to render a Gravity Form.
-
-### Props
-
-<Properties>
-  <Property name="formId" type="string (required)">
-    The ID of the form to render.
-  </Property>
-</Properties>
-
-### Usage
-
-```tsx {{ title: 'src/templates/page/default.tsx' }}
-import { GravityForm } from '@nextwp/addons'
-
-export function DefaultPageTemplate() {
-  return <GravityForm formId="1" />
 }
 ```

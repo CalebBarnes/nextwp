@@ -10,7 +10,7 @@ It complements the `@nextwp/core` package by adding enhanced features and functi
 
 <div className="not-prose mb-16 mt-6 flex gap-3">
   <Button href="/quickstart" arrow="right">
-    <>Download</>
+    <>Download plugin</>
   </Button>
   <Button
     href="https://github.com/CalebBarnes/nextwp/tree/main/wordpress/plugins/nextwp-toolkit"
@@ -34,7 +34,7 @@ This plugin is designed to optimize your workflow, making it easier and more eff
 ## Endpoints
 
 NextWP Toolkit adds the following REST endpoints to your WordPress site.
-These endpoints are used by the functions in `@nextwp/core` when retrieving data from WordPress.
+These endpoints are used by the functions in `@nextwp/core` when retrieving certain data from WordPress that is not available by default in the WP REST API, such as ACF options pages.
 
 ---
 
@@ -42,7 +42,10 @@ These endpoints are used by the functions in `@nextwp/core` when retrieving data
 
 <Row>
   <Col>
-    This endpoint allows you to retrieve a specific ACF options page by its slug. 
+    This endpoint allows you to retrieve a specific ACF options page by its slug.
+
+    `@nextwp/core` provides a `getOptionsPage` function that uses this endpoint to retrieve the data for an options page.
+
   </Col>
   <Col sticky>
 

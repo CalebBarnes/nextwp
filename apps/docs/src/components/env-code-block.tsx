@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 
 export function EnvCodeBlock() {
   const [code, setCode] =
-    useState(`NEXT_PUBLIC_WP_URL= {#comment}https://cms.example.com{#}
+    useState(`NEXT_PUBLIC_WP_URL={#comment}https://cms.example.com{#}
 WP_APPLICATION_PASSWORD=
 NEXT_PREVIEW_SECRET=
 REVALIDATE_SECRET_KEY=`)
@@ -23,23 +23,10 @@ REVALIDATE_SECRET_KEY=`)
       .map(() => chars[Math.floor(Math.random() * chars.length)])
       .join('')
 
-    let WP_APPLICATION_PASSWORD = ''
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-
-    for (let i = 0; i < 6; i++) {
-      for (let j = 0; j < 4; j++) {
-        WP_APPLICATION_PASSWORD += characters.charAt(
-          Math.floor(Math.random() * characters.length),
-        )
-      }
-      if (i < 5) WP_APPLICATION_PASSWORD += ' '
-    }
-
-    setCode(`NEXT_PUBLIC_WP_URL= {#comment}https://cms.example.com{#}
-WP_APPLICATION_PASSWORD= {#comment}admin:{#} {#string}${WP_APPLICATION_PASSWORD}{#}
-NEXT_PREVIEW_SECRET= {#string}${NEXT_PREVIEW_SECRET}{#}
-REVALIDATE_SECRET_KEY= {#string}${REVALIDATE_SECRET_KEY}{#}`)
+    setCode(`NEXT_PUBLIC_WP_URL={#comment}https://cms.example.com{#}
+WP_APPLICATION_PASSWORD=
+NEXT_PREVIEW_SECRET={#string}${NEXT_PREVIEW_SECRET}{#}
+REVALIDATE_SECRET_KEY={#string}${REVALIDATE_SECRET_KEY}{#}`)
   }
 
   useEffect(() => {
@@ -54,8 +41,8 @@ REVALIDATE_SECRET_KEY= {#string}${REVALIDATE_SECRET_KEY}{#}`)
           <>
             <CodeButton
               onClick={() =>
-                setCode(`NEXT_PUBLIC_WP_URL= {#comment}https://cms.example.com{#}
-WP_APPLICATION_PASSWORD= 
+                setCode(`NEXT_PUBLIC_WP_URL={#comment}https://cms.example.com{#}
+WP_APPLICATION_PASSWORD=
 NEXT_PREVIEW_SECRET=
 REVALIDATE_SECRET_KEY=`)
               }
