@@ -28,10 +28,10 @@ interface Resource {
 
 const resources: Array<Resource> = [
   {
-    href: '/packages',
-    name: 'Packages',
+    href: '/packages/nextwp/core/components',
+    name: 'Components',
     description:
-      'Learn about the NextWP packages and how to use them in your project.',
+      'Learn about the NextWP components and how to use them in your project.',
     icon: UserIcon,
     pattern: {
       y: 16,
@@ -42,9 +42,10 @@ const resources: Array<Resource> = [
     },
   },
   {
-    href: '/environment-variables',
-    name: 'Environment Variables',
-    description: 'Learn about the NextWP environment variables.',
+    href: '/packages/nextwp/core/next-app-functions',
+    name: 'App Router Functions',
+    description:
+      'App Router functions used for Server Side Generation (SSG), SEO metadata, and a sitemap.',
     icon: ChatBubbleIcon,
     pattern: {
       y: -6,
@@ -54,31 +55,30 @@ const resources: Array<Resource> = [
       ],
     },
   },
-  // {
-  //   href: '/messages',
-  //   name: 'Messages',
-  //   description:
-  //     'Learn about the message model and how to create, retrieve, update, delete, and list messages.',
-  //   icon: EnvelopeIcon,
-  //   pattern: {
-  //     y: 32,
-  //     squares: [
-  //       [0, 2],
-  //       [1, 4],
-  //     ],
-  //   },
-  // },
-  // {
-  //   href: '/groups',
-  //   name: 'Groups',
-  //   description:
-  //     'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
-  //   icon: UsersIcon,
-  //   pattern: {
-  //     y: 22,
-  //     squares: [[0, 1]],
-  //   },
-  // },
+  {
+    href: '/packages/nextwp/core/route-handlers',
+    name: 'Route Handlers',
+    description: '',
+    icon: EnvelopeIcon,
+    pattern: {
+      y: 32,
+      squares: [
+        [0, 2],
+        [1, 4],
+      ],
+    },
+  },
+  {
+    href: '/environment-variables',
+    name: 'Environment Variables',
+    description:
+      'Learn about the environment variables that are required by NextWP.',
+    icon: UsersIcon,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]],
+    },
+  },
 ]
 
 function ResourceIcon({ icon: Icon }: { icon: Resource['icon'] }) {

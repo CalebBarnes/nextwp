@@ -1,0 +1,62 @@
+import { HeroPattern } from '@/components/HeroPattern'
+
+export const metadata = {
+  title: 'Why does NextWP use the WP REST API?',
+  description:
+    'Learn everything there is to know about building Headless WordPress sites with NextWP.',
+}
+
+<HeroPattern />
+
+# Why does NextWP use the WP REST API?
+
+NextWP utilizes the WordPress REST API for several key reasons, each contributing to creating an efficient, flexible, and secure headless CMS experience.
+Here's why the WP REST API is central to NextWP's functionality. {{ className: "lead" }}
+
+## Performance
+
+- **Efficient Caching**: One of the primary advantages of the REST API is the default caching mechanism for GET requests, which is not only supported in React Server Components, but also in most WordPress hosting caches and CDNs. This results in a notably faster experience in the Next.js App Router compared to other APIs like WPGraphQL, which doesn't have this caching feature enabled by default in most hosting environments.
+- **Reduced Server Load**: The default caching mechanism for GET request in React and Next.js also reduces the load on the WordPress server, allowing it to handle more requests without slowing down.
+
+## Flexibility
+
+- **Adaptability and Wide Support**: Known for its versatility, the REST API is compatible with numerous plugins, ensuring easy integration with existing WordPress systems.
+  - **Extensive Plugin Compatibility**: With inherent support in many popular plugins such as WooCommerce, Yoast SEO, Advanced Custom Fields, and Gravity Forms, the REST API facilitates smoother integration in NextWP environments. In contrast, WPGraphQL often necessitates additional third-party adapter plugins for each WordPress plugin, increasing complexity. Such a setup can potentially lead to instability and a higher chance of encountering breaking changes and mismatched plugin versions with future updates.
+  - **WPGraphQL Coexistence**: The REST API's compatibility with WPGraphQL enables the use of both APIs simultaneously, offering the best of both worlds – the REST API’s efficient caching for most GET requests, and WPGraphQL’s advanced features for specific needs.
+
+## Security
+
+- **Built-in Security**: The REST API prioritizes security, ensuring robust data protection.
+- **Enhanced Security Options**: Users can further strengthen security through various authentication plugins.
+
+## Official Endorsement
+
+- **Core WordPress Component**: As an official part of WordPress core, the REST API is a reliable and regularly updated choice.
+- **Stable and Reliable**: Its stable nature is maintained through ongoing updates, reducing the likelihood of disruptive changes.
+- **Consistent Stability**: Its stable nature is maintained through ongoing updates, reducing the likelihood of disruptive changes.
+
+## Future-Proof
+
+- **Reliable Stability**: While absolute immunity from breaking changes is impossible in software development, the REST API's core integration in WordPress means it's generally less prone to such issues, especially compared to some third-party plugins.
+- **Seamless WordPress Updates**: Regular compatibility updates make updating through WordPress version upgrades seamless.
+
+## Streamlined Development Workflow with Type Support
+
+NextWP leverages the WP REST API for a more efficient development workflow, particularly in data management and query simplicity compared to WPGraphQL.
+
+- **Built-in and Extendable Types**: NextWP includes default TypeScript types for standard WordPress content, saving time and effort. These types are easily extendable for custom fields, avoiding the repetitive manual type definitions often required with WPGraphQL.
+- **Simplified Data Retrieval**: Fetching data via the WP REST API is generally more straightforward, especially for custom fields or blocks, enabling faster prototyping and development cycles.
+- **User-Friendly for Developers**: The REST API's approach, combined with NextWP's type support, offers a gentler learning curve, accelerating onboarding and productivity.
+
+In essence, NextWP’s integration with the WP REST API not only makes the development process smoother but also enriches the overall developer experience, allowing teams to focus on feature development with less concern about data fetching complexities.
+
+<div className="not-prose">
+  <Button
+    href="https://developer.wordpress.org/rest-api/reference/"
+    variant="text"
+    arrow="right"
+    target="_blank"
+  >
+    <>Learn about the WP REST API on the official docs</>
+  </Button>
+</div>
