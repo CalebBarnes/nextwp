@@ -1,11 +1,14 @@
 // nextjs app functions
 export { generateMetadata } from "./src/next-app-functions/generate-meta-data";
 export { generateStaticParams } from "./src/next-app-functions/generate-static-params";
-export { generateSitemap } from "./src/next-app-functions/generate-sitemap";
-export { revalidate } from "./src/next-app-functions/revalidate";
+export {
+  generateSitemap,
+  generateSiteMap,
+} from "./src/next-app-functions/generate-sitemap";
 
-// draft mode preview route handler
-export { NextWordPressPreview } from "./src/draft/draft-route-handler";
+// route handlers
+export { revalidate } from "./src/route-handlers/revalidate";
+export { preview } from "./src/route-handlers/preview";
 
 // rest api functions
 export { getSiteSettings } from "./src/api/get-site-settings";
@@ -19,6 +22,8 @@ export { getOptionsPage } from "./src/api/get-options-page";
 // react components
 export { FlexibleContent } from "./src/components/flexible-content";
 export { WordpressTemplate } from "./src/components/wordpress-template";
+export { Icon } from "./src/components/icon";
+export { AppleIcon } from "./src/components/apple-icon";
 
 // utils helpers
 export { getFeaturedImage } from "./src/utils/get-featured-image";

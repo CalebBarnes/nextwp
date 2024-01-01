@@ -32,7 +32,7 @@ export async function generateSitemap({
 
 export function generateSiteMap() {
   console.warn(
-    "Warning: generateSiteMap is deprecated. Please use generateSitemap instead."
+    "Warning: generateSiteMap is deprecated. Please use generateSitemap instead. This will be removed in the next release."
   );
 
   return generateSitemap;

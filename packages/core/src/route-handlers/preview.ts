@@ -1,5 +1,5 @@
 import { cookies, draftMode } from "next/headers";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 
 interface RouteHandlerContext {
   params: { preview: string[] };
@@ -9,41 +9,45 @@ type PreviewOptions = {
   toolbar: boolean;
 };
 
-function NextWordPressPreview(options: PreviewOptions): any;
-function NextWordPressPreview(
+function preview(options: PreviewOptions): any;
+function preview(
   req: NextRequest,
   res: RouteHandlerContext,
   options: PreviewOptions
 ): any;
 
-/** The main entry point to next-wordpress-preview */
-function NextWordPressPreview(
-  ...args:
-    | [PreviewOptions]
-    | Parameters<typeof NextWordPressPreviewRouteHandler>
+/** The main entry point to nextwp preview */
+function preview(
+  ...args: [PreviewOptions] | Parameters<typeof previewRouteHandler>
 ) {
   if (args.length === 1) {
     return async (req: NextRequest, res: RouteHandlerContext) => {
       if ((res as any)?.params) {
-        return await NextWordPressPreviewRouteHandler(
-          req as NextRequest,
-          res as RouteHandlerContext,
-          args[0]
-        );
+        return previewRouteHandler(req, res, args[0]);
       }
     };
   }
 
   if ((args[1] as any)?.params) {
-    return NextWordPressPreviewRouteHandler(
-      ...(args as Parameters<typeof NextWordPressPreviewRouteHandler>)
+    return previewRouteHandler(
+      ...(args as Parameters<typeof previewRouteHandler>)
     );
   }
 }
 
-export { NextWordPressPreview };
+// todo: remove this deprecated export in the next release
+export function NextWordPressPreview(...args: Parameters<typeof preview>) {
+  // eslint-disable-next-line no-console -- this is a deprecated export
+  console.warn(
+    "The import named 'NextWordPressPreview' is deprecated, please import 'preview' from @nextwp/core instead"
+  );
+  return preview(...args);
+}
 
-export async function NextWordPressPreviewRouteHandler(
+export { preview };
+export default preview;
+
+function previewRouteHandler(
   request: Request,
   context: RouteHandlerContext,
   options: PreviewOptions
@@ -58,7 +62,7 @@ export async function NextWordPressPreviewRouteHandler(
 
     if (secret !== process.env.NEXT_PREVIEW_SECRET) {
       return new Response(
-        "Invalid preview token. Check 'NEXT_PREVIEW_SECRET' environment variable.",
+        "Invalid preview token. Check that your 'NEXT_PREVIEW_SECRET' environment variable matches the one in the NextWP Toolkit plugin settings.",
         {
           status: 401,
         }
@@ -71,10 +75,10 @@ export async function NextWordPressPreviewRouteHandler(
 
     draftMode().enable();
 
-    // this is a temporary fix to get it working in an iframe
+    // this is a temporary fix to get draft mode working in an iframe
     // until Next.js changes the sameSite setting for the draft cookie
     const draft = cookies().get("__prerender_bypass");
-    //@ts-ignore
+    // @ts-expect-error -- this is a temporary fix
     cookies().set("__prerender_bypass", draft?.value, {
       httpOnly: true,
       sameSite: "None",
@@ -90,7 +94,6 @@ export async function NextWordPressPreviewRouteHandler(
     }
 
     let path = uri;
-
     if (id) {
       path = `/private/${rest_base}/${id}`;
     }
@@ -117,9 +120,9 @@ export async function NextWordPressPreviewRouteHandler(
         Location: uri === "/" ? "/" : `/${uri}`,
       },
     });
-  } else {
-    return new Response("Not Found " + context.params.preview?.[0], {
-      status: 404,
-    });
   }
+
+  return new Response(`Not Found ${context.params.preview?.[0]}`, {
+    status: 404,
+  });
 }

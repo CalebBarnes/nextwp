@@ -9,18 +9,16 @@ export async function revalidate(request: Request) {
     return new Response(JSON.stringify({ message: "Invalid payload" }));
   }
 
-  if (!paths) {
+  if (!paths.length) {
     return new Response(JSON.stringify({ message: "No paths" }));
   }
 
   const correctPaths = paths.filter((path: string) => path.startsWith("/"));
 
   try {
-    const revalidatePaths = correctPaths.map((path: string) => {
+    for (const path of correctPaths) {
       revalidatePath(path);
-    });
-
-    await Promise.all(revalidatePaths);
+    }
 
     return new Response(
       JSON.stringify({
