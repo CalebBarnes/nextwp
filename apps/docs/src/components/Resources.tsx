@@ -10,10 +10,10 @@ import {
 
 import { GridPattern } from '@/components/GridPattern'
 import { Heading } from '@/components/Heading'
-import { ChatBubbleIcon } from '@/components/icons/ChatBubbleIcon'
-import { EnvelopeIcon } from '@/components/icons/EnvelopeIcon'
-import { UserIcon } from '@/components/icons/UserIcon'
-import { UsersIcon } from '@/components/icons/UsersIcon'
+import { ShapesIcon } from './icons/ShapesIcon'
+import { BoltIcon } from './icons/BoltIcon'
+import { SquaresPlusIcon } from './icons/SquaresPlusIcon'
+import { CogIcon } from './icons/CogIcon'
 
 interface Resource {
   href: string
@@ -32,7 +32,7 @@ const resources: Array<Resource> = [
     name: 'Components',
     description:
       'Learn about the NextWP components and how to use them in your project.',
-    icon: UserIcon,
+    icon: SquaresPlusIcon,
     pattern: {
       y: 16,
       squares: [
@@ -46,7 +46,7 @@ const resources: Array<Resource> = [
     name: 'App Router Functions',
     description:
       'App Router functions used for Server Side Generation (SSG), SEO metadata, and a sitemap.',
-    icon: ChatBubbleIcon,
+    icon: ShapesIcon,
     pattern: {
       y: -6,
       squares: [
@@ -58,8 +58,9 @@ const resources: Array<Resource> = [
   {
     href: '/packages/nextwp/core/route-handlers',
     name: 'Route Handlers',
-    description: '',
-    icon: EnvelopeIcon,
+    description:
+      'Learn about the route handlers used by NextWP for preview and revalidation.',
+    icon: BoltIcon,
     pattern: {
       y: 32,
       squares: [
@@ -73,7 +74,7 @@ const resources: Array<Resource> = [
     name: 'Environment Variables',
     description:
       'Learn about the environment variables that are required by NextWP.',
-    icon: UsersIcon,
+    icon: CogIcon,
     pattern: {
       y: 22,
       squares: [[0, 1]],
