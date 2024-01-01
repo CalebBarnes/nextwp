@@ -249,10 +249,10 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Frequently Asked Questions',
     links: [
-      {
-        title: 'Hosting for NextWP site?',
-        href: '/faq/hosting',
-      },
+      // {
+      //   title: 'Hosting for NextWP site?',
+      //   href: '/faq/hosting',
+      // },
       {
         title: 'Why use the REST API?',
         href: '/faq/why-rest-api',
