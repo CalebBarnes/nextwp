@@ -1,4 +1,4 @@
-import type { WpLink, WpMenu, WpMenuItem } from "../types";
+import type { WpLink, Menu, WpMenuItem } from "../types";
 
 type MenuResponse = {
   id: number;
@@ -96,7 +96,9 @@ ${
     });
 
     throw new Error(
-      `No menu found with slug "${slug}".\nAvailable menu slugs: ${availableMenus}`
+      `No menu found with slug "${slug}".\nAvailable menu slugs: ${availableMenus.join(
+        ", "
+      )}`
     );
   }
 
@@ -109,7 +111,7 @@ ${
   let data;
   try {
     data = (await req.json()) as MenuResponse;
-  } catch (err) {
+  } catch (err: any) {
     throw new Error(
       `Error fetching menu items for menu id ${menu.id}: ${err.message}`
     );
@@ -121,14 +123,14 @@ ${
 /**
  * Structure menu items into a tree with childItems instead of a single shallow array that the REST API returns.
  */
-function structureMenuItems(menuItems: MenuResponse): WpMenu {
+function structureMenuItems(menuItems: MenuResponse): Menu {
   // Create a map for easy lookup of child items
   const itemsById = new Map(
     menuItems.map((item) => [item.id, { ...item, childItems: [] }])
   );
 
   // The final structured menu items
-  const structuredItems: WpMenu = [];
+  const structuredItems: Menu = [];
 
   // Iterate over the menu items to structure them
   for (const item of menuItems) {
@@ -143,7 +145,7 @@ function structureMenuItems(menuItems: MenuResponse): WpMenu {
       // This item is a child of another item
       const parentItem = itemsById.get(item.parent) as WpMenuItem | undefined;
       if (parentItem) {
-        parentItem.childItems.push(structuredItem);
+        parentItem.childItems?.push(structuredItem);
       }
     }
   }

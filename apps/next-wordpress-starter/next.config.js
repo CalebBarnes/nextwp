@@ -36,11 +36,11 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 
-  logging: {
-    fetches: {
-      fullUrl: true,
-    },
-  },
+  // logging: {
+  //   fetches: {
+  //     fullUrl: true,
+  //   },
+  // },
 };
 
 module.exports = nextConfig;

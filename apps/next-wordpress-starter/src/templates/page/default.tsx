@@ -1,15 +1,23 @@
 import { FlexibleContent } from "@nextwp/core";
-import type { WpPage } from "@nextwp/core/src/types";
-import type { RowItem } from "@nextwp/core/src/components/flexible-content";
+import type { WpPage, TemplateProps, RowItem } from "@nextwp/core";
 import * as blocks from "../../components/blocks";
+
+interface DefaultTemplateProps extends TemplateProps {
+  data: PageData;
+}
 
 interface PageData extends WpPage {
   acf?: {
-    modules: RowItem[];
+    modules?: BlockProps[];
   };
 }
 
-export default function DefaultPageTemplate({ data }: { data: PageData }) {
-  if (!data.acf?.modules) return null;
+type BlockProps = RowItem;
+
+export default function DefaultPageTemplate({ data }) {
+  if (!data.acf?.modules) {
+    return null;
+  }
+
   return <FlexibleContent blocks={blocks} rows={data.acf.modules} />;
 }

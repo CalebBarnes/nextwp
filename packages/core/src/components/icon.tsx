@@ -1,11 +1,11 @@
 import { ImageResponse } from "next/og";
 import { getSiteIcon } from "../api/get-site-icon";
-import type { WpMediaObject } from "../types";
+import type { WpMediaItem } from "../types";
 
 export async function Icon() {
-  const wpSiteIcon: WpMediaObject = await getSiteIcon();
+  const wpSiteIcon: WpMediaItem = await getSiteIcon();
   const iconSourceUrl =
-    wpSiteIcon?.media_details?.sizes?.["site_icon-32"]?.source_url;
+    wpSiteIcon.media_details?.sizes?.["site_icon-32"]?.source_url;
 
   return new ImageResponse(
     (

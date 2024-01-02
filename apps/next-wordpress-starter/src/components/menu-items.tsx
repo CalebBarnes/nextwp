@@ -1,5 +1,4 @@
-import { getMenuItems } from "@nextwp/core";
-import type { WpMenuItem } from "@nextwp/core/types";
+import { getMenuItems, type WpMenuItem } from "@nextwp/core";
 
 export default async function MenuItems({ className }) {
   const menuItems = await getMenuItems({ slug: "main-menu" });

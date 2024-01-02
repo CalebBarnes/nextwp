@@ -1,5 +1,4 @@
-import { getMenuItems } from "@nextwp/core";
-import type { WpMenuItem } from "@nextwp/core/types";
+import { getMenuItems, type WpMenuItem } from "@nextwp/core";
 import Link from "next/link";
 
 const navigation = {

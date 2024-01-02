@@ -11,7 +11,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // todo: Log the error to an error reporting service like Sentry
+    // eslint-disable-next-line no-console -- Log the error to an error reporting service
     console.error(error);
   }, [error]);
 

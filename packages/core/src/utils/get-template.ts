@@ -5,7 +5,7 @@ import type {
   SearchParams,
 } from "../components/wordpress-template";
 import type { ArchivePageData } from "../api/get-page-data/get-archive-page";
-import { log } from "./log";
+import { debug } from "./debug-log";
 
 export interface TemplateProps {
   uri: string;
@@ -41,46 +41,46 @@ type GetTemplateArgs = {
 /**
  * Get the template for a given uri
  */
-export default function getTemplate({
+export function getTemplate({
   uri,
   data,
   archive,
   templates,
   supressWarnings,
 }: GetTemplateArgs): React.ComponentType<TemplateProps> | undefined {
+  const shouldLog = process.env.NODE_ENV === "development" && !supressWarnings;
+
   if (archive?.slug) {
-    const tmplName = handleTemplateName(archive.slug);
-    const template = templates.archive[tmplName];
-    if (!template && !supressWarnings) {
-      log(
-        `Warn: Archive template "${archive.slug}" not found on uri '${uri}'. Did you forget to add it to the templates object in src/templates/index? `
+    const templateName = getTemplateName(archive.slug);
+    const template = templates.archive[templateName];
+
+    if (!template && shouldLog) {
+      debug.warn(
+        `Archive template "${archive.slug}" not found on uri '${uri}'.\n Did you forget to add it to the templates object in src/templates/index?`
       );
+      return;
     }
+
     return template;
   }
 
-  if (!archive && data) {
-    const tmplName = handleTemplateName(data.template || "default");
-    const template = templates[data.type || ""][tmplName];
+  if (!archive && data && typeof data.template === "string") {
+    const templateName = getTemplateName(data.template || "default");
+    const template = templates[data.type || ""][templateName];
 
-    if (!template && !supressWarnings) {
-      log(
-        `Warn: Template "${tmplName || "default"}" not found for type "${
-          data.type
-        }" on uri '${uri}'. Did you forget to add it to the templates object in src/templates/index? `
+    if (!template && shouldLog) {
+      debug.warn(
+        `Template "${templateName}" not found for type "${data.type}" on uri '${uri}'.\n Did you forget to add it to the templates object in src/templates/index?`
       );
+      return;
     }
     return template;
   }
 }
 
-export { getTemplate };
-
-function handleTemplateName(filename: string) {
+function getTemplateName(filename: string): string {
   let templateName = filename;
-
   const dotIndex = filename.lastIndexOf(".");
-
   if (dotIndex !== -1) {
     templateName = filename.substring(0, dotIndex);
   }
@@ -91,6 +91,5 @@ function handleTemplateName(filename: string) {
     .join("");
 
   templateName = templateName.charAt(0).toLowerCase() + templateName.slice(1);
-
   return templateName;
 }

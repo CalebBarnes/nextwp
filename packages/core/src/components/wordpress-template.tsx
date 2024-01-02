@@ -6,7 +6,7 @@ import type { ArchivePageData } from "../api/get-page-data/get-archive-page";
 import { deepMerge } from "../utils/deep-merge";
 import type { Templates } from "../utils/get-template";
 import { createDataProxy } from "../helpers/data-proxy";
-import getTemplate from "../utils/get-template";
+import { getTemplate } from "../utils/get-template";
 import { getPageData } from "../api/get-page-data/get-page-data";
 import { PreviewToolbar } from "./preview-toolbar";
 import { RouteParamsDebug } from "./route-params-debug";

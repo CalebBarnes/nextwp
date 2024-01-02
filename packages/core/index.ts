@@ -15,12 +15,16 @@ export { getSiteSettings } from "./src/api/get-site-settings";
 export { getPageData } from "./src/api/get-page-data/get-page-data";
 export { getMenuItems } from "./src/api/get-menu-items";
 export { getSingleItem } from "./src/api/get-single-item";
+export { getSiteLogo } from "./src/api/get-site-logo";
 
 // custom rest endpoints - registered by the 'NextWP - Toolkit' wp plugin (@nextwp/wp-plugin)
 export { getOptionsPage } from "./src/api/get-options-page";
 
 // react components
-export { FlexibleContent } from "./src/components/flexible-content";
+export {
+  FlexibleContent,
+  type RowItem,
+} from "./src/components/flexible-content";
 export { WordpressTemplate } from "./src/components/wordpress-template";
 export { Icon } from "./src/components/icon";
 export { AppleIcon } from "./src/components/apple-icon";
@@ -29,3 +33,20 @@ export { AppleIcon } from "./src/components/apple-icon";
 export { getFeaturedImage } from "./src/utils/get-featured-image";
 export { stripWpUrl } from "./src/utils/strip-wp-url";
 export { swapWpUrl } from "./src/utils/swap-wp-url";
+
+// types
+export type {
+  WpPage,
+  YoastHeadJson,
+  WpLink,
+  WpImage,
+  AcfImage,
+  AcfFile,
+  AcfVideo,
+  WpSettings,
+  WpMenuItem,
+  Menu,
+  WpMediaItem,
+} from "./src/types";
+
+export type { Templates, TemplateProps } from "./src/utils/get-template";

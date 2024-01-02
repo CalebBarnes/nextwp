@@ -1,4 +1,4 @@
-export { Icon as default } from "@nextwp/core/src/components/icon";
+export { Icon as default } from "@nextwp/core";
 
 export const runtime = "edge";
 export const contentType = "image/png";

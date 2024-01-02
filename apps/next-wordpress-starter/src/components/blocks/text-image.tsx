@@ -1,7 +1,7 @@
 import type {
   WpImage,
   // WpLink
-} from "@nextwp/core/src/types";
+} from "@nextwp/core";
 // import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";

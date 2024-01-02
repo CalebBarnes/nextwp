@@ -1,19 +1,21 @@
 import React from "react";
+import { debug } from "../utils/debug-log";
 
-export interface RowItem {
+export interface Row {
   acf_fc_layout: string;
   [key: string]: any;
 }
+type RowItem = Row | null | undefined;
 
 export interface FlexibleContentProps {
   /**
    * Object of React Components that will be used to render the flexible content
    */
-  blocks?: Record<string, React.ComponentType<any>>;
+  blocks?: Record<string, React.ComponentType<Row> | undefined>;
   /**
    * Array of acf flexible content rows from the Wordpress API
    */
-  rows: RowItem[];
+  rows?: RowItem[] | null | undefined;
   /**
    * Extra data that will be passed to each individual component
    */
@@ -30,47 +32,47 @@ export function FlexibleContent({
   data,
   supressWarnings,
 }: FlexibleContentProps) {
-  return (
-    rows
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- sanitizing data, removing empty rows just in case the API returns some crap
-      .filter((o) => o !== null)
-      .map(({ acf_fc_layout, ...rest }: RowItem, index: number) => {
-        // capitalize each word and remove underscores
-        const type = acf_fc_layout
-          .split(/[_-]/)
-          .map(
-            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-          )
-          .join("");
+  if (!rows?.length || !blocks) {
+    return null;
+  }
 
-        const rowData = { type, ...rest };
-        const Component = blocks?.[type];
-
-        if (Component) {
-          return (
-            <Component
-              firstItem={index === 0}
-              // eslint-disable-next-line react/no-array-index-key -- there is no alternative
-              key={index}
-              {...rowData}
-              {...data}
-            />
-          );
-        }
-
-        if (!supressWarnings) {
-          // eslint-disable-next-line no-console -- this is a warning
-          console.error(
-            `%cReact component "${type}" was not found. Make sure the
-            component exists and you are importing it.`,
-            "color: red;"
-          );
-          return null;
-        }
-
+  return rows
+    .filter((o) => o !== null)
+    .map((row, index: number) => {
+      if (!row?.acf_fc_layout) {
         return null;
-      })
-  );
+      }
+
+      // convert the layout name from snake_case or kebab-case to PascalCase
+      const componentName = row.acf_fc_layout
+        .split(/[_-]/)
+        .map(
+          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        )
+        .join("");
+
+      const Component = blocks[componentName];
+
+      if (Component && typeof Component !== "undefined") {
+        return (
+          <Component
+            firstItem={index === 0}
+            // eslint-disable-next-line react/no-array-index-key -- there is no unique id for the row
+            key={index}
+            {...row}
+            {...data}
+          />
+        );
+      }
+
+      if (!supressWarnings && process.env.NODE_ENV !== "production") {
+        debug.warn(
+          `React component "${componentName}" was not found. \nMake sure you are passing "${componentName}" to "FlexibleContent" in the blocks prop.\n`
+        );
+      }
+
+      return null;
+    });
 }
 
 export default FlexibleContent;

@@ -1,32 +1,102 @@
 export interface WpPage {
+  /**
+   * Unique identifier for the page or post.
+   */
   id: number;
-  date?: string;
-  date_gmt?: string;
-  guid?: RenderedObject;
-  modified?: string;
-  modified_gmt?: string;
+  /**
+   * An alphanumeric identifier for the post unique to its type.
+   */
   slug?: string;
-  status?: string;
-  type?: string;
-  link?: string;
+  /**
+   * The title for the page or post.
+   */
   title?: RenderedObject;
+  /**
+   * The content for the page or post.
+   */
   content?: RenderedObject;
+  /**
+   * The excerpt for the page or post.
+   */
   excerpt?: RenderedObject;
+  /**
+   * The date the post was published, in the site's timezone.
+   */
+  date?: string;
+  /**
+   * The date the post was published, as GMT.
+   */
+  date_gmt?: string;
+  /**
+   * The date the post was last modified, in the site's timezone.
+   */
+  modified?: string;
+  /**
+   * The date the post was last modified, as GMT.
+   */
+  modified_gmt?: string;
+  /**
+   * The globally unique identifier for the post.
+   */
+  guid?: RenderedObject;
+  /**
+   * URL to the post.
+   */
+  link?: string;
+  /**
+   * A named status for the post.
+   * One of: publish, future, draft, pending, private
+   */
+  status?: "publish" | "future" | "draft" | "pending" | "private";
+  /**
+   * Type of post.
+   */
+  type?: string;
+  /**
+   * The ID for the author of the post.
+   */
   author?: number;
+  /**
+   * The ID of the featured media for the post.
+   */
   featured_media?: number;
-  parent?: number;
+  /**
+   * Whether or not comments are open on the post.
+   * One of: open, closed
+   */
+  comment_status?: "open" | "closed";
+  /**
+   * Whether or not the post can be pinged.
+   * One of: open, closed
+   */
+  ping_status?: "open" | "closed";
+  /**
+   * The order of the post in relation to other posts.
+   */
   menu_order?: number;
-  comment_status?: string;
-  ping_status?: string;
+  /**
+   * Meta fields.
+   */
+  meta?: any;
+  /**
+   * The theme file to use to display the post.
+   */
   template?: string;
-  meta?: any; // Define a more specific type if the structure of meta is known
-  acf?: any;
+  /**
+   * The raw html generated for the yoast head.
+   */
   yoast_head?: string;
+  /**
+   * The yoast head data as json.
+   */
   yoast_head_json?: YoastHeadJson;
-  _links?: any; // Define a more specific type if the structure of _links is known
+  /**
+   * Links for embedded resources.
+   */
+  _links?: EmbeddedLinks;
 }
 
-interface YoastHeadJson {
+export interface YoastHeadJson {
   title?: string;
   og_description?: string;
   og_title?: string;
@@ -38,21 +108,41 @@ interface YoastHeadJson {
   twitter_image?: string;
 }
 
+type EmbeddedLinks = {
+  self?: EmbeddedLink[];
+  collection?: EmbeddedLink[];
+  about?: EmbeddedLink[];
+  author?: EmbeddedAuthorLink[];
+  replies?: EmbeddedLink[];
+};
+
+type EmbeddedLink = {
+  href?: string;
+};
+
+type EmbeddedAuthorLink = {
+  embeddable?: boolean;
+  href?: string;
+};
+
 export interface WpLink {
   target?: string;
   title?: string;
   url?: string;
 }
 
-export interface WpImage {
+export interface AcfFile {
+  alt?: string;
+  url?: string;
   ID?: number;
   id?: number;
+  width?: number;
+  height?: number;
+  mime_type?: string;
   title?: string;
   filename?: string;
   filesize?: number;
-  url?: string;
   link?: string;
-  alt?: string;
   author?: string;
   description?: string;
   caption?: string;
@@ -62,12 +152,9 @@ export interface WpImage {
   date?: string;
   modified?: string;
   menu_order?: number;
-  mime_type?: string;
   type?: string;
   subtype?: string;
   icon?: string;
-  width?: number;
-  height?: number;
   sizes?: {
     thumbnail?: string;
     "thumbnail-width"?: number;
@@ -90,10 +177,46 @@ export interface WpImage {
   };
 }
 
+export type { AcfFile as WpImage };
+export type { AcfFile as AcfImage };
+export type { AcfFile as AcfVideo };
+
 export interface WpSettings {
+  /**
+   * The site title
+   */
   title?: string;
+  /**
+   * The site tagline
+   */
   description?: string;
+  /**
+   * The URL of the WordPress site
+   */
   url?: string;
+  /**
+   * The number of posts to show per page on archive pages
+   */
+  posts_per_page?: number;
+  /**
+   * The ID of the page for the front page
+   */
+  page_on_front?: number;
+  /**
+   * The ID of the page for the blog posts archive
+   */
+  page_for_posts?: number;
+  /**
+   * The ID of the WpMediaItem for the site logo added in the appearance customizer
+   */
+  site_logo?: number;
+  /**
+   * The ID of the WpMediaItem for the site icon added in the appearance customizer
+   */
+  site_icon?: number;
+  /**
+   * The email address for the admin user
+   */
   email?: string;
   timezone?: string;
   date_format?: string;
@@ -103,14 +226,9 @@ export interface WpSettings {
   use_smilies?: boolean;
   default_category?: number;
   default_post_format?: string;
-  posts_per_page?: number;
   show_on_front?: string;
-  page_on_front?: number;
-  page_for_posts?: number;
   default_ping_status?: string;
   default_comment_status?: string;
-  site_logo?: null | string; // Assuming it could be a string when not null
-  site_icon?: number;
 }
 
 export interface WpMenuItem {
@@ -132,16 +250,16 @@ export interface WpMenuItem {
   invalid?: boolean;
   meta?: any;
   menus?: number;
-  acf?: any[]; // This might include WpImage or WpLink
-  _links?: WpLink[]; // Replacing LinksType with WpLink
+  acf?: any[];
+  _links?: WpLink[];
   label?: string;
   path?: string;
   childItems?: WpMenuItem[];
 }
 
-export type WpMenu = WpMenuItem[];
+export type Menu = WpMenuItem[];
 
-export interface WpMediaObject {
+export interface WpMediaItem {
   id?: number;
   date?: string;
   date_gmt?: string;
@@ -164,66 +282,47 @@ export interface WpMediaObject {
   alt_text?: string;
   media_type?: string;
   mime_type?: string;
-  media_details?: MediaDetails;
+  media_details?: {
+    width?: number;
+    height?: number;
+    file?: string;
+    filesize?: number;
+    sizes?: Record<string, ImageSize>;
+    image_meta?: ImageMeta;
+  };
   post?: any;
   source_url?: string;
   _links?: EmbeddedLinks;
 }
 
-type RenderedObject = {
+export interface RenderedObject {
   rendered?: string;
   protected?: boolean;
-};
+}
 
-type MediaDetails = {
-  width: number;
-  height: number;
-  file: string;
-  filesize?: number;
-  sizes: Record<string, ImageSize>;
-  image_meta: ImageMeta;
-};
-
-type ImageSize = {
+export interface ImageSize {
   file: string;
   width: number;
   height: number;
   filesize?: number;
   mime_type: string;
   source_url: string;
-};
+}
 
-type ImageMeta = {
-  aperture: string;
-  credit: string;
-  camera: string;
-  caption: string;
-  created_timestamp: string;
-  copyright: string;
-  focal_length: string;
-  iso: string;
-  shutter_speed: string;
-  title: string;
-  orientation: string;
-  keywords: string[];
-};
-
-type EmbeddedLinks = {
-  self?: EmbeddedLink[];
-  collection?: EmbeddedLink[];
-  about?: EmbeddedLink[];
-  author?: EmbeddedAuthorLink[];
-  replies?: EmbeddedLink[];
-};
-
-type EmbeddedLink = {
-  href?: string;
-};
-
-type EmbeddedAuthorLink = {
-  embeddable?: boolean;
-  href?: string;
-};
+export interface ImageMeta {
+  aperture?: string;
+  credit?: string;
+  camera?: string;
+  caption?: string;
+  created_timestamp?: string;
+  copyright?: string;
+  focal_length?: string;
+  iso?: string;
+  shutter_speed?: string;
+  title?: string;
+  orientation?: string;
+  keywords?: string[];
+}
 
 export interface WpArchive {
   description?: string;

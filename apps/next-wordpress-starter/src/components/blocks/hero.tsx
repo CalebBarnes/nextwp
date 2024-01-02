@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { WpImage, WpLink } from "@nextwp/core/src/types";
+import type { WpImage, WpLink } from "@nextwp/core";
 import Button from "../ui/button";
 
 export interface HeroProps {

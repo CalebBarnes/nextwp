@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import type { WpMenuItem } from "@nextwp/core/types";
+import type { WpMenuItem } from "@nextwp/core";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +21,7 @@ export function DesktopMenu({
   return (
     <nav className={cn("flex space-x-4", className)}>
       {menuItems?.map((menuItem) => {
-        if (menuItem.childItems.length > 0) {
+        if (menuItem?.childItems?.length > 0) {
           return (
             <DropdownMenu key={menuItem.id}>
               <DropdownMenuTrigger className="inline-flex items-center gap-x-1">

@@ -1,4 +1,4 @@
-export { AppleIcon as default } from "@nextwp/core/src/components/apple-icon";
+export { AppleIcon as default } from "@nextwp/core";
 
 export const runtime = "edge";
 export const contentType = "image/png";

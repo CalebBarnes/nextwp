@@ -1,8 +1,6 @@
-import { getMenuItems } from "@nextwp/core";
+import type { WpMediaItem, WpSettings } from "@nextwp/core";
+import { getMenuItems, getSiteLogo, getSiteSettings } from "@nextwp/core";
 import Link from "next/link";
-import { getSiteLogo } from "@nextwp/core/src/api/get-site-logo";
-import { getSiteSettings } from "@nextwp/core/src/api/get-site-settings";
-import type { WpMediaObject, WpSettings } from "@nextwp/core/src/types";
 import Image from "next/image";
 import Edges from "./edges";
 import Button from "./ui/button";
@@ -10,7 +8,7 @@ import { DesktopMenu } from "./menus/desktop-menu";
 
 export async function Navbar() {
   const menuItems = await getMenuItems({ slug: "main-menu" });
-  const logo: WpMediaObject = await getSiteLogo();
+  const logo: WpMediaItem = await getSiteLogo();
   const settings: WpSettings = await getSiteSettings();
 
   return (
@@ -36,7 +34,7 @@ export async function Navbar() {
 
         <div className="flex justify-end">
           <Button asChild>
-            <Link href="/contact-us">Get started</Link>
+            <Link href="/contact">Contact us</Link>
           </Button>
         </div>
       </Edges>
