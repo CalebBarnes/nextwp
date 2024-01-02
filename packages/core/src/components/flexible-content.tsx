@@ -67,7 +67,7 @@ export function FlexibleContent({
 
       if (!supressWarnings && process.env.NODE_ENV !== "production") {
         debug.warn(
-          `React component "${componentName}" was not found. \nMake sure you are passing "${componentName}" to "FlexibleContent" in the blocks prop.\n`
+          `FlexibleContent: React component "${componentName}" was not found. \nMake sure you are passing "${componentName}" to "FlexibleContent" in the blocks prop.\n`
         );
       }
 
