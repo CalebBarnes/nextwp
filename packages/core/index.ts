@@ -16,15 +16,13 @@ export { getPageData } from "./src/api/get-page-data/get-page-data";
 export { getMenuItems } from "./src/api/get-menu-items";
 export { getSingleItem } from "./src/api/get-single-item";
 export { getSiteLogo } from "./src/api/get-site-logo";
+export { getSiteIcon } from "./src/api/get-site-icon";
 
 // custom rest endpoints - registered by the 'NextWP - Toolkit' wp plugin (@nextwp/wp-plugin)
 export { getOptionsPage } from "./src/api/get-options-page";
 
 // react components
-export {
-  FlexibleContent,
-  type RowItem,
-} from "./src/components/flexible-content";
+export { FlexibleContent, type Row } from "./src/components/flexible-content";
 export { WordpressTemplate } from "./src/components/wordpress-template";
 export { Icon } from "./src/components/icon";
 export { AppleIcon } from "./src/components/apple-icon";
