@@ -3,7 +3,7 @@ export const metadata = {
   description: '',
 }
 
-# Next App Router Functions
+# Next App Functions
 
 Utility functions provided by `@nextwp/core` that are used in the Next.js app router to generate static routes (SSG), SEO metadata, and a sitemap.xml file. {{ className: "lead" }}
 
@@ -57,6 +57,8 @@ export async function generateStaticParams(params) {
     Defaults to the `NEXT_PUBLIC_WP_URL` [environment variable](/environment-variables).
   </Property>
 </Properties>
+
+---
 
 ## generateMetadata
 
@@ -116,6 +118,8 @@ export { generateMetadata } from '@nextwp/core'
     <>Read more about the Metadata API in Next.js</>
   </Button>
 </div>
+
+---
 
 ## generateSitemap
 

@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 import { AnimatePresence, motion, useIsPresent } from 'framer-motion'
 
-import { Button } from '@/components/Button'
 import { useIsInsideMobileNavigation } from '@/components/MobileNavigation'
 import { useSectionStore } from '@/components/SectionProvider'
 import { Tag } from '@/components/Tag'
@@ -281,16 +280,18 @@ export const navigation: Array<NavGroup> = [
   },
 
   {
-    title: '@nextwp/core',
+    title: 'API Reference',
     links: [
-      { title: 'Overview', href: '/packages/nextwp/core' },
-
       {
         title: 'Components',
         href: '/packages/nextwp/core/components',
       },
       {
-        title: 'Next App Router Functions',
+        title: 'REST API Functions',
+        href: '/packages/nextwp/core/functions',
+      },
+      {
+        title: 'Next App Functions',
         href: '/packages/nextwp/core/next-app-functions',
       },
 
@@ -311,12 +312,13 @@ export const navigation: Array<NavGroup> = [
 
     links: [
       { title: 'Packages', href: '/packages' },
+      { title: '@nextwp/core', href: '/packages/nextwp/core' },
+      { title: '@nextwp/addons', href: '/packages/nextwp/addons' },
+      { title: '@nextwp/stackbit', href: '/packages/nextwp/stackbit' },
       {
         title: 'create-nextwp-app',
         href: '/packages/create-nextwp-app',
       },
-      { title: '@nextwp/addons', href: '/packages/nextwp/addons' },
-      { title: '@nextwp/stackbit', href: '/packages/nextwp/stackbit' },
     ],
   },
   {

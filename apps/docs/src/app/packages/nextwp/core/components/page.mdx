@@ -93,13 +93,15 @@ const templates = {
 }
 
 export { templates as default }
+```
 
-````
-  </Property>
+</Property>
   <Property name="supressWarnings" type="boolean (optional)">
     Supresses warnings in the console when a template component is missing.
   </Property>
 </Properties>
+
+---
 
 ## FlexibleContent
 
@@ -114,7 +116,7 @@ The component's export name must match the ACF flexible content layout name.
 export { Hero } from './hero'
 export { Text } from './text'
 export { FeaturedPosts } from './featured-posts'
-````
+```
 
 Import your block components and pass them to `FlexibleContent` as the `blocks` prop.
 
@@ -229,6 +231,8 @@ With this example data, the `FlexibleContent` component would render the followi
 />
 ```
 
+---
+
 ## Icon
 
 Generates an app icon and favicon from the icon added in the WordPress Appearance menu.
@@ -267,6 +271,8 @@ nextwp generate --icon
     <>Read more about generating icons in Next.js</>
   </Button>
 </div>
+
+---
 
 ## AppleIcon
 
