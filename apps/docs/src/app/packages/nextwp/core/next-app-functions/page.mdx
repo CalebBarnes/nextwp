@@ -140,9 +140,11 @@ You can also customize the function by importing it and passing in more options,
 ```ts {{title: 'src/app/sitemap.ts'}}
 import { generateSitemap } from '@nextwp/core'
 
-export default generateSitemap({
-  postTypes: ['pages', 'posts', 'my_custom_type'],
-})
+export default function sitemap() {
+  return generateSitemap({
+    postTypes: ['pages', 'posts', 'team', 'project'],
+  })
+}
 ```
 
 <div className="not-prose">
