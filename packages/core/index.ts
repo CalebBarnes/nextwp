@@ -48,3 +48,8 @@ export type {
 } from "./src/types";
 
 export type { Templates, TemplateProps } from "./src/utils/get-template";
+
+export type {
+  SearchParams,
+  RouteParams,
+} from "./src/components/wordpress-template";
