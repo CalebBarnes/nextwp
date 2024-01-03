@@ -12,7 +12,7 @@ tmp_dir = "tmp"
   exclude_regex = ["_test.go"]
   exclude_unchanged = false
   follow_symlink = false
-  full_bin = "WORKING_DIR=/Users/caleb/playground/cli-test-dir ./tmp/main my-test-app"
+  full_bin = "NEXTWP_CLI_WORKING_DIR=/Users/caleb/playground/cli-test-dir ./tmp/main my-test-app"
   include_dir = []
   include_ext = ["go", "tpl", "tmpl", "html"]
   include_file = []

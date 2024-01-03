@@ -36,8 +36,8 @@ func main() {
 
 			fmt.Printf("Initializing nextwp project: %s\n", projectName)
 
-			// Check if the WORKING_DIR environment variable is set
-			workingDir := os.Getenv("WORKING_DIR")
+			// Check if the NEXTWP_CLI_WORKING_DIR environment variable is set -- this NEXTWP_CLI_WORKING_DIR env is used during development only
+			workingDir := os.Getenv("NEXTWP_CLI_WORKING_DIR")
 			if workingDir == "" {
 				// If not, use the current working directory
 				cwd, err := os.Getwd()
@@ -47,7 +47,6 @@ func main() {
 				workingDir = cwd
 			}
 
-			// Create a path for the new project directory
 			projectDir := fmt.Sprintf("%s/%s", workingDir, projectName)
 
 			cmd := exec.Command("git", "clone", "--depth", "1", "--filter=blob:none", repoURL, projectDir)
@@ -56,29 +55,24 @@ func main() {
 				return err
 			}
 
-			// Change directory to the new project directory
 			if err := os.Chdir(projectDir); err != nil {
 				return err
 			}
 
-			// log current working directory
 			cwd, err := os.Getwd()
 			if err != nil {
 				return err
 			}
 			fmt.Printf("Current working directory: %s\n", cwd)
 
-			// remove the old .git directory
 			if err := os.RemoveAll(".git"); err != nil {
 				return err
 			}
 
-			// make temp dir
 			if err := os.Mkdir("temp", 0755); err != nil {
 				return err
 			}
 
-			// move subdirectory dir to root/temp
 			files, err := os.ReadDir(starterProjectSubDir)
 			if err != nil {
 				return err
@@ -92,7 +86,6 @@ func main() {
 				}
 			}
 
-			// remove all files from project root except for temp dir
 			files, err = os.ReadDir(".")
 			if err != nil {
 				return err
@@ -124,25 +117,20 @@ func main() {
 				return err
 			}
 
-			// update package.json name
-			// Read the file
 			content, err := os.ReadFile("package.json")
 			if err != nil {
 				return err
 			}
-			// Replace the string
+
 			newContent := strings.Replace(string(content), "next-wordpress-starter", projectName, -1)
-			// Write the updated content back to the file
 			err = os.WriteFile("package.json", []byte(newContent), 0644)
 			if err != nil {
 				return err
 			}
 
-			// log the location of the new project
 			fmt.Printf("Initialized project at: %s\n", projectDir)
 			fmt.Println("cd " + projectName)
 
-			// init new git repo
 			cmd = exec.Command("git", "init")
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
