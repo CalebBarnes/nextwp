@@ -35,6 +35,10 @@ interface Resource {
   fetchPriority?: "auto" | "high" | "low";
 }
 
+/**
+ * This component uses the new ReactDOM methods for preloading resources in the page head.
+ * @see https://github.com/facebook/react/pull/26237
+ */
 export function PreloadResources({ resources }: { resources: Resource[] }) {
   for (const resource of resources) {
     ReactDOM.preload(resource.href, {

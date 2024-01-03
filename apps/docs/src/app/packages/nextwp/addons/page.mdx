@@ -66,31 +66,22 @@ export function DefaultPageTemplate() {
 
 ## PreloadResources
 
-`PreloadResources` is a critical tool in optimizing your Next.js application, particularly for preloading various media types in the page head. It functions similarly to the priority prop in Next Image, which you can read about in more detail [here](https://nextjs.org/docs/app/building-your-application/optimizing/images#priority).
+`PreloadResources` is a component in `@nextwp/core` designed for optimizing Next.js applications by preloading crucial media types in the initial viewport. This component is particularly effective for videos that are key to the Largest Contentful Paint (LCP), but can be applied to other resource types as well.
 
-### Purpose and Use
+Read more about the new ReactDOM preload methods in this [pull request](https://github.com/facebook/react/pull/26237).
 
-While the priority prop in Next Image is ideal for optimizing the Largest Contentful Paint (LCP) elements (typically large images or text blocks), `PreloadResources` extends this optimization strategy to other key media types like videos. It’s important to note that for images, you should still use Next Image with the priority prop, and for fonts, consider using `next/font`, as detailed in the Next.js docs [here](https://nextjs.org/docs/app/building-your-application/optimizing/fonts).
+### Purpose
 
-### Usage Scenario
+The primary function of `PreloadResources` is to enhance the loading of essential non-image media in your application's initial viewport. It's especially useful for videos, ensuring they are loaded efficiently and ready for immediate display, which can significantly improve the user experience and LCP.
 
-This component is especially useful for media elements like videos that are critical to your initial viewport but are not images. It ensures these elements are loaded efficiently, thereby enhancing the overall user experience and potentially improving LCP.
+### Key Benefits of PreloadResources
+
+- **Advanced Preloading with ReactDOM**: Leverages the latest ReactDOM methods for efficient preloading of resources in the page head, enhancing performance and optimizing page load times.
+- **Optimized for Crucial Media Elements**: Especially effective for videos impacting the Largest Contentful Paint (LCP), it also adeptly manages other resource types, ensuring timely loading and readiness for use.
+- **Improved User Experience**: Contributes significantly to a faster, smoother page load, thereby enhancing the user experience, particularly in media-heavy applications.
+- **Seamless Next.js Integration**: Designed to integrate effortlessly with the Next.js framework, making it a versatile and intuitive choice for developers.
 
 ### Usage Example
-
-Optimizing your Next.js application's performance is crucial, and PreloadResources plays a key role in this process. This React component allows you to preload various types of media resources in the head of your page, similar to how the [priority prop in Next Image](https://nextjs.org/docs/app/building-your-application/optimizing/images#priority) optimizes image loading.
-
-### What it does
-
-PreloadResources enhances the loading performance of non-image media types like videos and fonts. While Next Image's priority prop is specifically designed for optimizing LCP (Largest Contentful Paint) elements, which are usually large images or text blocks, PreloadResources extends this concept to other media types. This ensures that your application's critical media assets are loaded promptly, contributing positively to your page's LCP and overall user experience.
-
-### Key Features
-
-- **Efficient Preloading**: Strategically load resources in the page's head to minimize loading times.
-- **Media-Ready**: Ideal for optimizing video display, reducing the initial load impact on user experience.
-- **Flexible Resource Management**: Easily manage a variety of resource types including video, images, and fonts.
-
-### Usage
 
 ```jsx
 import { PreloadResources } from '@nextwp/addons'
