@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@nextwp/core": "0.0.1-beta.1",
+    "@nextwp/core": "0.0.1-beta.2",
     "@stackbit/types": "^0.10.19"
   },
   "devDependencies": {
