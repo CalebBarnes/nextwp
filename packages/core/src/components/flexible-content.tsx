@@ -26,6 +26,11 @@ export interface FlexibleContentProps {
   supressWarnings?: boolean;
 }
 
+/**
+ * This component will render a list of components based on the acf flexible content rows.
+ *
+ * @see https://www.nextwp.org/packages/nextwp/core/components#flexible-content
+ */
 export function FlexibleContent({
   blocks,
   rows,

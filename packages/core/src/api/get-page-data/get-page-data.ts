@@ -15,6 +15,7 @@ import { getArchivePage } from "./get-archive-page";
  * ```
  * const pageData = await getPageData("/about");
  * ```
+ * @see https://www.nextwp.org/packages/nextwp/core/functions#get-page-data
  */
 export async function getPageData(
   uri: string,

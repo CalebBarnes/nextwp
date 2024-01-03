@@ -6,6 +6,10 @@ type WpSettingsResponse = {
   message?: string;
 } & WpSettings;
 
+/**
+ * Fetches site settings from WordPress.
+ * @see https://www.nextwp.org/packages/nextwp/core/functions#get-site-settings
+ */
 export async function getSiteSettings(): Promise<WpSettings> {
   if (!process.env.WP_APPLICATION_PASSWORD) {
     throw new Error(`'WP_APPLICATION_PASSWORD' environment variable is required for function 'getSiteSettings'.

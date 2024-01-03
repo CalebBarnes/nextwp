@@ -9,6 +9,20 @@ type PreviewOptions = {
   toolbar: boolean;
 };
 
+/**
+ * This preview route handler should be exported as `PUT` from `src/app/api/draft/[...preview]/route.ts`.
+ *
+ * Requires the NextWP Toolkit plugin to be
+ * installed and activated in WordPress to enable previews.
+ * Read the docs for more info:
+ * @see https://www.nextwp.org/packages/nextwp/core/route-handlers#preview
+ *
+ * @example
+ * ```ts
+ * // src/app/api/draft/[...preview]/route.ts
+ * export { preview as PUT } from '@nextwp/core'
+ * ```
+ */
 function preview(options: PreviewOptions): any;
 function preview(
   req: NextRequest,
@@ -52,7 +66,7 @@ function previewRouteHandler(
   context: RouteHandlerContext,
   options: PreviewOptions
 ) {
-  if (context.params.preview?.[0] === "preview") {
+  if (context.params.preview[0] === "preview") {
     const { searchParams } = new URL(request.url);
     const secret = searchParams.get("secret");
     const uri = searchParams.get("uri");
@@ -104,7 +118,7 @@ function previewRouteHandler(
         Location: `${path}?toolbar=${toolbarOption ? "true" : "false"}`,
       },
     });
-  } else if (context.params.preview?.[0] === "disable-draft") {
+  } else if (context.params.preview[0] === "disable-draft") {
     const { searchParams } = new URL(request.url);
     draftMode().disable();
 
@@ -122,7 +136,7 @@ function previewRouteHandler(
     });
   }
 
-  return new Response(`Not Found ${context.params.preview?.[0]}`, {
+  return new Response(`Not Found ${context.params.preview[0]}`, {
     status: 404,
   });
 }

@@ -31,6 +31,10 @@ const args = {
   },
 };
 
+/**
+ * Fetches menu items from WordPress.
+ * @see https://www.nextwp.org/packages/nextwp/core/functions#get-menu-items
+ */
 export async function getMenuItems({
   slug,
 }: {

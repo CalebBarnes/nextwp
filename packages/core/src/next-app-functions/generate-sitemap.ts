@@ -1,19 +1,19 @@
 import type { MetadataRoute } from "next";
 import { getAllItems } from "../api/get-all-items";
 /**
- * The generateSiteMap function can be exported from your Next.js page.js and
- * used to generate a sitemap.xml file for your site.
- * This function uses the WordPress REST API to generate the sitemap.
- * @see https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
+ * This function is used to generate a sitemap.xml file for your WordPress content in Next.js.
  *
- * Add your custom post types here, by rest_base
- * @example generateSiteMap({postTypes: ["pages", "posts", "custom-post-type"])
- * This would be the same as the rest_base in the WordPress API
- * https://example.com/wp-json/wp/v2/pages
- * https://example.com/wp-json/wp/v2/posts
- * https://example.com/wp-json/wp/v2/custom-post-type
+ * It should be exported as default from your `src/app/sitemap.ts` file.
  *
- * @see https://developer.wordpress.org/rest-api/reference/
+ *
+ * Read the docs for more info:
+ * @see https://www.nextwp.org/packages/nextwp/core/next-app-functions#generate-sitemap
+ *
+ * @example
+ * ```ts
+ * // src/app/sitemap.ts
+ * export { generateSitemap as default } from "@nextwp/core";
+ * ```
  */
 export async function generateSitemap({
   postTypes = ["pages", "posts"],
@@ -28,12 +28,4 @@ export async function generateSitemap({
       priority: 0.5,
     };
   });
-}
-
-export function generateSiteMap() {
-  console.warn(
-    "Warning: generateSiteMap is deprecated. Please use generateSitemap instead. This will be removed in the next release."
-  );
-
-  return generateSitemap;
 }

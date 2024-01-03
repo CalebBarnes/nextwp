@@ -1,6 +1,10 @@
 import { draftMode } from "next/headers";
 import type { WpPage } from "../types";
 
+/**
+ * Fetches a single item from WordPress based on the uri, id, or slug.
+ * @see https://www.nextwp.org/packages/nextwp/core/functions#get-single-item
+ */
 export const getSingleItem = async ({
   uri,
   id,

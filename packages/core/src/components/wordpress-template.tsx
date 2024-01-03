@@ -14,6 +14,14 @@ import { RouteParamsDebug } from "./route-params-debug";
 export type SearchParams = Record<string, string | string[] | undefined>;
 export type RouteParams = { paths?: string[] };
 
+/**
+ * This component is the main entry point for rendering a WordPress page.
+ * It will fetch the data for the page and render the appropriate template.
+ * It also handles preview mode.
+ *
+ * Read the docs for more info:
+ * @see https://www.nextwp.org/packages/nextwp/core/components#wordpress-template
+ */
 export async function WordpressTemplate(props: {
   params?: RouteParams;
   templates: Templates;

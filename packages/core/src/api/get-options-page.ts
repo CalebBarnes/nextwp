@@ -8,13 +8,15 @@ type OptionsPageResponse = {
 
 /**
  * Get an options page from WordPress.
- * This function requires the 'NextWP - Toolkit' plugin to be installed and activated on your WordPress site.
+ * This function requires the 'NextWP Toolkit' plugin to be installed and activated on your WordPress site.
  * The user for the 'WP_APPLICATION_PASSWORD' environment variable must also have administrator permissions.
  *
  * @example
  * ```ts
  * const options = await getOptionsPage({ slug: "theme-options" });
  * ```
+ *
+ * @see https://www.nextwp.org/packages/nextwp/core/functions#get-options-page
  */
 export async function getOptionsPage(
   args: {

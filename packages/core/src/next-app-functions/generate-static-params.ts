@@ -1,9 +1,17 @@
 import { getAllItems } from "../api/get-all-items";
 
 /**
- * The generateStaticParams function can be exported from your Next.js App's page.js and
- * will be called at build time to generate the static routes for your site based on the WordPress REST API results.
- * @see https://nextjs.org/docs/app/api-reference/functions/generate-static-params
+ * This function is used to statically generate routes at build time instead of on-demand at request time.
+ * To statically generate routes for your WordPress content in Next.js, you can export this function from your dynamic route `src/app/[[...paths]]/page.tsx` file.
+ *
+ * Read the docs for more info:
+ * @see https://www.nextwp.org/packages/nextwp/core/next-app-functions#generate-static-params
+ *
+ * @example
+ * ```ts
+ * // src/app/[[...paths]]/page.tsx
+ * export { generateStaticParams } from "@nextwp/core";
+ * ```
  */
 export async function generateStaticParams({
   wpUrl = process.env.NEXT_PUBLIC_WP_URL || "",
@@ -11,7 +19,6 @@ export async function generateStaticParams({
 }: {
   /**
    * The URL of the WP SITE to fetch data from the REST API.
-   * @default process.env.NEXT_PUBLIC_WP_URL
    */
   wpUrl?: string;
   /**
@@ -29,21 +36,19 @@ export async function generateStaticParams({
   const allItems = await getAllItems(postTypes);
 
   for (const item of allItems) {
-
     // if (item.path === "/") {
     //   staticParams.push({
     //     paths: ["/"],
     //   });
     //   continue;
     // }
-  
-//       if (item.path === "/") {
-//         staticParams.push({
-//           paths: ["index"],
-//         });
-//         continue;
-//       }
 
+    //       if (item.path === "/") {
+    //         staticParams.push({
+    //           paths: ["index"],
+    //         });
+    //         continue;
+    //       }
 
     const pathBreadcrumbs = item.path.split("/").filter((x) => x);
 

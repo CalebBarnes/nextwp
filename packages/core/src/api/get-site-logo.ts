@@ -1,6 +1,10 @@
 import type { WpMediaItem } from "../types";
 import { getSiteSettings } from "./get-site-settings";
 
+/**
+ * Get the site logo from WordPress.
+ * @see https://www.nextwp.org/packages/nextwp/core/functions#get-site-logo
+ */
 export async function getSiteLogo(): Promise<WpMediaItem> {
   const settings = await getSiteSettings();
 

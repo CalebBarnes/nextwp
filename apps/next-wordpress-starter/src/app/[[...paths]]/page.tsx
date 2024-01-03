@@ -1,9 +1,10 @@
+import type { RouteParams, SearchParams } from "@nextwp/core";
 import { WordpressTemplate } from "@nextwp/core";
 import templates from "@/templates";
 
 export default function PageRoute(props: {
-  params: { paths: string[] };
-  searchParams?: Record<string, string | string[] | undefined>;
+  params: RouteParams;
+  searchParams?: SearchParams;
 }) {
   return (
     <WordpressTemplate

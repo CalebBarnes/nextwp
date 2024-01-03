@@ -1,10 +1,7 @@
 // nextjs app functions
 export { generateMetadata } from "./src/next-app-functions/generate-meta-data";
 export { generateStaticParams } from "./src/next-app-functions/generate-static-params";
-export {
-  generateSitemap,
-  generateSiteMap,
-} from "./src/next-app-functions/generate-sitemap";
+export { generateSitemap } from "./src/next-app-functions/generate-sitemap";
 
 // route handlers
 export { revalidate } from "./src/route-handlers/revalidate";
