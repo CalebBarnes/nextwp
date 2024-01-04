@@ -21,6 +21,7 @@ jobs:
 
       - name: Set up SSH key
         run: |
+          mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
           sed -i 's/\\n/\n/g' private_key
           chmod 600 private_key
