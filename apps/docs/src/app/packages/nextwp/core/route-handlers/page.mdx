@@ -1,6 +1,7 @@
 export const metadata = {
   title: 'Route Handlers',
-  description: '',
+  description:
+    'Route handlers are included in @nextwp/core to handle things like preview and revalidation.',
 }
 
 # Route Handlers
@@ -26,7 +27,44 @@ These route handlers are included by default in the starter project generated wi
 
 ---
 
+## unifiedRouteHandler
+
+<Note>
+  This is a planned feature and is not yet implemented. The naming and API is
+  subject to change. We are currently iterating on this feature and it should be
+  released in the next minor version of `@nextwp/core`.
+</Note>
+
+A single unified route handler that can be used for all NextWP integrations with WordPress such as preview and revalidation. It handles all requests to the `/app/api/wp/[...nextwp]/route.ts` directory.
+
+The individual route handlers can still be used instead, but this unified route handler is recommended for most use cases.
+
+### Usage example
+
+```ts {{ title: "src/app/api/wp/[...nextwp]/route.ts" }}
+import { unifiedRouteHandler } from '@nextwp/core'
+
+const handler = unifiedRouteHandler({
+  preview: {
+    // Hides the preview toolbar that appears in draft mode on the left side of the screen
+    toolbar: false,
+  },
+  revalidate: {
+    // revalidate options
+  },
+})
+
+export { handler as GET, handler as PUT }
+```
+
+---
+
 ## revalidate
+
+<Note>
+  The revalidate route handler directory location is subject to change with the
+  release of the unified route handler.
+</Note>
 
 The revalidate route handler in Next.js allows for instant content updates without triggering a full site build. When a post is updated in WordPress, the specific page(s) in Next.js are regenerated, ensuring that the latest content is displayed.
 
@@ -39,6 +77,11 @@ export { revalidate as PUT } from '@nextwp/core'
 ---
 
 ## preview
+
+<Note>
+  The preview route handler directory location is subject to change with the
+  release of the unified route handler.
+</Note>
 
 The `preview` route handler is used to preview posts in WordPress.
 
