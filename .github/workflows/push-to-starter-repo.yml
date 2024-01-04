@@ -15,7 +15,7 @@ jobs:
       - name: Push to another repository
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_PERSONAL_ACCESS_TOKEN }}
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           repository: CalebBarnes/nextwp-starter
           directory: apps/next-wordpress-starter
           branch: main
