@@ -32,7 +32,7 @@ jobs:
 
       - name: Clone the destination repository using SSH
         run: |
-          git clone git@github.com:CalebBarnes/nextwp-starter.git temp_repo
+          GIT_SSH_COMMAND="ssh -i private_key -o StrictHostKeyChecking=no" git clone git@github.com:CalebBarnes/nextwp-starter.git temp_repo
 
       - name: Copy files to the temporary directory
         run: |
@@ -44,34 +44,3 @@ jobs:
           git add .
           git commit -m "Mirrored from nextwp repository"
           git push origin main
-
-# name: Push Starter Project Subdirectory to Another Repo
-# on:
-#   push:
-#     branches:
-#       - main
-#     # paths:
-#     #   - "apps/next-wordpress-starter/**"
-# permissions: write-all
-
-# jobs:
-#   push:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Test printing a non-sensitive secret
-#         run: echo "Test secret is ${{ secrets.TEST }}"
-
-#       - uses: actions/checkout@v3
-#         with:
-#           # token: ${{ secrets.GITHUB_TOKEN }}
-#           # ref: ${{ github.head_ref }}
-#           fetch-depth: 0
-
-#       - name: Push to another repository
-#         uses: ad-m/github-push-action@master
-#         with:
-#           github_token: ${{ secrets.PAT }}
-#           repository: CalebBarnes/nextwp-starter
-#           directory: apps/next-wordpress-starter
-#           branch: main
-#           force: true
