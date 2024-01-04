@@ -27,7 +27,7 @@ jobs:
           release_assets="${{ steps.get_latest_release_assets.outputs.assets }}"
           for asset in $release_assets; do
             asset_name="${asset%%-v*}"  # Remove version number
-            component_file="apps/docs/packages/wordpress/${asset_name}/latest-release.tsx"
+            component_file="apps/docs/src/app/packages/wordpress/${asset_name}/latest-release.tsx"
             echo "export function LatestRelease() {" > "$component_file"
             echo "  return (" >> "$component_file"
             echo "    <a href=\"https://github.com/CalebBarnes/nextwp/releases/latest/download/${asset}\">" >> "$component_file"
@@ -44,7 +44,7 @@ jobs:
         run: |
           git config --global user.name 'GitHub Action Bot'
           git config --global user.email 'action@github.com'
-          git add apps/docs/packages/wordpress/*/*.tsx
+          git add apps/docs/src/app/packages/wordpress/*/*.tsx
           git commit -m "Update Latest Release Components"
           git push
         env:
