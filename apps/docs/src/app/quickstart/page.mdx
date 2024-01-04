@@ -34,26 +34,22 @@ NextWP integrates with the [NextWP Toolkit](/packages/wordpress/nextwp-toolkit-p
 
 You can one click deploy NextWP to Vercel.
 
-<div>
-  <Link
+<Link
     href="https://vercel.com/new/clone?repository-url=https://github.com/CalebBarnes/nextwp&env=NEXT_PUBLIC_WP_URL,WP_APPLICATION_PASSWORD,NEXT_PREVIEW_SECRET,REVALIDATE_SECRET_KEY"
     target="_blank"
-  >
+>
+
     <img
       src="https://vercel.com/button"
       alt="Deploy with Vercel"
-      width="200"
-      className="w-28"
+      width="112"
+      height="34"
+      className="h-[34px] inline-block"
     />
+
   </Link>
-</div>
 
 Or, create a new project using the `create-nextwp-app` CLI tool to generate a starter project.
-
-<Note>
-  The NextWP CLI tool is currently very new and experimental. If you run into
-  any issues, please let us know.
-</Note>
 
 <CodeGroup>
 
@@ -71,9 +67,16 @@ yarn create nextwp-app
 
 </CodeGroup>
 
+<Note>
+  The NextWP CLI tool is currently very new and experimental. If you run into
+  any issues, please let us know.
+</Note>
+
+---
+
 ## Add to existing project
 
-If you already have a Next.js project, you can install `@nextwp/core` and optionally `@nextwp/addons` using your preferred package manager.
+If you already have a Next.js project, you can install `@nextwp/core` using your preferred package manager.
 
 <CodeGroup>
 
@@ -90,6 +93,14 @@ yarn add @nextwp/core
 ```
 
 </CodeGroup>
+
+<div className="not-prose">
+  <Button href="/environment-variables" variant="text" arrow="right">
+    <>Read more about adding NextWP to an existing project</>
+  </Button>
+</div>
+
+---
 
 ## Add Environment Variables
 
@@ -109,6 +120,8 @@ You can quickly copy these randomly generated example variables to your `.env.lo
     <>Read the docs for environment variables</>
   </Button>
 </div>
+
+---
 
 ## What's next?
 

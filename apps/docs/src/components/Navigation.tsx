@@ -266,21 +266,7 @@ export const navigation: Array<NavGroup> = [
   },
 
   {
-    title: 'Frequently Asked Questions',
-    links: [
-      // {
-      //   title: 'Hosting for NextWP site?',
-      //   href: '/faq/hosting',
-      // },
-      {
-        title: 'Why use the REST API?',
-        href: '/faq/why-rest-api',
-      },
-    ],
-  },
-
-  {
-    title: 'API Reference',
+    title: 'Reference',
     links: [
       {
         title: 'Components',
@@ -308,10 +294,10 @@ export const navigation: Array<NavGroup> = [
     ],
   },
   {
-    title: 'Reference',
+    title: 'Packages',
 
     links: [
-      { title: 'Packages', href: '/packages' },
+      { title: 'Overview', href: '/packages' },
       { title: '@nextwp/core', href: '/packages/nextwp/core' },
       { title: '@nextwp/addons', href: '/packages/nextwp/addons' },
       { title: '@nextwp/stackbit', href: '/packages/nextwp/stackbit' },
@@ -333,6 +319,20 @@ export const navigation: Array<NavGroup> = [
       {
         title: 'NextWP Toolkit',
         href: '/packages/wordpress/nextwp-toolkit-plugin',
+      },
+    ],
+  },
+
+  {
+    title: 'Frequently Asked Questions',
+    links: [
+      // {
+      //   title: 'Hosting for NextWP site?',
+      //   href: '/faq/hosting',
+      // },
+      {
+        title: 'Why use the REST API?',
+        href: '/faq/why-rest-api',
       },
     ],
   },

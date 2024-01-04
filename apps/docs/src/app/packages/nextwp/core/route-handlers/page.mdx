@@ -27,7 +27,7 @@ These route handlers are included by default in the starter project generated wi
 
 ---
 
-## unifiedRouteHandler
+## nextwpRouteHandler
 
 <Note>
   This is a planned feature and is not yet implemented. The naming and API is
@@ -35,16 +35,16 @@ These route handlers are included by default in the starter project generated wi
   released in the next minor version of `@nextwp/core`.
 </Note>
 
-A single unified route handler that can be used for all NextWP integrations with WordPress such as preview and revalidation. It handles all requests to the `/app/api/wp/[...nextwp]/route.ts` directory.
+A single unified route handler that can be used for all NextWP integrations with WordPress such as preview and revalidation. It handles all requests to the `/api/wp/[...nextwp]/route.ts` route.
 
 The individual route handlers can still be used instead, but this unified route handler is recommended for most use cases.
 
 ### Usage example
 
 ```ts {{ title: "src/app/api/wp/[...nextwp]/route.ts" }}
-import { unifiedRouteHandler } from '@nextwp/core'
+import { nextwpRouteHandler } from '@nextwp/core'
 
-const handler = unifiedRouteHandler({
+const handler = nextwpRouteHandler({
   preview: {
     // Hides the preview toolbar that appears in draft mode on the left side of the screen
     toolbar: false,
