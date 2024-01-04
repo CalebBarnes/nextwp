@@ -61,17 +61,17 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.PAT }}
 
-      - name: Add "latest" tag to release
-        run: gh release edit ${{ github.ref_name }} --title "Release ${{ github.ref_name }}" --notes "Release notes" --tag latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-
       - name: Upload all zipped items to Release
         run: |
           for zip_file in *.zip; do
             echo "Uploading ${zip_file}..."
             gh release upload ${{ github.ref_name }} "${zip_file}" --clobber
           done
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
+      - name: Add "latest" tag to release
+        run: gh release edit ${{ github.ref_name }} --title "Release ${{ github.ref_name }}" --notes "Release notes" --tag latest
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
