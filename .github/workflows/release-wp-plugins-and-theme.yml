@@ -70,10 +70,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
-      - name: Add "latest" tag to release
-        run: gh release edit ${{ github.ref_name }} --title "Release ${{ github.ref_name }}" --notes "Release notes" --tag latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+      # - name: Add "latest" tag to release
+      #   run: gh release edit ${{ github.ref_name }} --title "Release ${{ github.ref_name }}" --notes "Release notes" --tag latest
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.PAT }}
 
       # Trigger the update-docs-latest-release-links.yml workflow here
       - name: Trigger update-docs workflow
