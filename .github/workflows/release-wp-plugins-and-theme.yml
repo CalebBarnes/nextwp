@@ -1,10 +1,7 @@
 on:
   push:
-    branches:
-      - main
-    # paths:
-    #   - "wordpress/plugins/**"
-    #   - "wordpress/theme/**"
+    tags:
+      - "v*"
 
 jobs:
   build:
