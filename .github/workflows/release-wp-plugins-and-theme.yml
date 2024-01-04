@@ -13,8 +13,24 @@ jobs:
         run: |
           for dir in wordpress/plugins/* wordpress/theme/*; do
             if [ -d "$dir" ]; then
-                item_name=$(basename "$dir")
+              item_name=$(basename "$dir")
+
+              # For plugins, look for a PHP file with the same name as the directory
+              if [[ "$dir" == wordpress/plugins/* ]]; then
+                version=$(grep -Po '(?<=Version: )(\d+\.\d+\.?\d*)' "$dir/$item_name.php")
+              fi
+
+              # For themes, look for the version in style.css
+              if [[ "$dir" == wordpress/theme/* ]]; then
+                version=$(grep -Po '(?<=Version: )(\d+\.\d+\.?\d*)' "$dir/style.css")
+              fi
+
+              # If version is found, append it to the zip filename
+              if [ ! -z "$version" ]; then
+                zip -r "${item_name}-v${version}.zip" "$dir"
+              else
                 zip -r "${item_name}.zip" "$dir"
+              fi
             fi
           done
 
