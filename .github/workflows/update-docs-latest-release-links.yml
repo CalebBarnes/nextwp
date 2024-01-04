@@ -1,4 +1,4 @@
-name: Update Latest Release Components
+name: Update Docs Latest Release Links Components
 
 on:
   workflow_dispatch: {}
