@@ -3,8 +3,8 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #   - "apps/next-wordpress-starter/**"
+    paths:
+      - "apps/next-wordpress-starter/**"
 
 jobs:
   push:
@@ -27,8 +27,6 @@ jobs:
           chmod 600 private_key
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-        env:
-          GIT_SSH_COMMAND: ssh -i private_key -o StrictHostKeyChecking=no
 
       - name: Clone the destination repository using SSH
         run: |
