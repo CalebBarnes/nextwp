@@ -1,9 +1,10 @@
 name: Update Latest Release Components
 
-on:
-  push:
-    tags:
-      - "v*" # Trigger on tag pushes, e.g., v1.0.2
+# on:
+#   workflow_run:
+#     workflows: ["Upload all zipped items to Release"]
+#     types:
+#       - completed
 
 jobs:
   update_release_components:
