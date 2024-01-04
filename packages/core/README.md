@@ -37,14 +37,6 @@ Ensure you have the following WordPress plugins installed:
 - **Yoast SEO**: Provides SEO features for WordPress sites.
 - [**NextWP - Headless Toolkit**](https://www.nextwp.org/packages/wordpress/nextwp-toolkit-plugin): Essential for CMS previews in NextJS.
 
-## Installation
-
-Install `@nextwp/core` in your Next.js project:
-
-```bash
-npm install @nextwp/core
-```
-
 ## Quick Start
 
 One click deploy a new project to Vercel:
@@ -57,7 +49,17 @@ Or, you can get up and running by using the cli tool `create-nextwp-app`:
 npx create-nextwp-app
 ```
 
-Here's a basic example to get started in an existing project:
+---
+
+If you want to add to an existing project, you can install the `@nextwp/core` package:
+
+Install `@nextwp/core` in your Next.js project:
+
+```bash
+npm install @nextwp/core
+```
+
+Here is a basic example of how to use `@nextwp/core` in your existing Next.js project:
 
 ```tsx
 // src/app/[[...paths]]/page.tsx
@@ -93,27 +95,4 @@ The following environment variables are required for configuring `@nextwp/core`:
 
 Make sure to set these environment variables in your project's configuration.
 
-@todo: move some of this stuff below over to other docs files and link to them instead
-
-## Usage
-
-### Importing Templates file
-
-Import and define your page templates:
-
-```tsx
-// Example templates file
-import ContactPageTemplate from "./page/contact";
-import DefaultPageTemplate from "./page/default";
-
-const templates = {
-  // post type slug in WP
-  page: {
-    // template name in WP
-    default: DefaultPageTemplate,
-    contact: ContactPageTemplate,
-  },
-};
-
-export default templates;
-```
+Read more about [environment variables](https://www.nextwp.org/environment-variables).
