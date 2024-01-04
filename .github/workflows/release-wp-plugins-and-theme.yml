@@ -11,26 +11,24 @@ jobs:
 
       - name: Zip all plugins and themes
         run: |
+          main_dir=$(pwd)
           for dir in wordpress/plugins/* wordpress/theme/*; do
             if [ -d "$dir" ]; then
               item_name=$(basename "$dir")
 
               # For plugins, look for a PHP file with the same name as the directory
               if [[ "$dir" == wordpress/plugins/* ]]; then
-                version=$(grep -Po '(?<=Version: )(\d+\.\d+\.?\d*)' "$dir/$item_name.php")
+                version=$(grep -Po '(?<=Version: )(\d+\.\d+\.?\d*)' "$dir/$item_name.php" || echo "")
               fi
 
               # For themes, look for the version in style.css
               if [[ "$dir" == wordpress/theme/* ]]; then
-                version=$(grep -Po '(?<=Version: )(\d+\.\d+\.?\d*)' "$dir/style.css")
+                version=$(grep -Po '(?<=Version: )(\d+\.\d+\.?\d*)' "$dir/style.css" || echo "")
               fi
 
-              # If version is found, append it to the zip filename
-              if [ ! -z "$version" ]; then
-                zip -r "${item_name}-v${version}.zip" "$dir"
-              else
-                zip -r "${item_name}.zip" "$dir"
-              fi
+              # Change to the directory and zip the contents, then move back
+              (cd "$dir" && zip -r "${main_dir}/${item_name}${version:+-v$version}.zip" .)
+
             fi
           done
 
@@ -51,16 +49,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
-      # - name: Remove "latest" tag from previous release (if it exists)
-      #   run: |
-      #     latest_release_tag="latest"
-      #     previous_release_id=$(gh release list --limit 2 | awk 'NR==2 {print $1}')
-      #     if [ -n "$previous_release_id" ]; then
-      #       gh release edit $previous_release_id --tag "$latest_release_tag-remove"
-      #     fi
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.PAT }}
-
       - name: Upload all zipped items to Release
         run: |
           for zip_file in *.zip; do
@@ -69,11 +57,6 @@ jobs:
           done
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
-
-      # - name: Add "latest" tag to release
-      #   run: gh release edit ${{ github.ref_name }} --title "Release ${{ github.ref_name }}" --notes "Release notes" --tag latest
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.PAT }}
 
       # Trigger the update-docs-latest-release-links.yml workflow here
       - name: Trigger update-docs workflow
