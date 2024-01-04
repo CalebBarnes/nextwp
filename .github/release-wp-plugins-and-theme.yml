@@ -1,0 +1,42 @@
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "wordpress/plugins/**"
+      - "wordpress/theme/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Zip all plugins and themes
+        run: |
+          for dir in wordpress/plugins/* wordpress/theme/*; do
+            if [ -d "$dir" ]; then
+                item_name=$(basename "$dir")
+                zip -r "${item_name}.zip" "$dir"
+            fi
+          done
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload all zipped items to Release
+        run: |
+          for zip_file in *.zip; do
+            echo "Uploading ${zip_file}..."
+            gh release upload ${{ github.ref }} "${zip_file}" --clobber
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

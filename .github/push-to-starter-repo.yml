@@ -1,0 +1,21 @@
+name: Push Starter Project Subdirectory to Another Repo
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/next-wordpress-starter/**"
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Push to another repository
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repository: <your-target-repo>
+          directory: apps/next-wordpress-starter
+          branch: main
