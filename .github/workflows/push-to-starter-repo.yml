@@ -5,6 +5,7 @@ on:
       - main
     # paths:
     #   - "apps/next-wordpress-starter/**"
+permissions: write-all
 
 jobs:
   push:
