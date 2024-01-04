@@ -11,12 +11,17 @@ jobs:
   push:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          # token: ${{ secrets.GITHUB_TOKEN }}
+          # ref: ${{ github.head_ref }}
+          fetch-depth: 0
 
       - name: Push to another repository
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          github_token: ${{ secrets.PAT }}
           repository: CalebBarnes/nextwp-starter
           directory: apps/next-wordpress-starter
           branch: main
+          force: true
