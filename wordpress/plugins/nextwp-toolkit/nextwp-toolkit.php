@@ -3,7 +3,7 @@
 * Plugin Name: NextWP - Headless Toolkit
 * Plugin URI: https://github.com/CalebBarnes/nextwp/@nextwp/wp-plugin
 * Description: A toolkit for headless Wordpress sites built with NextWP
-* Version: 1.0.1
+* Version: 1.0.0
 * Author: Caleb Barnes
 * Author URI: https://github.com/CalebBarnes
 */
