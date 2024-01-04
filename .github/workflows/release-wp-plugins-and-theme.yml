@@ -51,15 +51,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
-      - name: Remove "latest" tag from previous release (if it exists)
-        run: |
-          latest_release_tag="latest"
-          previous_release_id=$(gh release list --limit 2 | awk 'NR==2 {print $1}')
-          if [ -n "$previous_release_id" ]; then
-            gh release edit $previous_release_id --tag "$latest_release_tag-remove"
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+      # - name: Remove "latest" tag from previous release (if it exists)
+      #   run: |
+      #     latest_release_tag="latest"
+      #     previous_release_id=$(gh release list --limit 2 | awk 'NR==2 {print $1}')
+      #     if [ -n "$previous_release_id" ]; then
+      #       gh release edit $previous_release_id --tag "$latest_release_tag-remove"
+      #     fi
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.PAT }}
 
       - name: Add "latest" tag to release
         run: gh release edit ${{ github.ref_name }} --title "Release ${{ github.ref_name }}" --notes "Release notes" --tag latest
