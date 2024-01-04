@@ -16,6 +16,6 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          repository: <your-target-repo>
+          repository: CalebBarnes/nextwp-starter
           directory: apps/next-wordpress-starter
           branch: main
