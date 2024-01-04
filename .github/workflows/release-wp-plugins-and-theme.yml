@@ -45,6 +45,12 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Debug - List Releases
+        run: |
+          gh release list
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
       - name: Remove "latest" tag from previous release
         run: |
           latest_release_tag="latest"
