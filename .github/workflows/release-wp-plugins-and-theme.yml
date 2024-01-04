@@ -2,9 +2,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "wordpress/plugins/**"
-      - "wordpress/theme/**"
+    # paths:
+    #   - "wordpress/plugins/**"
+    #   - "wordpress/theme/**"
 
 jobs:
   build:
