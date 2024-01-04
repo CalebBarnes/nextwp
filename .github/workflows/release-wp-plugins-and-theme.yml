@@ -36,7 +36,7 @@ jobs:
         run: |
           for zip_file in *.zip; do
             echo "Uploading ${zip_file}..."
-            gh release upload ${{ github.ref }} "${zip_file}" --clobber
+            gh release upload ${{ github.ref_name }} "${zip_file}" --clobber
           done
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
