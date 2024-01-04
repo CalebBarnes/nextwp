@@ -48,7 +48,7 @@ jobs:
       - name: Remove "latest" tag from previous release
         run: |
           latest_release_tag="latest"
-          previous_release_id=$(gh release list --limit 2 | awk 'NR==2 {print $1}')  # Assumes the previous release is the second in the list
+          previous_release_id=$(gh release list --limit 2 | awk 'NR==2 {print $1}')
           gh release edit $previous_release_id --tag $latest_release_tag-remove
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
