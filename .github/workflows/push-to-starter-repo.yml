@@ -3,8 +3,8 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "apps/next-wordpress-starter/**"
+    # paths:
+    #   - "apps/next-wordpress-starter/**"
 
 jobs:
   push:
