@@ -23,7 +23,7 @@ jobs:
 
       - name: Generate Latest Release Components
         run: |
-          release_assets="${{ steps.get_latest_release_assets.outputs.assets }}"
+          release_assets="${{ steps.get_newest_release_assets.outputs.assets }}"
           for asset in $release_assets; do
             asset_name="${asset%%-v*}"  # Remove version number
             component_file="apps/docs/src/app/packages/wordpress/${asset_name}/latest-release.tsx"
