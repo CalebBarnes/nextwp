@@ -5,26 +5,63 @@ on:
       - main
     # paths:
     #   - "apps/next-wordpress-starter/**"
-permissions: write-all
 
 jobs:
   push:
     runs-on: ubuntu-latest
     steps:
-      - name: Test printing a non-sensitive secret
-        run: echo "Test secret is ${{ secrets.TEST }}"
-
       - uses: actions/checkout@v3
         with:
-          # token: ${{ secrets.GITHUB_TOKEN }}
-          # ref: ${{ github.head_ref }}
           fetch-depth: 0
 
-      - name: Push to another repository
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.PAT }}
-          repository: CalebBarnes/nextwp-starter
-          directory: apps/next-wordpress-starter
-          branch: main
-          force: true
+      - name: Setup Git Config
+        run: |
+          git config --global user.name 'GitHub Action Bot'
+          git config --global user.email 'action@github.com'
+
+      - name: Clone the destination repository
+        run: |
+          git clone https://github.com/CalebBarnes/nextwp-starter.git temp_repo
+
+      - name: Copy files to the temporary directory
+        run: |
+          rsync -av --exclude='.git' --delete apps/next-wordpress-starter/ temp_repo/
+
+      - name: Push to the destination repository
+        run: |
+          cd temp_repo
+          git add .
+          git commit -m "Update from source repository"
+          git push origin main
+        env:
+          GIT_SSH_COMMAND: ssh -i ${{ secrets.SSH_PRIVATE_KEY }} -o StrictHostKeyChecking=no
+# name: Push Starter Project Subdirectory to Another Repo
+# on:
+#   push:
+#     branches:
+#       - main
+#     # paths:
+#     #   - "apps/next-wordpress-starter/**"
+# permissions: write-all
+
+# jobs:
+#   push:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Test printing a non-sensitive secret
+#         run: echo "Test secret is ${{ secrets.TEST }}"
+
+#       - uses: actions/checkout@v3
+#         with:
+#           # token: ${{ secrets.GITHUB_TOKEN }}
+#           # ref: ${{ github.head_ref }}
+#           fetch-depth: 0
+
+#       - name: Push to another repository
+#         uses: ad-m/github-push-action@master
+#         with:
+#           github_token: ${{ secrets.PAT }}
+#           repository: CalebBarnes/nextwp-starter
+#           directory: apps/next-wordpress-starter
+#           branch: main
+#           force: true
