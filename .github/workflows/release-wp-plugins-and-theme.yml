@@ -56,7 +56,7 @@ jobs:
           latest_release_tag="latest"
           previous_release_id=$(gh release list --limit 2 | awk 'NR==2 {print $1}')
           if [ -n "$previous_release_id" ]; then
-            gh release edit $previous_release_id --tag $latest_release_tag-remove
+            gh release edit $previous_release_id --tag "$latest_release_tag-remove"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
