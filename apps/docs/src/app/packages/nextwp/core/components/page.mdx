@@ -9,14 +9,7 @@ A collection of components for use in NextWP projects. {{ className:"lead"}}
 
 ## WordpressTemplate
 
-A component used in a dynamic route to render Wordpress pages and posts.
-
-<Note>
-  The CLI generator is a planned feature and not yet implemented: Using the [CLI
-  tool](/packages/nextwp/cli), you can quickly add the `WordpressTemplate`
-  dynamic route and scaffold a starter `templates` directory in an existing
-  project.
-</Note>
+A component used in a Next.js dynamic route to render Wordpress pages and posts.
 
 <CodeGroup>
 ```javascript {{title:"src/app/[[...paths]]/page.tsx"}}
@@ -37,10 +30,6 @@ export default function PageRoute(props: {
 }
 
 export { generateMetadata, generateStaticParams } from "@nextwp/core";
-```
-
-```bash {{ title: 'add with CLI' }}
-nextwp generate --templates
 ```
 
 </CodeGroup>
