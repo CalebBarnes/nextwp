@@ -1,10 +1,7 @@
 name: Update Latest Release Components
 
-# on:
-#   workflow_run:
-#     workflows: ["Upload all zipped items to Release"]
-#     types:
-#       - completed
+on:
+  workflow_dispatch: {}
 
 jobs:
   update_release_components:
