@@ -1,62 +1,62 @@
-name: Update Docs Latest Release Links Components
+# name: Update Docs Latest Release Links Components
 
-on:
-  workflow_dispatch: {}
+# on:
+#   workflow_dispatch: {}
 
-jobs:
-  update_release_components:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+# jobs:
+#   update_release_components:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
 
-      - name: Debug - Print Git Remote URL
-        run: |
-          git remote -v
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+#       - name: Debug - Print Git Remote URL
+#         run: |
+#           git remote -v
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.PAT }}
 
-      - name: Debug - Print Branch
-        run: |
-          git branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+#       - name: Debug - Print Branch
+#         run: |
+#           git branch
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.PAT }}
 
-      - name: Get newest release assets
-        id: get_newest_release_assets
-        run: |
-          newest_release_tag=$(gh release list --limit 1 | awk 'NR==2 {print $1}')
-          assets=$(gh release view $newest_release_tag --json assets | jq -r '.assets[].name')
-          echo "Newest release assets: $assets"
-          echo "::set-output name=assets::$assets"
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-          GH_TOKEN: ${{ secrets.PAT }}
+#       - name: Get newest release assets
+#         id: get_newest_release_assets
+#         run: |
+#           newest_release_tag=$(gh release list --limit 1 | awk 'NR==2 {print $1}')
+#           assets=$(gh release view $newest_release_tag --json assets | jq -r '.assets[].name')
+#           echo "Newest release assets: $assets"
+#           echo "::set-output name=assets::$assets"
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.PAT }}
+#           GH_TOKEN: ${{ secrets.PAT }}
 
-      - name: Generate Latest Release Components
-        run: |
-          release_assets="${{ steps.get_newest_release_assets.outputs.assets }}"
-          for asset in $release_assets; do
-            asset_name="${asset%%-v*}"  # Remove version number
-            component_file="apps/docs/src/app/packages/wordpress/${asset_name}/latest-release.tsx"
-            echo "export function LatestRelease() {" > "$component_file"
-            echo "  return (" >> "$component_file"
-            echo "    <a href=\"https://github.com/CalebBarnes/nextwp/releases/latest/download/${asset}\">" >> "$component_file"
-            echo "      Download Latest Release (${asset_name})" >> "$component_file"
-            echo "    </a>" >> "$component_file"
-            echo "  )" >> "$component_file"
-            echo "}" >> "$component_file"
-            echo "Generated $component_file for $asset_name"
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+#       - name: Generate Latest Release Components
+#         run: |
+#           release_assets="${{ steps.get_newest_release_assets.outputs.assets }}"
+#           for asset in $release_assets; do
+#             asset_name="${asset%%-v*}"  # Remove version number
+#             component_file="apps/docs/src/app/packages/wordpress/${asset_name}/latest-release.tsx"
+#             echo "export function LatestRelease() {" > "$component_file"
+#             echo "  return (" >> "$component_file"
+#             echo "    <a href=\"https://github.com/CalebBarnes/nextwp/releases/latest/download/${asset}\">" >> "$component_file"
+#             echo "      Download Latest Release (${asset_name})" >> "$component_file"
+#             echo "    </a>" >> "$component_file"
+#             echo "  )" >> "$component_file"
+#             echo "}" >> "$component_file"
+#             echo "Generated $component_file for $asset_name"
+#           done
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.PAT }}
 
-      - name: Commit and push changes
-        run: |
-          git config --global user.name 'GitHub Action Bot'
-          git config --global user.email 'action@github.com'
-          git add apps/docs/src/app/packages/wordpress/*/*.tsx
-          git commit -m "Update Latest Release Components"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+#       - name: Commit and push changes
+#         run: |
+#           git config --global user.name 'GitHub Action Bot'
+#           git config --global user.email 'action@github.com'
+#           git add apps/docs/src/app/packages/wordpress/*/*.tsx
+#           git commit -m "Update Latest Release Components"
+#           git push
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.PAT }}
