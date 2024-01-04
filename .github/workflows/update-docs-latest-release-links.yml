@@ -10,6 +10,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Debug - Print Git Remote URL
+        run: |
+          git remote -v
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
+      - name: Debug - Print Branch
+        run: |
+          git branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
       - name: Get newest release assets
         id: get_newest_release_assets
         run: |
