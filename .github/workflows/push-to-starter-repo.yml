@@ -43,4 +43,4 @@ jobs:
           cd temp_repo
           git add .
           git commit -m "Mirrored from nextwp repository"
-          git push origin main
+          GIT_SSH_COMMAND="ssh -i ../private_key -o StrictHostKeyChecking=no" git push origin main
