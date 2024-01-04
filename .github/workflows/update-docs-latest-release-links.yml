@@ -13,7 +13,7 @@ jobs:
       - name: Get latest release assets
         id: get_latest_release_assets
         run: |
-          assets=$(gh release list --limit 1 --json assets | jq -r '.[0].assets[].name')
+          assets=$(gh release view latest --json assets | jq -r '.assets[].name')
           echo "Latest release assets: $assets"
           echo "::set-output name=assets::$assets"
         env:
