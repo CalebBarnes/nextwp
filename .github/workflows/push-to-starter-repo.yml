@@ -19,9 +19,11 @@ jobs:
           git config --global user.name 'GitHub Action Bot'
           git config --global user.email 'action@github.com'
 
-      - name: Clone the destination repository
+      - name: Clone the destination repository using SSH
         run: |
-          git clone https://github.com/CalebBarnes/nextwp-starter.git temp_repo
+          git clone git@github.com:CalebBarnes/nextwp-starter.git temp_repo
+        env:
+          GIT_SSH_COMMAND: ssh -i ${{ secrets.SSH_PRIVATE_KEY }} -o StrictHostKeyChecking=no
 
       - name: Copy files to the temporary directory
         run: |
