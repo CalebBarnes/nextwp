@@ -19,11 +19,19 @@ jobs:
           git config --global user.name 'GitHub Action Bot'
           git config --global user.email 'action@github.com'
 
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          sed -i 's/\\n/\n/g' private_key
+          chmod 600 private_key
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+        env:
+          GIT_SSH_COMMAND: ssh -i private_key -o StrictHostKeyChecking=no
+
       - name: Clone the destination repository using SSH
         run: |
           git clone git@github.com:CalebBarnes/nextwp-starter.git temp_repo
-        env:
-          GIT_SSH_COMMAND: ssh -i ${{ secrets.SSH_PRIVATE_KEY }} -o StrictHostKeyChecking=no
 
       - name: Copy files to the temporary directory
         run: |
@@ -33,10 +41,9 @@ jobs:
         run: |
           cd temp_repo
           git add .
-          git commit -m "Update from source repository"
+          git commit -m "Mirrored from nextwp repository"
           git push origin main
-        env:
-          GIT_SSH_COMMAND: ssh -i ${{ secrets.SSH_PRIVATE_KEY }} -o StrictHostKeyChecking=no
+
 # name: Push Starter Project Subdirectory to Another Repo
 # on:
 #   push:
