@@ -250,7 +250,6 @@ export interface WpMenuItem {
   invalid?: boolean;
   meta?: any;
   menus?: number;
-  acf?: any[];
   _links?: WpLink[];
   label?: string;
   path?: string;
