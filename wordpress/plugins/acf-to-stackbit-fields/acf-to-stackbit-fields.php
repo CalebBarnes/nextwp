@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: ACF to Stackbit Fields
- * Description: Experimental WIP plugin that provides a REST API endpoint to get ACF field definitions for Stackbit.
+ * Description: Provides a REST API endpoint to get ACF field definitions for Stackbit.
  * Version: 1.0
  * Author: Caleb Barnes
  */
