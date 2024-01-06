@@ -15,13 +15,13 @@ const npmPackages = [
     description: 'Additional components and features for NextWP.',
     svg: <NextLogo />,
   },
-  {
-    href: '/packages/nextwp/stackbit',
-    name: '@nextwp/stackbit',
-    description:
-      'A WordPress content source interface that allows you to use the Stackbit Visual Editor with WordPress.',
-    logo: logoNode,
-  },
+  // {
+  //   href: '/packages/nextwp/stackbit',
+  //   name: '@nextwp/stackbit',
+  //   description:
+  //     'A WordPress content source interface that allows you to use the Stackbit Visual Editor with WordPress.',
+  //   logo: logoNode,
+  // },
 ]
 
 export function NpmPackages() {

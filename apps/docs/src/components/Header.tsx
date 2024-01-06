@@ -83,12 +83,13 @@ export const Header = forwardRef<
               href="https://www.npmjs.com/package/@nextwp/core"
               target="_blank"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://badge.fury.io/js/@nextwp%2Fcore.svg"
                 alt="npm"
               />
             </Link>
-            <TopLevelNavItem href="/">API</TopLevelNavItem>
+            {/* <TopLevelNavItem href="/">API</TopLevelNavItem> */}
             {/* <TopLevelNavItem href="#">Documentation</TopLevelNavItem> */}
             {/* <TopLevelNavItem href="#">Support</TopLevelNavItem> */}
           </ul>
@@ -100,7 +101,7 @@ export const Header = forwardRef<
         </div>
         <div className="hidden min-[416px]:contents">
           <Button
-            href="https://github.com/CalebBarnes/nextwp/tree/main/packages/core"
+            href="https://github.com/CalebBarnes/nextwp"
             target="_blank"
             className="flex h-8 w-8 items-center justify-center"
           >
