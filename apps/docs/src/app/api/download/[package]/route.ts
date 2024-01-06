@@ -67,6 +67,10 @@ export async function GET(
   _request: Request,
   { params: { package: packageName } }: { params: { package: string } },
 ) {
+  if (!process.env.GITHUB_PAT) {
+    return new Response('No GitHub PAT provided', { status: 500 })
+  }
+
   if (!packageName) {
     return new Response('No package name provided', { status: 400 })
   }
