@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Heading } from '@/components/Heading'
 
 export const metadata = {
@@ -6,6 +7,13 @@ export const metadata = {
 }
 
 # @nextwp/addons
+
+<div className="not-prose my-5 flex gap-3">
+  <Link href="https://www.npmjs.com/package/@nextwp/addons" target="_blank">
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img src="https://badge.fury.io/js/@nextwp%2Faddons.svg" alt="npm" />
+  </Link>
+</div>
 
 Enhance your NextWP experience with `@nextwp/addons`, a collection of additional components and features designed to extend the capabilities of your NextWP project. {{ className: "lead" }}
 

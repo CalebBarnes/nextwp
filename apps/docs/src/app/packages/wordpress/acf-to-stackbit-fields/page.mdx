@@ -1,0 +1,50 @@
+export const metadata = {
+  title: 'ACF to Stackbit Fields plugin for WordPress',
+  description:
+    'A WordPress plugin that adds an endpoint to the WP REST API for retrieving ACF fields in a format that matches the Stackbit schema.',
+}
+
+# ACF to Stackbit Fields
+
+This plugin adds an endpoint to the WP REST API for retrieving ACF fields in a format that matches the Stackbit schema. {{ className: "lead" }}
+
+<div className="not-prose mb-16 mt-6 flex gap-3">
+  <Button href="/api/download/acf-to-stackbit-fields" target="_blank" arrow="right">
+    <>Download plugin</>
+  </Button>
+
+  <Button
+    href="https://github.com/CalebBarnes/nextwp"
+    target="_blank"
+    variant="outline"
+  >
+    <>Visit Repo</>
+  </Button>
+</div>
+
+## Endpoints
+
+ACF to Stackbit Fields adds the following endpoints to the WP REST API.
+
+---
+
+## Retrieve the stackbit schema for a post type's acf fields {{ tag: 'GET', label: '/acf-to-stackbit/v1/:postType/fields' }}
+
+<Row>
+  <Col>
+   This endpoint allows you to retrieve the stackbit schema for a post type's acf fields.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/acf-to-stackbit/v1/pages/fields">
+    ```ts {{ title: "fetch with TypeScript" }}
+    const res = await fetch('/wp-json/acf-to-stackbit/v1/pages/fields')
+    const data = await res.json()
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
