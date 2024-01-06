@@ -1,4 +1,5 @@
 import type { WpLink, Menu, WpMenuItem } from "../types";
+import { debug } from "../utils/debug-log";
 
 type MenuResponse = {
   id: number;
@@ -74,13 +75,14 @@ ${
         slug: string;
         items: number[];
       }[];
-      return json[0];
-    } catch (err) {
+
+      return json?.[0];
+    } catch (err: any) {
       throw new Error(`Error fetching menu with slug ${slug}: ${err.message}`);
     }
   });
 
-  if (!menu.id) {
+  if (!menu?.id) {
     // handle missing menu
     const availableMenus = await fetch(
       `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/menus`,
@@ -98,12 +100,17 @@ ${
         throw new Error(`Error fetching menus`);
       }
     });
-
-    throw new Error(
-      `No menu found with slug "${slug}".\nAvailable menu slugs: ${availableMenus.join(
-        ", "
-      )}`
+    const availableMenusString = `\nAvailable menu slugs: ${availableMenus.join(
+      ", "
+    )}`;
+    debug.warn(
+      `No menu found with slug "${slug}". ${
+        availableMenus.length
+          ? availableMenusString
+          : ` \n No menus available, make sure you added a menu in WordPress!`
+      } `
     );
+    return [];
   }
 
   // get menu items by menu id
