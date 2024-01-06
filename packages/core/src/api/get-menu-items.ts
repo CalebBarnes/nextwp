@@ -163,6 +163,9 @@ ${
   process.env.NEXT_PUBLIC_WP_URL
     ? `See ${process.env.NEXT_PUBLIC_WP_URL}/wp-admin/profile.php#application-passwords-section`
     : ""
-}`);
+}
+
+Read the docs for more info: https://www.nextwp.org/packages/nextwp/core/functions#get-menu-items
+`);
   }
 }
