@@ -11,8 +11,71 @@ The REST API functions are a set of functions that can be used to retrieve data 
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultricies aliquam, nunc nisl aliquet nunc, quis aliqu
 
-## getMenuItems {{ tag: 'GET' }}
+## getMenuItems {{ tag: 'GET', label: '/wp-json/wp/v2/menus?slug=${slug}' }}
 
+<Row>
+  <Col>
+    This function allows you to retrieve your menu items from the menu slug in WordPress.
+
+    ### Returns
+
+    <Properties>
+        <Property name="menuItems" type="WpMenuItem">
+        A list of menu items in json format. Refer to the or the `WpMenuItem` type definition for more information.
+        </Property>
+    </Properties>
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/menus?slug=${slug}">
+    ```ts
+    import { getMenuItems } from '@nextwp/core'
+
+    const menuItems = await getMenuItems({ slug: "main-menu" });
+    ```
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+        "id": 1,
+        "title": "Welcome to my site!",
+        "status": "",
+        "url": "/main-menu",
+        "attr_title": "1",
+        "description": "",
+        "type": "",
+        "type_label": "",
+        "object": "",
+        "object_id": 1,
+        "parent": 1,
+        "menu_order": 1,
+        "target": "0",
+        "classes": "",
+        "xfn": true,
+        "invalid": false,
+        "meta": "",
+        "menus": 1,
+        "_links": "",
+        "label": "",
+        "path": "",
+        "childItems":""
+    }
+    ```
+
+  </Col>
+</Row>
 ---
 
 ## getSiteSettings {{ tag: 'GET', label: '/wp-json/wp/v2/settings?embed=true' }}
