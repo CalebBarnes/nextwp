@@ -79,6 +79,15 @@ export const Header = forwardRef<
       <div className="flex items-center gap-5">
         <nav className="hidden md:block">
           <ul role="list" className="flex items-center gap-8">
+            <Link
+              href="https://www.npmjs.com/package/@nextwp/core"
+              target="_blank"
+            >
+              <img
+                src="https://badge.fury.io/js/@nextwp%2Fcore.svg"
+                alt="npm"
+              />
+            </Link>
             <TopLevelNavItem href="/">API</TopLevelNavItem>
             {/* <TopLevelNavItem href="#">Documentation</TopLevelNavItem> */}
             {/* <TopLevelNavItem href="#">Support</TopLevelNavItem> */}
