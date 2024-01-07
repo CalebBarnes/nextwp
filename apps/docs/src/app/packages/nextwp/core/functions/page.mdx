@@ -140,8 +140,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
       url?: string;
       posts_per_page?: number;
       page_on_front?: number;
-      page_for_posts?: number;
-      site_logo?: number;
+      page_for_posts?: number;      site_logo?: number;
       site_icon?: number;
       email?: string;
       timezone?: string;
@@ -163,8 +162,70 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 ---
 
-## getPageData
+## getPageData {{ tag: 'GET', label: '/wp-json/wp/v2/page' }}
 
+<Row>
+  <Col>
+    This function takes a URI as an argument and returns a Promise that resolves to a WpPage object. The WpPage object contains various properties about the page such as its ID, slug, title, and more. This function is useful when you need to fetch and display data for a specific page in your application.
+
+    ### Returns
+    <Properties>
+        <Property name="page" type="WpPage">
+        A JSON object containing the data of the specified page.
+        </Property>
+    </Properties>
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/page">
+    ```ts
+    import { getPageData } from '@nextwp/core'
+
+    const page = await getPageData({ uri: "/"});
+    ```
+    </CodeGroup>
+    ```ts {{ title: 'Return Type' }}
+    export interface WpPage {
+      id: number;
+      slug?: string;
+      title?: RenderedObject;
+      content?: RenderedObject;
+      excerpt?: RenderedObject;
+      date?: string;
+      date_gmt?: string;
+      modified?: string;
+      modified_gmt?: string;
+      guid?: RenderedObject;
+      link?: string;
+      status?: "publish" | "future" | "draft" | "pending" | "private";
+      type?: string;
+      author?: number;
+      featured_media?: number;
+      comment_status?: "open" | "closed";
+      ping_status?: "open" | "closed";
+      menu_order?: number;
+      meta?: any;
+      template?: string;
+      yoast_head?: string;
+      yoast_head_json?: YoastHeadJson;
+      _links?: EmbeddedLinks;
+    }
+    ```
+
+  </Col>
+</Row>
 ---
 
 ## getSingleItem
