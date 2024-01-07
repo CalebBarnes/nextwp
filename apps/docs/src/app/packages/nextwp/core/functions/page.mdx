@@ -264,8 +264,97 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 </Row>
 ---
 
-## getSingleItem
+## getSingleItem {{ tag: 'GET', label: '/wp-json/wp/v2/<postTypeRestBase>/<id>' }}
 
+<Row>
+  <Col>
+    // write this
+
+    ### Environment variables
+
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+    <Properties>
+      <Property name="NEXT_PUBLIC_WP_URL" type="string">
+        The URL of the WordPress site.
+      </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="/environment-variables"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about environment variables</>
+    </Button>
+    </div>
+
+    ### Returns
+    <Properties>
+        <Property name="data" type="WpPage | undefined">
+        A JSON object containing the data of the item.
+        </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/<postTypeRestBase>/<id>">
+    ```ts
+    import { getSingleItem } from '@nextwp/core'
+
+    const singleItem = await getSingleItem({ uri: "/", id: "1", slug: "home", postTypeRestBase: "pages"});
+    ```
+    </CodeGroup>
+    ```ts {{ title: 'Return Type' }}
+    export interface WpPage {
+      id: number;
+      slug?: string;
+      title?: RenderedObject;
+      content?: RenderedObject;
+      excerpt?: RenderedObject;
+      date?: string;
+      date_gmt?: string;
+      modified?: string;
+      modified_gmt?: string;
+      guid?: RenderedObject;
+      link?: string;
+      status?: "publish" | "future" | "draft" | "pending" | "private";
+      type?: string;
+      author?: number;
+      featured_media?: number;
+      comment_status?: "open" | "closed";
+      ping_status?: "open" | "closed";
+      menu_order?: number;
+      meta?: any;
+      template?: string;
+      yoast_head?: string;
+      yoast_head_json?: YoastHeadJson;
+      _links?: EmbeddedLinks;
+    }
+    ```
+
+  </Col>
+</Row>
 ---
 
 ## getSiteLogo
