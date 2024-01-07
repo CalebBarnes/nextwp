@@ -196,8 +196,18 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
     ### Returns
     <Properties>
-        <Property name="page" type="WpPage">
-        A JSON object containing the data of the specified page.
+        <Property name="data" type="WpPage | ArchivePageData">
+        A JSON object containing the data of the page.
+        </Property>
+    </Properties>
+        <Properties>
+        <Property name="archive" type="PostType">
+        A JSON object containing the post type archive data if applicable.
+        </Property>
+    </Properties>
+        <Properties>
+        <Property name="previewData" type="WpPage">
+        A JSON object containing the preview data for the requested page.
         </Property>
     </Properties>
 
@@ -219,7 +229,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     ```ts
     import { getPageData } from '@nextwp/core'
 
-    const page = await getPageData({ uri: "/"});
+    const page = await getPageData({ uri: "/", searchParams: "?slug=home"});
     ```
     </CodeGroup>
     ```ts {{ title: 'Return Type' }}
