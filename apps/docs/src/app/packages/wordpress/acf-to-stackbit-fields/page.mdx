@@ -1,0 +1,179 @@
+export const metadata = {
+  title: 'ACF to Stackbit Fields plugin for WordPress',
+  description:
+    'A WordPress plugin that adds an endpoint to the WP REST API for retrieving ACF fields in a format that matches the Stackbit schema.',
+}
+
+# ACF to Stackbit Fields
+
+<Note>
+  This experimental plugin is a work in progress and is not yet ready for
+  production use.
+</Note>
+
+This plugin adds an endpoint to the WP REST API for retrieving ACF fields in a format that matches the Stackbit schema. This is designed to be used with the [`@nextwp/stackbit`](/packages/nextwp/stackbit) package to enable Stackbit's visual editor for Headless WordPress. {{ className: "lead" }}
+
+<div className="not-prose mb-16 mt-6 flex gap-3">
+  <Button href="/api/download/acf-to-stackbit-fields" target="_blank" arrow="right">
+    <>Download plugin</>
+  </Button>
+
+  <Button
+    href="https://github.com/CalebBarnes/nextwp"
+    target="_blank"
+    variant="outline"
+  >
+    <>Visit Repo</>
+  </Button>
+</div>
+
+---
+
+## Retrieve the stackbit schema for a post type's acf fields {{ tag: 'GET', label: '/acf-to-stackbit/v1/:postType/fields' }}
+
+<Row>
+  <Col>
+   This endpoint allows you to retrieve the stackbit schema for any post type's acf fields.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/acf-to-stackbit/v1/page/fields">
+    ```ts {{ title: "fetch with TypeScript" }}
+    const res = await fetch('/wp-json/acf-to-stackbit/v1/page/fields',
+      {
+        Authorization: btoa(process.env.WP_APPLICATION_PASSWORD)
+      }
+    )
+    const data = await res.json()
+    ```
+
+    </CodeGroup>
+
+### Response
+
+This example response is for a post type with a flexible content field group which contains multiple layouts.
+
+    ```json {{ title: 'Response' }}
+    {
+    "type": "object",
+    "name": "acf",
+    "label": "Fields",
+    "fields": [
+        {
+        "type": "list",
+        "name": "modules",
+        "label": "Modules",
+        "items": {
+            "type": "object",
+            "fields": [
+            {
+                "name": "hero",
+                "label": "Hero",
+                "type": "object",
+                "fields": [
+                {
+                    "name": "image",
+                    "label": "Image",
+                    "type": "image"
+                },
+                {
+                    "name": "headline",
+                    "label": "Headline",
+                    "type": "string"
+                },
+                {
+                    "name": "subline",
+                    "label": "Subline",
+                    "type": "text"
+                },
+                {
+                    "name": "links",
+                    "type": "list",
+                    "items": {
+                    "type": "object",
+                    "fields": {
+                        "type": "object",
+                        "fields": [
+                        {
+                            "name": "link",
+                            "label": "Link",
+                            "type": "object",
+                            "fields": [
+                            {
+                                "name": "url",
+                                "label": "URL",
+                                "type": "string"
+                            },
+                            {
+                                "name": "title",
+                                "label": "Title",
+                                "type": "string"
+                            },
+                            {
+                                "name": "target",
+                                "label": "Target",
+                                "type": "string"
+                            }
+                            ]
+                        },
+                        {
+                            "name": "variant",
+                            "label": "Variant",
+                            "type": "enum",
+                            "options": [
+                            {
+                                "label": "primary",
+                                "value": "primary"
+                            },
+                            {
+                                "label": "secondary",
+                                "value": "secondary"
+                            }
+                            ]
+                        }
+                        ]
+                    }
+                    }
+                }
+                ]
+            },
+            {
+                "name": "text-image",
+                "label": "Text Image",
+                "type": "object",
+                "fields": [
+                {
+                    "name": "text",
+                    "label": "Text",
+                    "type": "richText"
+                },
+                {
+                    "name": "image",
+                    "label": "Image",
+                    "type": "image"
+                }
+                ]
+            },
+            {
+                "name": "textarea",
+                "label": "Textarea",
+                "type": "object",
+                "fields": [
+                {
+                    "name": "text",
+                    "label": "Text",
+                    "type": "richText"
+                }
+                ]
+            }
+            ]
+        }
+        }
+    ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---

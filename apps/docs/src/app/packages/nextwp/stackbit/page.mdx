@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export const metadata = {
   title: '@nextwp/stackbit',
   description:
@@ -5,6 +7,18 @@ export const metadata = {
 }
 
 # @nextwp/stackbit
+
+<div className="not-prose my-5 flex gap-3">
+  <Link href="https://www.npmjs.com/package/@nextwp/stackbit" target="_blank">
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img src="https://badge.fury.io/js/@nextwp%2Fstackbit.svg" alt="npm" />
+  </Link>
+</div>
+
+<Note>
+  This experimental package is a work in progress and is not yet ready for
+  production use.
+</Note>
 
 A WordPress content source interface that allows you to use the Stackbit Visual Editor with WordPress.
 

@@ -24,7 +24,7 @@ These route handlers are included by default in the starter project generated wi
     <>Read more about route handlers in Next.js</>
   </Button>
 </div>
-
+{/* 
 ---
 
 ## nextwpRouteHandler
@@ -41,7 +41,7 @@ The individual route handlers can still be used instead, but this unified route 
 
 ### Usage example
 
-```ts {{ title: "src/app/api/wp/[...nextwp]/route.ts" }}
+````ts {{ title: "src/app/api/wp/[...nextwp]/route.ts" }}
 import { nextwpRouteHandler } from '@nextwp/core'
 
 const handler = nextwpRouteHandler({
@@ -55,7 +55,7 @@ const handler = nextwpRouteHandler({
 })
 
 export { handler as GET, handler as PUT }
-```
+``` */}
 
 ---
 
@@ -72,7 +72,7 @@ To use the revalidate route handler, you need to install the [On-Demand Revalida
 
 ```ts {{ title: "src/app/api/revalidate/route.ts" }}
 export { revalidate as PUT } from '@nextwp/core'
-```
+````
 
 ---
 
