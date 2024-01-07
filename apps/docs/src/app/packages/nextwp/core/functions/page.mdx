@@ -11,7 +11,7 @@ The REST API functions are a set of functions that can be used to retrieve data 
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultricies aliquam, nunc nisl aliquet nunc, quis aliqu
 
-## getMenuItems {{ tag: 'GET', label: '/wp-json/wp/v2/menus?slug=${slug}' }}
+## getMenuItems {{ tag: 'GET', label: '/wp-json/wp/v2/menus?slug={slug}' }}
 
 <Row>
   <Col>
@@ -39,7 +39,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
   </Col>
   <Col sticky>
 
-    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/menus?slug=${slug}">
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/menus?slug={slug}">
     ```ts
     import { getMenuItems } from '@nextwp/core'
 
@@ -166,7 +166,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function takes a URI as an argument and returns a Promise that resolves to a WpPage object. The WpPage object contains various properties about the page such as its ID, slug, title, and more. This function is useful when you need to fetch and display data for a specific page in your application.
+    This function takes a URI as an argument and returns a Promise that resolves to a WpPage object.
 
     ### Environment variables
 
@@ -264,11 +264,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 </Row>
 ---
 
-## getSingleItem {{ tag: 'GET', label: '/wp-json/wp/v2/<postTypeRestBase>/<id>' }}
+## getSingleItem {{ tag: 'GET', label: '/wp-json/wp/v2/{postTypeRestBase}/{id}' }}
 
 <Row>
   <Col>
-    // write this
+    This function returns a Promise that resolves to a WpPage object if the item is found, or undefined if not.
 
     ### Environment variables
 
@@ -318,7 +318,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
   </Col>
   <Col sticky>
 
-    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/<postTypeRestBase>/<id>">
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/{postTypeRestBase}/{id}">
     ```ts
     import { getSingleItem } from '@nextwp/core'
 
