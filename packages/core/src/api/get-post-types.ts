@@ -51,6 +51,14 @@ export async function getPostTypes(): Promise<PostTypes> {
 
     return data;
   } catch (err: any) {
-    throw new Error(`getPostTypes: Error fetching post types: ${err.message}`);
+    throw new Error(
+      `getPostTypes: Error fetching post types from WordPress REST API. 
+      
+Make sure your WordPress URL is correct, your environment variables are correct and that your WordPress site is running. 
+
+Refer to the documentation for more information: https://www.nextwp.org/environment-variables
+
+${err.message}`
+    );
   }
 }
