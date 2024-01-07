@@ -4,6 +4,7 @@ function nextwp_admin_menu_icon_css() {
   <style>
     #adminmenu .toplevel_page_nextwp div.wp-menu-image img {
       height: 20px;
+      margin-top: -2px;
     } 
   </style>
   <?php
