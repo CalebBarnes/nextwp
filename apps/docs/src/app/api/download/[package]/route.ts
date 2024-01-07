@@ -60,7 +60,6 @@ const fetchOptions = {
   headers: {
     accept: 'application/vnd.github+json',
     Authorization: `Bearer ${process.env.GITHUB_PAT}`,
-    cache: 'no-store',
   },
 }
 
@@ -78,7 +77,7 @@ export async function GET(
 
   const releasesRes = await fetch(
     `https://api.github.com/repos/CalebBarnes/nextwp/releases?per_page=1`,
-    fetchOptions,
+    { ...fetchOptions, cache: 'no-store' },
   )
   const releases = (await releasesRes.json()) as Release[]
 
