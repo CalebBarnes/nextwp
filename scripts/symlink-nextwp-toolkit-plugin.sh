@@ -1,4 +1,5 @@
 #!/bin/bash
+# * This script is used for local development of the NextWP Toolkit plugin.
 
 # This bash script creates or removes a symlink between the monorepo's 
 # wordpress/plugins/nextwp-toolkit directory and the plugins directory of your local WordPress installation.
