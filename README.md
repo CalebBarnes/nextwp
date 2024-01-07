@@ -1,10 +1,10 @@
 # NextWP
 
-A new era of WordPress development.
+Welcome to the new era of Headless WordPress development.
 
-## What is it?
+## What is NextWP?
 
-NextWP is a package that makes it easy to build super fast Next.js sites with WordPress as a headless CMS.
+NextWP is a library built on the WP REST API and Next.js App Router that streamlines the process of building super fast Headless WordPress sites with Next.js. It provides a set of tools and utilities to help you build interactive, dynamic, and performant sites with WordPress and Next.js.
 
 ## Getting Started
 

@@ -14,7 +14,7 @@ export const metadata = {
 This plugin adds an endpoint to the WP REST API for retrieving ACF fields in a format that matches the Stackbit schema. This is designed to be used with the [`@nextwp/stackbit`](/packages/nextwp/stackbit) package to enable Stackbit's visual editor for Headless WordPress. {{ className: "lead" }}
 
 <div className="not-prose mb-16 mt-6 flex gap-3">
-  <Button href="/api/download/acf-to-stackbit-fields" target="_blank" arrow="right">
+  <Button href="/api/download/acf-to-stackbit-fields" target="_blank" arrow="down">
     <>Download plugin</>
   </Button>
 
@@ -85,92 +85,16 @@ This example response is for a post type with a flexible content field group whi
                     "name": "subline",
                     "label": "Subline",
                     "type": "text"
-                },
-                {
-                    "name": "links",
-                    "type": "list",
-                    "items": {
-                    "type": "object",
-                    "fields": {
-                        "type": "object",
-                        "fields": [
-                        {
-                            "name": "link",
-                            "label": "Link",
-                            "type": "object",
-                            "fields": [
-                            {
-                                "name": "url",
-                                "label": "URL",
-                                "type": "string"
-                            },
-                            {
-                                "name": "title",
-                                "label": "Title",
-                                "type": "string"
-                            },
-                            {
-                                "name": "target",
-                                "label": "Target",
-                                "type": "string"
-                            }
-                            ]
-                        },
-                        {
-                            "name": "variant",
-                            "label": "Variant",
-                            "type": "enum",
-                            "options": [
-                            {
-                                "label": "primary",
-                                "value": "primary"
-                            },
-                            {
-                                "label": "secondary",
-                                "value": "secondary"
-                            }
-                            ]
-                        }
-                        ]
-                    }
-                    }
-                }
-                ]
-            },
-            {
-                "name": "text-image",
-                "label": "Text Image",
-                "type": "object",
-                "fields": [
-                {
-                    "name": "text",
-                    "label": "Text",
-                    "type": "richText"
-                },
-                {
-                    "name": "image",
-                    "label": "Image",
-                    "type": "image"
-                }
-                ]
-            },
-            {
-                "name": "textarea",
-                "label": "Textarea",
-                "type": "object",
-                "fields": [
-                {
-                    "name": "text",
-                    "label": "Text",
-                    "type": "richText"
                 }
                 ]
             }
             ]
         }
         }
+        // ... more fields
     ]
     }
+
     ```
 
   </Col>

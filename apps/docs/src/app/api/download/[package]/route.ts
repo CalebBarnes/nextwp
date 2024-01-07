@@ -76,8 +76,8 @@ export async function GET(
   }
 
   const releasesRes = await fetch(
-    `https://api.github.com/repos/CalebBarnes/nextwp/releases`,
-    fetchOptions,
+    `https://api.github.com/repos/CalebBarnes/nextwp/releases?per_page=1`,
+    { ...fetchOptions, cache: 'no-store' },
   )
   const releases = (await releasesRes.json()) as Release[]
 

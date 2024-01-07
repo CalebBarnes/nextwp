@@ -6,10 +6,6 @@ export const metadata = {
 
 # Route Handlers
 
-<Note>
-  @todo: update/rewrite this section to be more clear with good usage examples
-</Note>
-
 The route handlers included in `@nextwp/core` add endpoints in your Next.js project's app router to handle things like preview and revalidation. <br/> {{ className: "lead" }}
 
 These route handlers are included by default in the starter project generated with [create-nextwp-app](/packages/create-nextwp-app). {{ className: "lead" }}
@@ -61,11 +57,6 @@ export { handler as GET, handler as PUT }
 
 ## revalidate
 
-<Note>
-  The revalidate route handler directory location is subject to change with the
-  release of the unified route handler.
-</Note>
-
 The revalidate route handler in Next.js allows for instant content updates without triggering a full site build. When a post is updated in WordPress, the specific page(s) in Next.js are regenerated, ensuring that the latest content is displayed.
 
 To use the revalidate route handler, you need to install the [On-Demand Revalidation](https://wordpress.org/plugins/on-demand-revalidation/) WordPress plugin.
@@ -77,11 +68,6 @@ export { revalidate as PUT } from '@nextwp/core'
 ---
 
 ## preview
-
-<Note>
-  The preview route handler directory location is subject to change with the
-  release of the unified route handler.
-</Note>
 
 The `preview` route handler is used to preview posts in WordPress.
 
