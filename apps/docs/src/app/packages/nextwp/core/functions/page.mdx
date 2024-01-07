@@ -461,10 +461,211 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 ---
 
-## getSiteIcon
+## getSiteIcon {{ tag: 'GET', label: '/wp-json/wp/v2/media/{settings.site_icon}' }}
 
+<Row>
+  <Col>
+    This function fetches the site icon from a WordPress site. It returns a Promise that resolves to a WpMediaItem, which is a JSON object containing the data of the media item representing the site icon.
+
+    ### Environment variables
+
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+    <Properties>
+      <Property name="NEXT_PUBLIC_WP_URL" type="string">
+        The URL of the WordPress site.
+      </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="/environment-variables"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about environment variables</>
+    </Button>
+    </div>
+
+    ### Returns
+    <Properties>
+        <Property name="data" type="WpMediaItem">
+        A JSON object containing the data of the media item.
+        </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/media/{settings.site_icon}">
+    ```ts
+    import { getSiteIcon } from '@nextwp/core'
+
+    const siteIcon = await getSiteIcon();
+    ```
+    </CodeGroup>
+    ```ts {{ title: 'Return Type' }}
+    export interface WpMediaItem {
+      id?: number;
+      date?: string;
+      date_gmt?: string;
+      guid?: RenderedObject;
+      modified?: string;
+      modified_gmt?: string;
+      slug?: string;
+      status?: string;
+      type?: string;
+      link?: string;
+      title?: RenderedObject;
+      author?: number;
+      comment_status?: string;
+      ping_status?: string;
+      template?: string;
+      meta?: any[];
+      acf?: any[];
+      description?: RenderedObject;
+      caption?: RenderedObject;
+      alt_text?: string;
+      media_type?: string;
+      mime_type?: string;
+      media_details?: {
+        width?: number;
+        height?: number;
+        file?: string;
+        filesize?: number;
+        sizes?: Record<string, ImageSize>;
+        image_meta?: ImageMeta;
+      };
+      post?: any;
+      source_url?: string;
+      _links?: EmbeddedLinks;
+    }
+    ```
+
+  </Col>
+</Row>
 ---
 
-## getOptionsPage
+## getOptionsPage {{ tag: 'GET', label: '/wp-json/nextwp/v1/options/{slug}' }}
 
+<Row>
+  <Col>
+    This function fetches the site icon from a WordPress site. It returns a Promise that resolves to a WpMediaItem, which is a JSON object containing the data of the media item representing the site icon.
+
+     Requires the [NextWP - Toolkit](/packages/wordpress/nextwp-toolkit-plugin) plugin to be installed and activated on your WordPress site.
+
+
+    ### Environment variables
+
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+    <Properties>
+      <Property name="NEXT_PUBLIC_WP_URL" type="string">
+        The URL of the WordPress site.
+      </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="/environment-variables"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about environment variables</>
+    </Button>
+    </div>
+
+    ### Returns
+    <Properties>
+        <Property name="data" type="WpMediaItem">
+        A JSON object containing the data of the media item.
+        </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/nextwp/v1/options/{slug}">
+    ```ts
+    import { getOptionsPage } from '@nextwp/core'
+
+    const optionsPage = await getOptionsPage({ slug: 'my-options-page' })
+    ```
+    </CodeGroup>
+    ```ts {{ title: 'Return Type' }}
+    export interface WpMediaItem {
+      id?: number;
+      date?: string;
+      date_gmt?: string;
+      guid?: RenderedObject;
+      modified?: string;
+      modified_gmt?: string;
+      slug?: string;
+      status?: string;
+      type?: string;
+      link?: string;
+      title?: RenderedObject;
+      author?: number;
+      comment_status?: string;
+      ping_status?: string;
+      template?: string;
+      meta?: any[];
+      acf?: any[];
+      description?: RenderedObject;
+      caption?: RenderedObject;
+      alt_text?: string;
+      media_type?: string;
+      mime_type?: string;
+      media_details?: {
+        width?: number;
+        height?: number;
+        file?: string;
+        filesize?: number;
+        sizes?: Record<string, ImageSize>;
+        image_meta?: ImageMeta;
+      };
+      post?: any;
+      source_url?: string;
+      _links?: EmbeddedLinks;
+    }
+    ```
+
+  </Col>
+</Row>
 ---
