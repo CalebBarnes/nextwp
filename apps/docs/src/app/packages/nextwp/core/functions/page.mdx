@@ -11,8 +11,71 @@ The REST API functions are a set of functions that can be used to retrieve data 
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultricies aliquam, nunc nisl aliquet nunc, quis aliqu
 
-## getMenuItems {{ tag: 'GET' }}
+## getMenuItems {{ tag: 'GET', label: '/wp-json/wp/v2/menus?slug=${slug}' }}
 
+<Row>
+  <Col>
+    This function fetches menu items from a WordPress site using the WordPress REST API, based on a specified menu `slug`. It transforms the flat array of menu items returned by the API into a hierarchical structure. In this structure, nested menu items are added under the `childItems` key of their parent item, creating a tree-like organization.
+
+    ### Returns
+
+    <Properties>
+        <Property name="menuItems" type="WpMenuItem">
+        A JSON object containing the menu items of the specified menu.
+        </Property>
+    </Properties>
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/menus?slug=${slug}">
+    ```ts
+    import { getMenuItems } from '@nextwp/core'
+
+    const menuItems = await getMenuItems({ slug: "main-menu" });
+    ```
+    </CodeGroup>
+
+    ```ts {{ title: 'Return Type' }}
+    export interface WpMenuItem {
+      id?: number;
+      title?: RenderedObject;
+      status?: string;
+      url?: string;
+      attr_title?: string;
+      description?: string;
+      type?: string;
+      type_label?: string;
+      object?: string;
+      object_id?: number;
+      parent?: number;
+      menu_order?: number;
+      target?: string;
+      classes?: string[];
+      xfn?: string[];
+      invalid?: boolean;
+      meta?: any;
+      menus?: number;
+      _links?: WpLink[];
+      label?: string;
+      path?: string;
+      childItems?: WpMenuItem[];
+    }
+    ```
+
+  </Col>
+</Row>
 ---
 
 ## getSiteSettings {{ tag: 'GET', label: '/wp-json/wp/v2/settings?embed=true' }}
@@ -70,28 +133,27 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     ```
     </CodeGroup>
 
-    ```json {{ title: 'Response' }}
-    {
-        "title": "My WordPress Site",
-        "description": "Welcome to my site!",
-        "url": "https://example.com",
-        "posts_per_page": 10,
-        "page_on_front": 1,
-        "page_for_posts": 2,
-        "site_logo": 123,
-        "site_icon": 456,
-        "email": "admin@example.com",
-        "timezone": "America/New_York",
-        "date_format": "F j, Y",
-        "time_format": "g:i a",
-        "start_of_week": 0,
-        "language": "en_US",
-        "use_smilies": true,
-        "default_category": 1,
-        "default_post_format": "standard",
-        "show_on_front": "page",
-        "default_ping_status": "open",
-        "default_comment_status": "open"
+    ```ts {{ title: 'Return Type' }}
+    export interface WpSettings {
+      title?: string;
+      description?: string;
+      url?: string;
+      posts_per_page?: number;
+      page_on_front?: number;
+      page_for_posts?: number;      site_logo?: number;
+      site_icon?: number;
+      email?: string;
+      timezone?: string;
+      date_format?: string;
+      time_format?: string;
+      start_of_week?: number;
+      language?: string;
+      use_smilies?: boolean;
+      default_category?: number;
+      default_post_format?: string;
+      show_on_front?: string;
+      default_ping_status?: string;
+      default_comment_status?: string;
     }
     ```
 
@@ -100,8 +162,106 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 ---
 
-## getPageData
+## getPageData {{ tag: 'GET', label: '/wp-json/wp/v2/page' }}
 
+<Row>
+  <Col>
+    This function takes a URI as an argument and returns a Promise that resolves to a WpPage object. The WpPage object contains various properties about the page such as its ID, slug, title, and more. This function is useful when you need to fetch and display data for a specific page in your application.
+
+    ### Environment variables
+
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+    <Properties>
+      <Property name="NEXT_PUBLIC_WP_URL" type="string">
+        The URL of the WordPress site.
+      </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="/environment-variables"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about environment variables</>
+    </Button>
+    </div>
+
+    ### Returns
+    <Properties>
+        <Property name="data" type="WpPage | ArchivePageData">
+        A JSON object containing the data of the page.
+        </Property>
+    </Properties>
+        <Properties>
+        <Property name="archive" type="PostType">
+        A JSON object containing the post type archive data if applicable.
+        </Property>
+    </Properties>
+        <Properties>
+        <Property name="previewData" type="WpPage">
+        A JSON object containing the preview data for the requested page.
+        </Property>
+    </Properties>
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/page">
+    ```ts
+    import { getPageData } from '@nextwp/core'
+
+    const page = await getPageData({ uri: "/", searchParams: "?slug=home"});
+    ```
+    </CodeGroup>
+    ```ts {{ title: 'Return Type' }}
+    export interface WpPage {
+      id: number;
+      slug?: string;
+      title?: RenderedObject;
+      content?: RenderedObject;
+      excerpt?: RenderedObject;
+      date?: string;
+      date_gmt?: string;
+      modified?: string;
+      modified_gmt?: string;
+      guid?: RenderedObject;
+      link?: string;
+      status?: "publish" | "future" | "draft" | "pending" | "private";
+      type?: string;
+      author?: number;
+      featured_media?: number;
+      comment_status?: "open" | "closed";
+      ping_status?: "open" | "closed";
+      menu_order?: number;
+      meta?: any;
+      template?: string;
+      yoast_head?: string;
+      yoast_head_json?: YoastHeadJson;
+      _links?: EmbeddedLinks;
+    }
+    ```
+
+  </Col>
+</Row>
 ---
 
 ## getSingleItem
