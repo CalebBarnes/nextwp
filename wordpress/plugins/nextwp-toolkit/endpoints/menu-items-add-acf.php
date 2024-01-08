@@ -1,6 +1,7 @@
 <?php
 /**
  * Add ACF fields to menu items in the REST API
+ * For some reason, this was not included in the ACF plugin
  */
 add_filter("rest_pre_echo_response", function($result, $server, $request){
     $route = $request->get_route();
