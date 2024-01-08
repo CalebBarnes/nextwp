@@ -84,10 +84,7 @@ export const Header = forwardRef<
               target="_blank"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://badge.fury.io/js/@nextwp%2Fcore.svg"
-                alt="npm"
-              />
+              <img src="https://img.shields.io/npm/v/@nextwp/core" alt="npm" />
             </Link>
             {/* <TopLevelNavItem href="/">API</TopLevelNavItem> */}
             {/* <TopLevelNavItem href="#">Documentation</TopLevelNavItem> */}
