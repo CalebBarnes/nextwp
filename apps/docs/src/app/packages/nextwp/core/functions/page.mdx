@@ -15,13 +15,47 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function fetches menu items from a WordPress site using the WordPress REST API, based on a specified menu `slug`. It transforms the flat array of menu items returned by the API into a hierarchical structure. In this structure, nested menu items are added under the `childItems` key of their parent item, creating a tree-like organization.
+    This function fetches menu items from a WordPress site based on a specified menu `slug`. It transforms the flat array of menu items returned by the API into a hierarchical structure. It returns a Promise that resolves to a `WpMenuItem` object containing the menu items.
+
+    ### Environment variables
+
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+    <Properties>
+      <Property name="NEXT_PUBLIC_WP_URL" type="string">
+        The URL of the WordPress site.
+      </Property>
+    </Properties>
+
+        <div className="not-prose">
+    <Button
+        href="/environment-variables"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about environment variables</>
+    </Button>
+    </div>
+
+
+    ### Parameters
+
+    <Properties>
+      <Property name="slug" type="string">
+        The slug of the menu.
+      </Property>
+    </Properties>
 
     ### Returns
 
     <Properties>
         <Property name="menuItems" type="WpMenuItem">
-        A JSON object containing the menu items of the specified menu.
+        The menu items of the specified menu.
         </Property>
     </Properties>
 
@@ -82,13 +116,19 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function allows you to retrieve your site settings from WordPress. The settings are returned as a JSON object.
+    This function allows you to retrieve your site settings from WordPress.  It returns a Promise that resolves to a `WpSettings` object containing the data of the site settings.
 
     ### Environment variables
 
     <Properties>
       <Property name="WP_APPLICATION_PASSWORD" type="string">
         The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+    <Properties>
+      <Property name="NEXT_PUBLIC_WP_URL" type="string">
+        The URL of the WordPress site.
       </Property>
     </Properties>
 
@@ -107,7 +147,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
     <Properties>
         <Property name="settings" type="WpSettings">
-        The site settings. Refer to the or the `WpSettings` type definition for more information.
+        The site settings.
         </Property>
     </Properties>
 
@@ -166,7 +206,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function takes a URI as an argument and returns a Promise that resolves to a WpPage object.
+    This function takes a `uri` as an argument and fetches the data of the page that matches the `uri`. It returns a Promise that resolves to a `WpPage` object containing the data of the page requested.
 
     ### Environment variables
 
@@ -194,20 +234,34 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     </Button>
     </div>
 
+    ### Parameters
+
+    <Properties>
+      <Property name="uri" type="string">
+        The uri of the page.
+      </Property>
+    </Properties>
+
+    <Properties>
+      <Property name="searchParams" type="string">
+        The search parameters.
+      </Property>
+    </Properties>
+
     ### Returns
     <Properties>
         <Property name="data" type="WpPage | ArchivePageData">
-        A JSON object containing the data of the page.
+        The data of the page.
         </Property>
     </Properties>
         <Properties>
         <Property name="archive" type="PostType">
-        A JSON object containing the post type archive data if applicable.
+        The post type archive data if applicable.
         </Property>
     </Properties>
         <Properties>
         <Property name="previewData" type="WpPage">
-        A JSON object containing the preview data for the requested page.
+        The preview data for the requested page.
         </Property>
     </Properties>
 
@@ -268,26 +322,52 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function fetches a single item from WordPress based on the id, or the uri and slug.
+    This function fetches a single item from WordPress based on the `id`, `uri`, or `slug`. It returns a Promise that resolves to a `WpPage` object containing the data of the item requested.
+
+    ### Environment variables
+
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+    <Properties>
+      <Property name="NEXT_PUBLIC_WP_URL" type="string">
+        The URL of the WordPress site.
+      </Property>
+    </Properties>
+
+    <div className="not-prose">
+    <Button
+        href="/environment-variables"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about environment variables</>
+    </Button>
+    </div>
+
 
     ### Parameters
 
     <Properties>
       <Property name="uri" type="string">
-        The uri of the requested item.
+        The uri of the item.
       </Property>
     </Properties>
 
     <Properties>
 
       <Property name="id" type="string | integer">
-        The id of the requested item.
+        The id of the item.
       </Property>
     </Properties>
 
     <Properties>
       <Property name="slug" type="string">
-        The slug of the requested item.
+        The slug of the item.
       </Property>
     </Properties>
 
@@ -301,7 +381,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     ### Returns
     <Properties>
         <Property name="data" type="WpPage | undefined">
-        A JSON object containing the data of the item.
+        The data of the item.
         </Property>
     </Properties>
 
@@ -363,7 +443,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function fetches the site logo from a WordPress site. It returns a Promise that resolves to a WpMediaItem, which is a JSON object containing the data of the media item representing the site logo.
+    This function fetches the site logo from a WordPress site. It returns a Promise that resolves to a `WpMediaItem` object containing the data of the media item representing the site logo.
 
     ### Environment variables
 
@@ -394,7 +474,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     ### Returns
     <Properties>
         <Property name="data" type="WpMediaItem">
-        A JSON object containing the data of the media item.
+        The data of the media item.
         </Property>
     </Properties>
 
@@ -467,7 +547,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function fetches the site icon from a WordPress site. It returns a Promise that resolves to a WpMediaItem, which is a JSON object containing the data of the media item representing the site icon.
+    This function fetches the site icon from a WordPress site. It returns a Promise that resolves to a `WpMediaItem` object containing the data of the media item representing the site icon.
 
     ### Environment variables
 
@@ -498,7 +578,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     ### Returns
     <Properties>
         <Property name="data" type="WpMediaItem">
-        A JSON object containing the data of the media item.
+        The data of the media item.
         </Property>
     </Properties>
 
@@ -570,7 +650,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function fetches the site options page from WordPress.
+    This function fetches the site options page from WordPress. It returns a Promise that resolves to a object containing the data of the site options page.
 
      Requires the [NextWP - Toolkit](/packages/wordpress/nextwp-toolkit-plugin) plugin to be installed and activated on your WordPress site.
 
@@ -601,10 +681,20 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     </Button>
     </div>
 
+    ### Parameters
+
+    <Properties>
+      <Property name="slug" type="string">
+        The slug of the options page.
+      </Property>
+    </Properties>
+
+
+
     ### Returns
     <Properties>
         <Property name="data" type="WpMediaItem">
-        A JSON object containing the data of the media item.
+        The data of the options page.
         </Property>
     </Properties>
 
@@ -632,7 +722,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     </CodeGroup>
     ```ts {{ title: 'Return Type' }}
     export interface <object> {
-      ...options
+      {...options page data}
     }
     ```
 
