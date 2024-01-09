@@ -1,13 +1,14 @@
 <?php
-function nextwp_admin_menu_icon_css() {
-  ?>
+function nextwp_admin_menu_icon_css()
+{
+?>
   <style>
     #adminmenu .toplevel_page_nextwp div.wp-menu-image img {
       height: 20px;
       margin-top: -2px;
-    } 
+    }
   </style>
-  <?php
+<?php
 }
 add_action('admin_head', 'nextwp_admin_menu_icon_css');
 
@@ -38,7 +39,7 @@ endif;
 if (function_exists('acf_add_local_field_group')) :
   acf_add_local_field_group(array(
     'key' => 'group_1',
-    'title' => 'Settings',
+    'title' => 'NextWP Settings',
     'fields' => array(
       array(
         'key' => 'field_63dac3a7baf64',

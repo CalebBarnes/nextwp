@@ -1,16 +1,17 @@
 <?php
 /*
 * Plugin Name: NextWP - Headless Toolkit
-* Plugin URI: https://github.com/CalebBarnes/nextwp/@nextwp/wp-plugin
+* Plugin URI: https://www.nextwp.org/packages/wordpress/nextwp-toolkit-plugin
 * Description: A toolkit for headless Wordpress sites built with NextWP
-* Version: 1.1.1
+* Version: 1.1.3
 * Author: Caleb Barnes
 * Author URI: https://github.com/CalebBarnes
 */
 
 add_action('acf/init', 'nextwp_acf_init');
 
-function nextwp_acf_init() {
+function nextwp_acf_init()
+{
   if (class_exists('acf')) {
     include_once('acf/options-page.php');
 
