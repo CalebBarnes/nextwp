@@ -629,40 +629,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     ```
     </CodeGroup>
     ```ts {{ title: 'Return Type' }}
-    export interface WpMediaItem {
-      id?: number;
-      date?: string;
-      date_gmt?: string;
-      guid?: RenderedObject;
-      modified?: string;
-      modified_gmt?: string;
-      slug?: string;
-      status?: string;
-      type?: string;
-      link?: string;
-      title?: RenderedObject;
-      author?: number;
-      comment_status?: string;
-      ping_status?: string;
-      template?: string;
-      meta?: any[];
-      acf?: any[];
-      description?: RenderedObject;
-      caption?: RenderedObject;
-      alt_text?: string;
-      media_type?: string;
-      mime_type?: string;
-      media_details?: {
-        width?: number;
-        height?: number;
-        file?: string;
-        filesize?: number;
-        sizes?: Record<string, ImageSize>;
-        image_meta?: ImageMeta;
-      };
-      post?: any;
-      source_url?: string;
-      _links?: EmbeddedLinks;
+    export interface <object> {
+      ...options
     }
     ```
 
