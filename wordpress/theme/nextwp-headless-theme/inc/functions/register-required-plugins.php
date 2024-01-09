@@ -30,6 +30,7 @@ function nextwp_headless_theme_register_required_plugins()
 			'name'      => 'NextWP - Headless Toolkit',
 			'slug'      => 'nextwp-toolkit',
 			'source'    => 'https://www.nextwp.org/api/download/nextwp-toolkit',
+			'is_callable' => 'nextwp_acf_init',
 			'required'     => true
 		),
 
