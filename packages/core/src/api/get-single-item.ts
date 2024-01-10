@@ -1,21 +1,27 @@
 import { draftMode } from "next/headers";
-import type { WpPage } from "../types";
+import type { WpPage, WpRevision } from "../types";
+import { debug } from "../utils/debug-log";
+import { getPreviewData } from "./get-page-data/get-preview-data";
 
 /**
  * Fetches a single item from WordPress based on the uri, id, or slug.
  * @see https://www.nextwp.org/packages/nextwp/core/functions#get-single-item
  */
+
+type GetSingleItemParams =
+  | { uri: string; id?: never; rest_base: string }
+  | { uri?: never; id: string | number; rest_base: string };
+
 export const getSingleItem = async ({
   uri,
   id,
-  slug,
-  postTypeRestBase,
-}: {
-  uri?: string;
-  id?: string | number;
-  slug?: string;
-  postTypeRestBase: string;
-}): Promise<WpPage | undefined> => {
+  rest_base,
+}: GetSingleItemParams): Promise<
+  | { data: WpPage; previewData: WpRevision } // preview mode
+  | { data: WpPage; previewData?: undefined } // published mode
+  | undefined // no data found
+  | { data: WpPage | undefined; previewData?: undefined }
+> => {
   const params: Record<string, string> = {
     acf_format: "standard", // includes ACF data in the response
     _embed: "true", // includes embedded data in the response like (featured image, author, etc.)
@@ -31,61 +37,148 @@ export const getSingleItem = async ({
   }
 
   if (id) {
-    const queryString = new URLSearchParams(params).toString();
-    const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${postTypeRestBase}/${id}?${queryString}`;
-    const req = await fetch(endpoint, {
+    return getNodeById({
+      id,
+      rest_base,
+      params,
       headers,
     });
-
-    try {
-      const data = (await req.json()) as WpPage | { code?: string } | undefined;
-
-      if (data && "id" in data) {
-        return data;
-      }
-      return undefined;
-    } catch (err: any) {
-      throw new Error(
-        `Error fetching from endpoint: ${endpoint}
-Error Message: ${err.message}`
-      );
-    }
   }
 
-  if (slug) {
-    params.slug = slug;
-    const queryString = new URLSearchParams(params).toString();
-    const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${postTypeRestBase}?${queryString}`;
-    const req = await fetch(endpoint, {
+  if (uri) {
+    return getNodeByUri({
+      uri,
+      rest_base,
+      params,
       headers,
     });
-
-    try {
-      type WpItemsResponse = WpPage[] | { code?: string } | undefined;
-      const data = (await req.json()) as WpItemsResponse;
-
-      if (uri && Array.isArray(data) && data.length > 1) {
-        // if there are multiple items with the same slug, find the one that matches the uri
-        const matchedItem = data.find((item: WpPage) => {
-          const itemPath = item.link?.replace(
-            process.env.NEXT_PUBLIC_WP_URL!,
-            ""
-          );
-          return itemPath === `/${uri}/`;
-        });
-
-        return matchedItem || data[0];
-      }
-
-      if (Array.isArray(data)) {
-        return data[0];
-      }
-      return undefined;
-    } catch (err: any) {
-      throw new Error(
-        `Error fetching from endpoint: ${endpoint}
-Error Message: ${err.message}`
-      );
-    }
   }
 };
+
+async function getNodeById({
+  id,
+  rest_base,
+  params,
+  headers,
+}: {
+  id: string | number;
+  rest_base: string;
+  params: Record<string, string>;
+  headers?: Record<string, string>;
+}) {
+  debug.info(String(id), "getNodeById");
+  // console.log({
+  //   id,
+  //   rest_base,
+  //   params,
+  //   headers,
+  // });
+  const preview = draftMode();
+
+  const queryString = new URLSearchParams({
+    ...params,
+    status: preview.isEnabled ? "any" : "publish", // allow previewing of non published posts
+  }).toString();
+
+  const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${rest_base}/${id}?${queryString}`;
+  const req = await fetch(endpoint, {
+    headers,
+  });
+
+  try {
+    const data = (await req.json()) as WpPage | { code?: string } | undefined;
+
+    if (data && "id" in data) {
+      if (preview.isEnabled) {
+        const previewData = await getPreviewData({
+          id: data.id,
+          rest_base,
+        });
+
+        return { data, previewData };
+      }
+
+      return { data };
+    }
+  } catch (err: any) {
+    throw new Error(
+      `Error fetching from endpoint: ${endpoint}
+Error Message: ${err.message}`
+    );
+  }
+}
+
+async function getNodeByUri({
+  uri,
+  rest_base,
+  params,
+  headers,
+}: {
+  uri: string;
+  rest_base: string;
+  params: Record<string, string>;
+  headers?: Record<string, string>;
+}) {
+  debug.info(uri, "getNodeByUri");
+  // console.log({
+  //   uri,
+  //   rest_base,
+  //   params,
+  //   headers,
+  // });
+  const preview = draftMode();
+  const slug = uri.split("/").slice(-1).toString();
+
+  const queryString = new URLSearchParams({
+    ...params,
+    slug,
+    status: preview.isEnabled ? "any" : "publish", // allow previewing of non published posts
+  }).toString();
+
+  const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${rest_base}?${queryString}`;
+  const req = await fetch(endpoint, {
+    headers,
+  });
+
+  let node: WpPage | undefined;
+
+  try {
+    type WpItemsResponse = WpPage[] | { code?: string } | undefined;
+    const data = (await req.json()) as WpItemsResponse;
+
+    if (uri && Array.isArray(data) && data.length > 1) {
+      // if there are multiple items with the same slug, find the one that matches the uri
+      const matchedItem = data.find((item: WpPage) => {
+        const itemPath = item.link?.replace(
+          process.env.NEXT_PUBLIC_WP_URL!,
+          ""
+        );
+        return itemPath === `/${uri}/`;
+      });
+
+      node = matchedItem || data[0];
+    } else if (Array.isArray(data) && data[0]) {
+      node = data[0];
+    }
+  } catch (err: any) {
+    throw new Error(
+      `Error fetching from endpoint: ${endpoint}
+Error Message: ${err.message}`
+    );
+  }
+
+  if (preview.isEnabled && node) {
+    const previewData = await getPreviewData({
+      id: node.id,
+      rest_base,
+    });
+
+    return { data: node, previewData };
+  }
+
+  if (!node) {
+    return;
+  }
+
+  return { data: node };
+}

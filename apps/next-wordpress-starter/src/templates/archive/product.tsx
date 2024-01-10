@@ -5,36 +5,40 @@ import { getFeaturedImage } from "@nextwp/core/src/utils/get-featured-image";
 import Edges from "@/components/edges";
 import Button from "@/components/ui/button";
 
-export default function PostArchive(props) {
-  // console.log(props);
+export default function ProductArchive(props) {
   const {
     // uri,
     data: {
+      // products,
       items,
       page,
       prevPage,
       nextPage,
-      // totalItems,
+      totalItems,
       totalPages,
       currentPage,
     },
     // archive,
   } = props;
+  // console.log({ products });
 
-  // console.log({ items });
   return (
     <div>
-      <h1>items: {items.length}</h1>
+      <div className="edges">
+        <h1>current page items: {items?.length}</h1>
+        <p>totalItems: {totalItems}</p>
+        <p>totalPages: {totalPages}</p>
+      </div>
 
       <Edges>
         <h1 className="mb-5">{page?.title?.rendered}</h1>
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-          {items.map((post) => {
-            const featuredImage = getFeaturedImage(post);
+          {items?.map((item: any) => {
+            const featuredImage = getFeaturedImage(item);
             return (
               <article
                 className="flex flex-col items-start justify-between"
-                key={post.id}
+                key={item?.id}
               >
                 <div className="relative w-full aspect-[16/9] sm:aspect-[2/1] lg:aspect-[3/2]">
                   {featuredImage?.url ? (
@@ -50,44 +54,55 @@ export default function PostArchive(props) {
                 </div>
                 <div className="max-w-xl">
                   <div className="mt-8 flex items-center gap-x-4 text-xs">
-                    <time className="text-gray-500" dateTime={post.datetime}>
-                      {post.date}
-                    </time>
-                    {/* <a
-                      className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
-                      href={post.category.href}
-                    >
-                      {post.category.title}
-                    </a> */}
+                    {item?.date ? (
+                      <time className="text-gray-500" dateTime={item.datetime}>
+                        {item.date}
+                      </time>
+                    ) : null}
+                    {item?.category?.title ? (
+                      <a
+                        className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
+                        href={item.category.href}
+                      >
+                        {item.category.title}
+                      </a>
+                    ) : null}
                   </div>
                   <div className="group relative">
                     <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                      <Link href={swapWpUrl(post.link)}>
+                      <Link href={swapWpUrl(item.link)}>
                         <span className="absolute inset-0" />
-                        {post.title.rendered}
+                        {item.title.rendered}
                       </Link>
                     </h3>
-                    <div
-                      className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600"
-                      dangerouslySetInnerHTML={{
-                        __html: post.excerpt.rendered,
-                      }}
-                    />
+                    {item?.excerpt?.rendered ? (
+                      <div
+                        className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600"
+                        dangerouslySetInnerHTML={{
+                          __html: item?.excerpt?.rendered,
+                        }}
+                      />
+                    ) : null}
                   </div>
                   <div className="relative mt-8 flex items-center gap-x-4">
-                    <img
-                      alt=""
-                      className="h-10 w-10 rounded-full bg-gray-100"
-                      src={post?._embedded?.author?.[0]?.avatar_urls?.["96"]}
-                    />
+                    {item?._embedded?.author?.[0]?.avatar_urls?.["96"] ? (
+                      <img
+                        alt=""
+                        className="h-10 w-10 rounded-full bg-gray-100"
+                        src={item?._embedded?.author?.[0]?.avatar_urls?.["96"]}
+                      />
+                    ) : null}
+
                     <div className="text-sm leading-6">
                       <p className="font-semibold text-gray-900">
-                        {/* <a href={post.author}> */}
+                        {/* <a href={item.author}> */}
                         <span className="absolute inset-0" />
-                        {post?._embedded?.author?.[0].name}
+                        {item?._embedded?.author?.[0].name}
                         {/* </a> */}
                       </p>
-                      <p className="text-gray-600">{post.author.role}</p>
+                      {item?.author?.role ? (
+                        <p className="text-gray-600">{item.author.role}</p>
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -138,7 +153,7 @@ export default function PostArchive(props) {
             <div>
               {prevPage ? (
                 <Button asChild>
-                  <Link href={`?page=${prevPage}`}>Prev page</Link>
+                  <Link href={prevPage}>Prev page</Link>
                 </Button>
               ) : null}
             </div>
@@ -146,7 +161,7 @@ export default function PostArchive(props) {
             <div>
               {nextPage ? (
                 <Button asChild>
-                  <Link href={`?page=${nextPage}`}>Next page</Link>
+                  <Link href={nextPage}>Next page</Link>
                 </Button>
               ) : null}
             </div>
@@ -154,7 +169,6 @@ export default function PostArchive(props) {
         </div>
       </Edges>
 
-      {/* <p>totalPages: {totalPages}</p> */}
       {/* <p>num items on this page: {items.length}</p> */}
       {/* 
       <pre>

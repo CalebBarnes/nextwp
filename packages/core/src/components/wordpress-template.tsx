@@ -5,9 +5,9 @@ import type { WpPage } from "../types";
 import type { ArchivePageData } from "../api/get-page-data/get-archive-page";
 import { deepMerge } from "../utils/deep-merge";
 import type { Templates } from "../utils/get-template";
-import { createDataProxy } from "../helpers/data-proxy";
 import { getTemplate } from "../utils/get-template";
 import { getPageData } from "../api/get-page-data/get-page-data";
+import { debug } from "../utils/debug-log";
 import { PreviewToolbar } from "./preview-toolbar";
 import { RouteParamsDebug } from "./route-params-debug";
 
@@ -33,9 +33,10 @@ export async function WordpressTemplate(props: {
 
   const preview = draftMode();
 
-  const { data, archive, previewData } = await getPageData(uri, searchParams);
-
+  const { data, archive, previewData } = await getPageData(uri);
+  // console.log({ data, archive, previewData });
   if (!data && !previewData && !archive) {
+    debug.warn(`No data found for uri: ${uri}`);
     notFound();
   }
 
@@ -51,22 +52,17 @@ export async function WordpressTemplate(props: {
     notFound();
   }
 
-  let mergedData: WpPage | ArchivePageData = data!;
-  if (previewData) {
+  let mergedData = data;
+  if (previewData && mergedData) {
     // eslint-disable-next-line no-console -- only logging in preview mode
     console.log({ previewData });
     mergedData = deepMerge<WpPage | ArchivePageData>(mergedData, previewData); // Merge previewData into mergedData
-  }
-  if (archive) {
-    mergedData = createDataProxy(
-      mergedData as ArchivePageData
-    ) as ArchivePageData;
   }
 
   return (
     <>
       {process.env.ROUTE_PARAMS_DEBUG_ENABLED ? (
-        <RouteParamsDebug params={params} searchParams={searchParams} />
+        <RouteParamsDebug params={params} />
       ) : null}
 
       <PageTemplate

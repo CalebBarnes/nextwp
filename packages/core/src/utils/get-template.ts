@@ -65,6 +65,14 @@ export function getTemplate({
   }
 
   if (!archive && data && typeof data.template === "string") {
+    if (data.type && !(data.type in templates)) {
+      if (shouldLog) {
+        debug.warn(
+          `No templates found for type "${data.type}" on uri '${uri}'.\n Did you forget to add it to the templates object in src/templates/index?`
+        );
+      }
+      return;
+    }
     const templateName = getTemplateName(data.template || "default");
     const template = templates[data.type || ""][templateName];
 

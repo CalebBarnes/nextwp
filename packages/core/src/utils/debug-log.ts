@@ -1,5 +1,5 @@
 function debugLog(
-  message: string,
+  message: string | Record<string, unknown>,
   level: "error" | "log" | "warn" | "info" = "log",
   overridePrefix?: string
 ) {
@@ -13,9 +13,9 @@ function debugLog(
       case "warn":
         return "\x1b[33m"; // Yellow
       case "info":
-        return "\x1b[34m"; // Blue
+        return "\x1b[36m"; // Cyan
       default:
-        return "\x1b[32m"; // Green
+        return ""; // No color
     }
   })();
 
@@ -23,7 +23,11 @@ function debugLog(
 
   // eslint-disable-next-line no-console -- this is a utility for logging
   console[level](
-    `${prefixColor}${prefix}${reset} ${messageColor}${message}${reset}`
+    `${prefixColor}${prefix}${reset} ${messageColor}${
+      typeof message === "object"
+        ? `\n${JSON.stringify(message, null, 2)}`
+        : message
+    }${reset}`
   );
 }
 
