@@ -47,11 +47,14 @@ export async function getNodeInfo(uri: string): Promise<{
   }
 
   for (const key in taxonomies) {
+    // todo: handle post_tag uniquely
+    // todo: because the slug is post_tag, but the uri would be /tag/tag-name
     // check if uri matches a taxonomy archive uri
     if (uri.startsWith(taxonomies[key].slug)) {
       const termSlug = uri.replace(`${taxonomies[key].slug}/`, "");
 
       if (termSlug) {
+        // eslint-disable-next-line no-await-in-loop -- only one will be awaited
         const termNode = await getTermNode({
           termSlug,
           rest_base: taxonomies[key].rest_base,
