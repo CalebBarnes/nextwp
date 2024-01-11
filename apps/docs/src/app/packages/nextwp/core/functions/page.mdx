@@ -17,7 +17,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
   <Col>
     This function fetches menu items from a WordPress site based on a specified menu `slug`. It transforms the flat array of menu items returned by the API into a hierarchical structure. It returns a Promise that resolves to a `WpMenuItem` object containing the menu items.
 
-    ### Environment variables
+    ### Required environment variables
 
     <Properties>
       <Property name="WP_APPLICATION_PASSWORD" type="string">
@@ -25,25 +25,18 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
       </Property>
     </Properties>
 
-    <Properties>
-      <Property name="NEXT_PUBLIC_WP_URL" type="string">
-        The URL of the WordPress site.
-      </Property>
-    </Properties>
-
-        <div className="not-prose">
-    <Button
-        href="/environment-variables"
-        variant="text"
-        arrow="right"
-        target="_blank"
-    >
-        <>Read more about environment variables</>
-    </Button>
+    <div className="not-prose">
+      <Button
+          href="/environment-variables"
+          variant="text"
+          arrow="right"
+          target="_blank"
+      >
+          <>Read more about environment variables</>
+      </Button>
     </div>
 
-
-    ### Parameters
+    ### Required parameters
 
     <Properties>
       <Property name="slug" type="string">
