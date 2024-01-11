@@ -15,7 +15,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function fetches menu items from a WordPress site based on a specified menu `slug`. It transforms the flat array of menu items returned by the API into a hierarchical structure. It returns a Promise that resolves to a `WpMenuItem` object containing the menu items.
+    This function fetches menu items from a WordPress site based on a specified menu `slug`. It transforms the flat array of menu items returned by the API into a hierarchical structure.
 
     ### Required environment variables
 
@@ -109,19 +109,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function allows you to retrieve your site settings from WordPress.  It returns a Promise that resolves to a `WpSettings` object containing the data of the site settings.
+    This function allows you to retrieve your site settings from WordPress.
 
-    ### Environment variables
+    ### Required environment variables
 
     <Properties>
       <Property name="WP_APPLICATION_PASSWORD" type="string">
         The application password for the WordPress user.
-      </Property>
-    </Properties>
-
-    <Properties>
-      <Property name="NEXT_PUBLIC_WP_URL" type="string">
-        The URL of the WordPress site.
       </Property>
     </Properties>
 
@@ -199,22 +193,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function takes a `uri` as an argument and fetches the data of the page that matches the `uri`. It returns a Promise that resolves to a `WpPage` object containing the data of the page requested.
+    This function fetches the data of the page that matches the `uri` parameter.
 
-    ### Environment variables
+    ### Required environment variables
 
     <Properties>
       <Property name="WP_APPLICATION_PASSWORD" type="string">
         The application password for the WordPress user.
       </Property>
     </Properties>
-
-    <Properties>
-      <Property name="NEXT_PUBLIC_WP_URL" type="string">
-        The URL of the WordPress site.
-      </Property>
-    </Properties>
-
 
     <div className="not-prose">
     <Button
@@ -227,13 +214,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     </Button>
     </div>
 
-    ### Parameters
+    ### Required parameters
 
     <Properties>
       <Property name="uri" type="string">
         The uri of the page.
       </Property>
     </Properties>
+
+      ### Optional parameters
 
     <Properties>
       <Property name="searchParams" type="string">
@@ -315,9 +304,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function fetches a single item from WordPress based on the `id`, `uri`, or `slug`. It returns a Promise that resolves to a `WpPage` object containing the data of the item requested.
+    This function fetches a single item from WordPress based on the `id`, `uri`, or `slug`.
 
-    ### Environment variables
+    ### Required environment variables
 
     <Properties>
       <Property name="WP_APPLICATION_PASSWORD" type="string">
@@ -325,11 +314,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
       </Property>
     </Properties>
 
-    <Properties>
-      <Property name="NEXT_PUBLIC_WP_URL" type="string">
-        The URL of the WordPress site.
-      </Property>
-    </Properties>
 
     <div className="not-prose">
     <Button
@@ -436,19 +420,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function fetches the site logo from a WordPress site. It returns a Promise that resolves to a `WpMediaItem` object containing the data of the media item representing the site logo.
+    This function fetches the site logo from a WordPress site.
 
-    ### Environment variables
+    ### Required environment variables
 
     <Properties>
       <Property name="WP_APPLICATION_PASSWORD" type="string">
         The application password for the WordPress user.
-      </Property>
-    </Properties>
-
-    <Properties>
-      <Property name="NEXT_PUBLIC_WP_URL" type="string">
-        The URL of the WordPress site.
       </Property>
     </Properties>
 
@@ -540,22 +518,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function fetches the site icon from a WordPress site. It returns a Promise that resolves to a `WpMediaItem` object containing the data of the media item representing the site icon.
+    This function fetches the site icon from a WordPress site.
 
-    ### Environment variables
+    ### Required environment variables
 
     <Properties>
       <Property name="WP_APPLICATION_PASSWORD" type="string">
         The application password for the WordPress user.
       </Property>
     </Properties>
-
-    <Properties>
-      <Property name="NEXT_PUBLIC_WP_URL" type="string">
-        The URL of the WordPress site.
-      </Property>
-    </Properties>
-
 
     <div className="not-prose">
     <Button
@@ -643,10 +614,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 <Row>
   <Col>
-    This function fetches the site options page from WordPress. It returns a Promise that resolves to a object containing the data of the site options page.
-
-     Requires the [NextWP - Toolkit](/packages/wordpress/nextwp-toolkit-plugin) plugin to be installed and activated on your WordPress site.
-
+    This function fetches the custom endpoint of the site options page registered by the [`NextWP Toolkit Plugin`](/packages/wordpress/nextwp-toolkit-plugin) in WordPress.
 
     ### Environment variables
 
@@ -655,13 +623,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
         The application password for the WordPress user.
       </Property>
     </Properties>
-
-    <Properties>
-      <Property name="NEXT_PUBLIC_WP_URL" type="string">
-        The URL of the WordPress site.
-      </Property>
-    </Properties>
-
 
     <div className="not-prose">
     <Button
@@ -674,7 +635,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     </Button>
     </div>
 
-    ### Parameters
+    ### Required parameters
 
     <Properties>
       <Property name="slug" type="string">
