@@ -50,3 +50,5 @@ export type {
   SearchParams,
   RouteParams,
 } from "./src/components/wordpress-template";
+
+export type { WpTerm } from "./src/api/taxonomy/get-term";

@@ -1,27 +1,33 @@
 import { draftMode } from "next/headers";
-import type { WpPage, WpRevision } from "../types";
-import { debug } from "../utils/debug-log";
+import type { WpPage } from "../types";
 import { getPreviewData } from "./get-page-data/get-preview-data";
 
-/**
- * Fetches a single item from WordPress based on the uri, id, or slug.
- * @see https://www.nextwp.org/packages/nextwp/core/functions#get-single-item
- */
+type SingleItem =
+  | {
+      /**
+       * The single page/post/custom returned from the WP REST API.
+       */
+      data?: WpPage;
+      /**
+       * The preview data returned from the WP REST API for the single page/post/custom.
+       */
+      previewData?: WpPage;
+    }
+  | undefined;
 
 type GetSingleItemParams =
   | { uri: string; id?: never; rest_base: string }
   | { uri?: never; id: string | number; rest_base: string };
 
+/**
+ * Fetches a single item from WordPress based on the uri, id, or slug.
+ * @see https://www.nextwp.org/packages/nextwp/core/functions#get-single-item
+ */
 export const getSingleItem = async ({
   uri,
   id,
   rest_base,
-}: GetSingleItemParams): Promise<
-  | { data: WpPage; previewData: WpRevision } // preview mode
-  | { data: WpPage; previewData?: undefined } // published mode
-  | undefined // no data found
-  | { data: WpPage | undefined; previewData?: undefined }
-> => {
+}: GetSingleItemParams): Promise<SingleItem> => {
   const params: Record<string, string> = {
     acf_format: "standard", // includes ACF data in the response
     _embed: "true", // includes embedded data in the response like (featured image, author, etc.)
@@ -66,15 +72,7 @@ async function getNodeById({
   params: Record<string, string>;
   headers?: Record<string, string>;
 }) {
-  debug.info(String(id), "getNodeById");
-  // console.log({
-  //   id,
-  //   rest_base,
-  //   params,
-  //   headers,
-  // });
   const preview = draftMode();
-
   const queryString = new URLSearchParams({
     ...params,
     status: preview.isEnabled ? "any" : "publish", // allow previewing of non published posts
@@ -87,7 +85,6 @@ async function getNodeById({
 
   try {
     const data = (await req.json()) as WpPage | { code?: string } | undefined;
-
     if (data && "id" in data) {
       if (preview.isEnabled) {
         const previewData = await getPreviewData({
@@ -119,16 +116,8 @@ async function getNodeByUri({
   params: Record<string, string>;
   headers?: Record<string, string>;
 }) {
-  debug.info(uri, "getNodeByUri");
-  // console.log({
-  //   uri,
-  //   rest_base,
-  //   params,
-  //   headers,
-  // });
   const preview = draftMode();
   const slug = uri.split("/").slice(-1).toString();
-
   const queryString = new URLSearchParams({
     ...params,
     slug,

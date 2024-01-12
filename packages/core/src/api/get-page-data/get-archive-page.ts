@@ -4,8 +4,22 @@ import type { PostType } from "../get-post-types";
 import { getSiteSettings } from "../get-site-settings";
 import { getSingleItem } from "../get-single-item";
 
+export type ArchivePage = {
+  /**
+   * The archive page returned from the WP REST API.
+   */
+  data?: ArchivePageData;
+  archive?: PostType;
+};
+
 export type ArchivePageData = {
-  items: WpPage[];
+  /**
+   * The list of single pages/posts/customs returned from the WP REST API for this post type's archive page.
+   */
+  items?: WpPage[];
+  /**
+   * The single page/post/custom returned from the WP REST API that was matching the uri of the archive page uri.
+   */
   page?: WpPage;
   /**
    * The pathname of the previous page.
@@ -41,7 +55,6 @@ export async function getArchivePage({
   archive?: PostType;
 }> {
   const settings = await getSiteSettings();
-
   const params = {
     per_page: String(settings.posts_per_page || 10),
     _embed: "true",
@@ -90,7 +103,6 @@ export async function getArchivePage({
 
     const data: ArchivePageData = {
       items,
-
       page: pageForItems?.data,
       prevPage,
       nextPage,

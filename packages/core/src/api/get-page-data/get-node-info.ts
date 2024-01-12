@@ -1,9 +1,12 @@
+import { debug } from "../../utils/debug-log";
 import type { PostType } from "../get-post-types";
 import { getPostTypes } from "../get-post-types";
 import { getSingleItem } from "../get-single-item";
 import { getSiteSettings } from "../get-site-settings";
+import type { Taxonomy } from "../get-taxonomies";
 import { getTaxonomies } from "../get-taxonomies";
-import { getTermNode } from "../taxonomy/get-term-node";
+// import type { WpTerm } from "../taxonomy/get-term";
+// import { getTerm } from "../taxonomy/get-term";
 
 /**
  * Get post type archive and rest base by uri
@@ -21,9 +24,8 @@ export async function getNodeInfo(uri: string): Promise<{
   /**
    * The taxonomy data if this uri is a taxonomy archive page.
    */
-  taxonomy?: any;
+  taxonomy?: Taxonomy;
 }> {
-  console.log("getNodeInfo", uri);
   const settings = await getSiteSettings();
   const postTypes = await getPostTypes();
   const taxonomies = await getTaxonomies();
@@ -47,28 +49,16 @@ export async function getNodeInfo(uri: string): Promise<{
   }
 
   for (const key in taxonomies) {
-    // todo: handle post_tag uniquely
-    // todo: because the slug is post_tag, but the uri would be /tag/tag-name
-    // check if uri matches a taxonomy archive uri
     if (uri.startsWith(taxonomies[key].slug)) {
-      const termSlug = uri.replace(`${taxonomies[key].slug}/`, "");
-
-      if (termSlug) {
-        // eslint-disable-next-line no-await-in-loop -- only one will be awaited
-        const termNode = await getTermNode({
-          termSlug,
-          rest_base: taxonomies[key].rest_base,
-        });
-        console.log("termNode", termNode);
-      }
-
-      console.log("termSlug", termSlug);
-      console.log(taxonomies[key].slug);
-      console.log("uri starts with taxonomy slug", taxonomies[key]);
       taxonomy = taxonomies[key];
       rest_base = taxonomy.rest_base;
       break;
     }
+  }
+
+  if (uri.startsWith("tag/")) {
+    taxonomy = taxonomies.post_tag;
+    rest_base = taxonomy.rest_base;
   }
 
   if (settings.page_for_posts) {

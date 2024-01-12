@@ -22,21 +22,23 @@ export type RouteParams = { paths?: string[] };
  * Read the docs for more info:
  * @see https://www.nextwp.org/packages/nextwp/core/components#wordpress-template
  */
-export async function WordpressTemplate(props: {
+export async function WordpressTemplate({
+  params,
+  templates,
+  searchParams,
+  supressWarnings,
+  ...rest
+}: {
   params?: RouteParams;
   templates: Templates;
   searchParams?: SearchParams;
   supressWarnings?: boolean;
 }) {
-  const { params, templates, searchParams, supressWarnings, ...rest } = props;
   const uri = params?.paths?.join("/") || "/";
-
   const preview = draftMode();
+  const { data, archive, previewData, taxonomy, term } = await getPageData(uri);
 
-  const { data, archive, previewData } = await getPageData(uri);
-  // console.log({ data, archive, previewData });
   if (!data && !previewData && !archive) {
-    debug.warn(`No data found for uri: ${uri}`);
     notFound();
   }
 
@@ -44,6 +46,8 @@ export async function WordpressTemplate(props: {
     uri,
     data,
     archive,
+    taxonomy,
+    term,
     templates,
     supressWarnings,
   });
@@ -54,8 +58,7 @@ export async function WordpressTemplate(props: {
 
   let mergedData = data;
   if (previewData && mergedData) {
-    // eslint-disable-next-line no-console -- only logging in preview mode
-    console.log({ previewData });
+    // console.log({ previewData });
     mergedData = deepMerge<WpPage | ArchivePageData>(mergedData, previewData); // Merge previewData into mergedData
   }
 
@@ -71,6 +74,8 @@ export async function WordpressTemplate(props: {
         isPreview={preview.isEnabled}
         params={params}
         searchParams={searchParams}
+        taxonomy={taxonomy}
+        term={term}
         uri={uri}
         {...rest}
       />
