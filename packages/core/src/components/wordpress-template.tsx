@@ -37,9 +37,19 @@ export async function WordpressTemplate({
   const uri = params?.paths?.join("/") || "/";
   const preview = draftMode();
   const { data, archive, previewData, taxonomy, term } = await getPageData(uri);
+  console.log({ data, archive, previewData, taxonomy, term });
+  if (!data && !previewData && !archive && !taxonomy && !term) {
+    return (
+      <>
+        {process.env.ROUTE_PARAMS_DEBUG_ENABLED ? (
+          <RouteParamsDebug params={params} />
+        ) : null}
 
-  if (!data && !previewData && !archive) {
-    notFound();
+        <div>Temporary 404 page here!</div>
+        <div>missing data, previewData, archive, taxonomy, and term</div>
+      </>
+    );
+    // notFound();
   }
 
   const PageTemplate = getTemplate({
@@ -53,7 +63,17 @@ export async function WordpressTemplate({
   });
 
   if (!PageTemplate) {
-    notFound();
+    return (
+      <>
+        {process.env.ROUTE_PARAMS_DEBUG_ENABLED ? (
+          <RouteParamsDebug params={params} />
+        ) : null}
+
+        <div>Temporary 404 page here!</div>
+        <div>missing PageTemplate</div>
+      </>
+    );
+    // notFound();
   }
 
   let mergedData = data;
