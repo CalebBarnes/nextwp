@@ -24,6 +24,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "tailwindui.com",
       },
+      {
+        protocol: "https",
+        hostname: "secure.gravatar.com",
+      },
     ],
   },
 
@@ -38,9 +42,20 @@ const nextConfig = {
 
   // logging: {
   //   fetches: {
-  //     fullUrl: true,
+  //     fullUrl: false,
   //   },
   // },
+  // reactStrictMode: false,
 };
+
+if (process.env.SINGLE_THREAD_BUILD === "true") {
+  // Single threaded builds for production during generateStaticParams and other functions to avoid rate limiting
+  // Only enable this if you are running into rate limiting issues while fetching a lot of posts in parallel
+  if (!nextConfig.experimental) {
+    nextConfig.experimental = {};
+  }
+  nextConfig.experimental.workerThreads = false;
+  nextConfig.experimental.cpus = 1;
+}
 
 module.exports = nextConfig;
