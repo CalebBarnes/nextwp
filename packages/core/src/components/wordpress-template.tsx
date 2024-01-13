@@ -37,7 +37,7 @@ export async function WordpressTemplate({
   const uri = params?.paths?.join("/") || "/";
   const preview = draftMode();
   const { data, archive, previewData, taxonomy, term } = await getPageData(uri);
-  console.log({ data, archive, previewData, taxonomy, term });
+  // console.log({ data, archive, previewData, taxonomy, term });
   if (!data && !previewData && !archive && !taxonomy && !term) {
     return (
       <>

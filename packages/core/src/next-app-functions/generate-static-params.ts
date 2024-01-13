@@ -61,6 +61,9 @@ export async function generateStaticParams({
     paths: ["/"],
   });
   staticParams.push({
+    paths: ["index"],
+  });
+  staticParams.push({
     paths: ["all-products"],
   });
 
