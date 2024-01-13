@@ -1,27 +1,23 @@
 import type { WpPage } from "../../types";
 import { getSingleItem } from "../get-single-item";
-import type { TaxonomyPage } from "../taxonomy/get-taxonomy-page";
+import type { TaxonomyPageData } from "../taxonomy/get-taxonomy-page";
 import { getTaxonomyPage } from "../taxonomy/get-taxonomy-page";
 import { extractPageNumberFromUri } from "../helpers/extract-page-number-from-uri";
+import type { PostType } from "../get-post-types";
+import type { Taxonomy } from "../get-taxonomies";
+import type { WpTerm } from "../taxonomy/get-term";
 import { getFrontPage } from "./get-front-page";
 import { getNodeInfo } from "./get-node-info";
-import type { ArchivePage } from "./get-archive-page";
+import type { ArchivePageData } from "./get-archive-page";
 import { getArchivePage } from "./get-archive-page";
 
-type SingleItem = {
-  /**
-   * The single page/post/custom returned from the WP REST API.
-   */
-  data?: WpPage;
-  /**
-   * The preview data returned from the WP REST API for the single page/post/custom.
-   */
+type PageData = {
+  data?: WpPage | ArchivePageData | TaxonomyPageData;
   previewData?: WpPage;
+  archive?: PostType;
+  taxonomy?: Taxonomy;
+  term?: WpTerm;
 };
-
-type PageData =
-  | (TaxonomyPage & ArchivePage & SingleItem)
-  | Record<string, never>;
 
 /**
  * Get data for a specific page from a WordPress REST API endpoint based on the URI

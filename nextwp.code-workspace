@@ -23,6 +23,7 @@
       "path": "packages/addons"
     },
     // {
+    //   "name": "@nextwp/cli",
     //   "path": "packages/cli"
     // },
 

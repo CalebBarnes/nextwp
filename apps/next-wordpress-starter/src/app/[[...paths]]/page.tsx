@@ -6,7 +6,6 @@ export default function PageRoute(props: {
   params: RouteParams;
   searchParams?: SearchParams;
 }) {
-  console.log("PageRoute", props);
   return (
     <WordpressTemplate
       params={props.params}
@@ -18,4 +17,4 @@ export default function PageRoute(props: {
 
 export { generateMetadata, generateStaticParams } from "@nextwp/core";
 
-export const dynamicParams = true; // true | false,
+// export const dynamicParams = true; // true | false,

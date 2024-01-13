@@ -23,7 +23,6 @@ const templates: Templates = {
     movie: MovieArchive,
     product: ProductArchive,
   },
-
   taxonomy: {
     category: ExampleTaxonomyTemplate,
     tag: ExampleTaxonomyTemplate,

@@ -7,7 +7,6 @@ import { deepMerge } from "../utils/deep-merge";
 import type { Templates } from "../utils/get-template";
 import { getTemplate } from "../utils/get-template";
 import { getPageData } from "../api/get-page-data/get-page-data";
-import { debug } from "../utils/debug-log";
 import { PreviewToolbar } from "./preview-toolbar";
 import { RouteParamsDebug } from "./route-params-debug";
 
@@ -37,19 +36,9 @@ export async function WordpressTemplate({
   const uri = params?.paths?.join("/") || "/";
   const preview = draftMode();
   const { data, archive, previewData, taxonomy, term } = await getPageData(uri);
-  // console.log({ data, archive, previewData, taxonomy, term });
-  if (!data && !previewData && !archive && !taxonomy && !term) {
-    return (
-      <>
-        {process.env.ROUTE_PARAMS_DEBUG_ENABLED ? (
-          <RouteParamsDebug params={params} />
-        ) : null}
 
-        <div>Temporary 404 page here!</div>
-        <div>missing data, previewData, archive, taxonomy, and term</div>
-      </>
-    );
-    // notFound();
+  if (!data && !previewData && !archive && !taxonomy && !term) {
+    notFound();
   }
 
   const PageTemplate = getTemplate({
@@ -63,22 +52,11 @@ export async function WordpressTemplate({
   });
 
   if (!PageTemplate) {
-    return (
-      <>
-        {process.env.ROUTE_PARAMS_DEBUG_ENABLED ? (
-          <RouteParamsDebug params={params} />
-        ) : null}
-
-        <div>Temporary 404 page here!</div>
-        <div>missing PageTemplate</div>
-      </>
-    );
-    // notFound();
+    notFound();
   }
 
   let mergedData = data;
   if (previewData && mergedData) {
-    // console.log({ previewData });
     mergedData = deepMerge<WpPage | ArchivePageData>(mergedData, previewData); // Merge previewData into mergedData
   }
 

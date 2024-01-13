@@ -13,23 +13,16 @@ export interface TemplateProps {
   uri: string;
   data?: WpPage | ArchivePageData | undefined;
   archive?: PostType | undefined;
+  taxonomy?: Taxonomy;
+  term?: WpTerm;
   isPreview?: boolean;
   params?: RouteParams;
   searchParams?: SearchParams;
 }
 
-// Define a type for the template objects
-type TemplateObject = Record<
-  string,
-  React.ComponentType<TemplateProps> | undefined
->;
-
-// Define a type for the templates
 export type Templates = Record<
   string,
-  {
-    default?: React.ComponentType<TemplateProps> | undefined;
-  } & TemplateObject
+  Record<string, React.ComponentType<any>>
 >;
 
 type GetTemplateArgs = {
