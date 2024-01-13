@@ -53,9 +53,16 @@ export async function generateStaticParams({
     const pathBreadcrumbs = item.path.split("/").filter((x) => x);
 
     staticParams.push({
-      paths: [...pathBreadcrumbs, "/", "all-products"],
+      paths: [...(pathBreadcrumbs || "/")],
     });
   }
+
+  staticParams.push({
+    paths: ["/"],
+  });
+  staticParams.push({
+    paths: ["all-products"],
+  });
 
   return staticParams;
 }
