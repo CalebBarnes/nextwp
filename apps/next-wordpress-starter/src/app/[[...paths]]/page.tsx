@@ -17,3 +17,5 @@ export default function PageRoute(props: {
 }
 
 export { generateMetadata, generateStaticParams } from "@nextwp/core";
+
+export const dynamicParams = true; // true | false,
