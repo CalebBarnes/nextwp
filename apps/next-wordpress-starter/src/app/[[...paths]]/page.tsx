@@ -6,6 +6,7 @@ export default function PageRoute(props: {
   params: RouteParams;
   searchParams?: SearchParams;
 }) {
+  console.log("PageRoute", props);
   return (
     <WordpressTemplate
       params={props.params}

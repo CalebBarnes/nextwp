@@ -1,0 +1,37 @@
+{
+  "folders": [
+    // {
+    //   "name": "root",
+    //   "path": "." // represents the root of the monorepo
+    // },
+
+    {
+      "path": "apps/docs"
+    },
+
+    {
+      "name": "nextwp-starter",
+      "path": "apps/next-wordpress-starter"
+    },
+
+    {
+      "name": "@nextwp/core",
+      "path": "packages/core"
+    },
+    {
+      "name": "@nextwp/addons",
+      "path": "packages/addons"
+    },
+    // {
+    //   "path": "packages/cli"
+    // },
+
+    {
+      "name": "@nextwp/stackbit",
+      "path": "packages/stackbit"
+    },
+    {
+      "path": "packages/create-nextwp-app"
+    }
+  ]
+}

@@ -6,15 +6,15 @@ $post_type_object = get_post_type_object($post->post_type);
 $rest_base = $post_type_object->rest_base;
 $url = get_permalink($post);
 $slug = str_replace(home_url(), "", $url);
-$previewSecret = get_field('preview_secret', 'option');
+
 $params = [
-    'secret' => get_field('preview_secret', 'option'),
+    'secret' => get_field('nextwp_preview_secret', 'option'),
     'toolbar' => 'false',
     'rest_base' => $rest_base,
 ];
 
 $isDraft = str_starts_with($slug, "/?");
-if ($isDraft){
+if ($isDraft) {
     $params['id'] = $post_id;
 } else {
     $params['uri'] = $slug;

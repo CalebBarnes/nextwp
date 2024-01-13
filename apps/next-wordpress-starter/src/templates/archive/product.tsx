@@ -7,11 +7,17 @@ import { Badge } from "@/components/ui/badge";
 import Button from "@/components/ui/button";
 import Edges from "@/components/edges";
 
-export function ExampleTaxonomyTemplate(props) {
+export default function ProductArchive(props) {
   const {
-    data: { items, prevPage, nextPage, totalItems, totalPages, currentPage },
-    term,
-    taxonomy,
+    data: {
+      items,
+      page,
+      prevPage,
+      nextPage,
+      totalItems,
+      totalPages,
+      currentPage,
+    },
   } = props;
 
   return (
@@ -25,10 +31,7 @@ export function ExampleTaxonomyTemplate(props) {
       </div>
 
       <Edges>
-        <h1 className="capitalize">
-          {taxonomy.slug}: {term.name}
-        </h1>
-
+        <h1 className="mb-5">{page?.title?.rendered}</h1>
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {items.map((item) => {
             const featuredImage = getFeaturedImage(item);
@@ -67,48 +70,13 @@ export function ExampleTaxonomyTemplate(props) {
                     })}
                   </div>
                   <div className="group relative">
-                    {item?.title?.rendered ? (
-                      <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                        <Link href={swapWpUrl(item.link)}>
-                          <span className="absolute inset-0" />
-                          {item.title.rendered}
-                        </Link>
-                      </h3>
-                    ) : null}
-                    {item?.excerpt?.rendered ? (
-                      <div
-                        className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600"
-                        dangerouslySetInnerHTML={{
-                          __html: item.excerpt.rendered,
-                        }}
-                      />
-                    ) : null}
-                  </div>
-                  {item?._embedded?.author ? (
-                    <div className="relative mt-8 flex items-center gap-x-4">
-                      <Link
-                        href={stripWpUrl(item?._embedded?.author?.[0].link)}
-                      >
-                        <Image
-                          alt=""
-                          className="h-10 w-10 rounded-full bg-gray-100"
-                          height={40}
-                          quality={100}
-                          src={
-                            item?._embedded?.author?.[0]?.avatar_urls?.["96"]
-                          }
-                          width={40}
-                        />
-                        <div className="text-sm leading-6">
-                          <p className="font-semibold text-gray-900">
-                            <span className="absolute inset-0" />
-                            {item?._embedded?.author?.[0].name}
-                          </p>
-                          <p className="text-gray-600">{item.author.role}</p>
-                        </div>
+                    <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                      <Link href={swapWpUrl(item.link)}>
+                        <span className="absolute inset-0" />
+                        {item?.title?.rendered}
                       </Link>
-                    </div>
-                  ) : null}
+                    </h3>
+                  </div>
                 </div>
               </article>
             );
@@ -138,6 +106,32 @@ export function ExampleTaxonomyTemplate(props) {
           </div>
         </div>
       </Edges>
+
+      {/* <p>totalPages: {totalPages}</p> */}
+      {/* <p>num items on this page: {items.length}</p> */}
+      {/* 
+      <pre>
+        <code>{JSON.stringify({ items }, null, 2)}</code>
+      </pre> */}
+      {/* 
+      <pre>
+        <code>{JSON.stringify({ page }, null, 2)}</code>
+      </pre>
+
+      <pre>
+        <code>{JSON.stringify({ archive }, null, 2)}</code>
+      </pre> */}
     </div>
   );
+}
+
+function getTerms(taxonomy, item) {
+  const terms = item?._embedded?.["wp:term"]?.[taxonomy]?.map((term) => {
+    return {
+      name: term.name,
+      slug: term.slug,
+      href: term.link,
+    };
+  });
+  return terms;
 }

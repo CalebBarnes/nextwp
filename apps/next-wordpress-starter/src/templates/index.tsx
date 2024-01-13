@@ -4,6 +4,8 @@ import DefaultPostTemplate from "./post/default";
 import MovieArchive from "./archive/movie";
 import ContactPageTemplate from "./page/contact";
 import PostArchive from "./archive/blog";
+import ProductArchive from "./archive/product";
+import { ExampleTaxonomyTemplate } from "./taxonomy/category";
 
 const templates: Templates = {
   page: {
@@ -13,15 +15,22 @@ const templates: Templates = {
   post: {
     default: DefaultPostTemplate,
   },
+  product: {
+    default: DefaultPostTemplate,
+  },
   archive: {
     posts: PostArchive,
     movie: MovieArchive,
+    product: ProductArchive,
   },
 
-  // taxonomy: {
-  //   category: CategoryTaxonomyTemplate,
-  //   post_tag: TagTaxonomyTemplate,
-  // },
+  taxonomy: {
+    category: ExampleTaxonomyTemplate,
+    tag: ExampleTaxonomyTemplate,
+    voltage: ExampleTaxonomyTemplate,
+    capacity: ExampleTaxonomyTemplate,
+    series: ExampleTaxonomyTemplate,
+  },
 };
 
 export default templates;

@@ -1,13 +1,27 @@
-import { draftMode } from "next/headers";
-import type { SearchParams } from "../../components/wordpress-template";
 import type { WpPage } from "../../types";
-import type { PostType } from "../get-post-types";
 import { getSingleItem } from "../get-single-item";
-import { getPreviewData } from "./get-preview-data";
+import type { TaxonomyPage } from "../taxonomy/get-taxonomy-page";
+import { getTaxonomyPage } from "../taxonomy/get-taxonomy-page";
+import { extractPageNumberFromUri } from "../helpers/extract-page-number-from-uri";
 import { getFrontPage } from "./get-front-page";
-import { getPostInfo } from "./get-post-info";
-import type { ArchivePageData } from "./get-archive-page";
+import { getNodeInfo } from "./get-node-info";
+import type { ArchivePage } from "./get-archive-page";
 import { getArchivePage } from "./get-archive-page";
+
+type SingleItem = {
+  /**
+   * The single page/post/custom returned from the WP REST API.
+   */
+  data?: WpPage;
+  /**
+   * The preview data returned from the WP REST API for the single page/post/custom.
+   */
+  previewData?: WpPage;
+};
+
+type PageData =
+  | (TaxonomyPage & ArchivePage & SingleItem)
+  | Record<string, never>;
 
 /**
  * Get data for a specific page from a WordPress REST API endpoint based on the URI
@@ -17,74 +31,53 @@ import { getArchivePage } from "./get-archive-page";
  * ```
  * @see https://www.nextwp.org/packages/nextwp/core/functions#get-page-data
  */
-export async function getPageData(
-  uri: string,
-  searchParams?: SearchParams
-): Promise<{
-  /**
-   * The data is the page data for the current page/post or it is the archive page data if the uri is an archive page.
-   */
-  data?: WpPage | ArchivePageData;
-  /**
-   * The archive is the post type archive data if the uri is an archive page.
-   */
-  archive?: PostType;
-  /**
-   * The previewData is the preview data for the current page/post/custom.
-   */
-  previewData?: WpPage;
-}> {
-  const preview = draftMode();
-  const paths = uri.split("/");
-  const slug = paths.slice(-1).toString();
-
+export async function getPageData(uri: string): Promise<PageData> {
   if (uri === "/" || uri === "index") {
     const frontPage = await getFrontPage();
-    return frontPage;
+    return frontPage || {};
   }
 
-  const { postTypeRestBase, archive } = await getPostInfo(uri);
+  const { uriWithoutPage, pageNumber } = extractPageNumberFromUri(uri);
+  const { rest_base, archive, taxonomy } = await getNodeInfo(uriWithoutPage);
 
   if (archive) {
-    const archivePage = getArchivePage({
+    return getArchivePage({
       archive,
-      searchParams,
+      pageNumber,
     });
-
-    return archivePage;
+  }
+  if (taxonomy) {
+    return getTaxonomyPage({
+      uri: uriWithoutPage,
+      taxonomy,
+      pageNumber,
+    });
   }
 
-  const data = await getSingleItem({
-    uri,
-    slug,
-    postTypeRestBase,
+  const singleItem = await getSingleItem({
+    uri: uriWithoutPage,
+    rest_base,
   });
 
-  if (data && preview.isEnabled) {
-    const previewData = await getPreviewData({
-      id: data.id,
-      postTypeRestBase,
-    });
-
-    return { data, previewData };
+  if (singleItem?.data) {
+    return singleItem;
   }
 
   // posts are a special case because they can have an empty slug prefix like pages
-  const maybePostData = await getSingleItem({
-    slug,
-    postTypeRestBase: "posts",
+  const possiblePostItem = await getSingleItem({
+    uri: uriWithoutPage,
+    rest_base: "posts",
   });
 
-  if (maybePostData) {
-    if (preview.isEnabled) {
-      const previewData = await getPreviewData({
-        id: maybePostData.id,
-        postTypeRestBase: "posts",
-      });
-
-      return { data: maybePostData, previewData };
-    }
-    return { data: maybePostData };
+  if (possiblePostItem?.data) {
+    return possiblePostItem;
   }
-  return { data: data || maybePostData };
+
+  return {
+    data: undefined,
+    previewData: undefined,
+    archive: undefined,
+    taxonomy: undefined,
+    term: undefined,
+  };
 }

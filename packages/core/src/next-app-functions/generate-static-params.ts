@@ -57,5 +57,15 @@ export async function generateStaticParams({
     });
   }
 
+  staticParams.push({
+    paths: ["/"],
+  });
+  staticParams.push({
+    paths: ["index"],
+  });
+  staticParams.push({
+    paths: ["all-products"],
+  });
+
   return staticParams;
 }

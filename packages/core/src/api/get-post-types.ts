@@ -15,6 +15,7 @@ export type PostType = {
   rest_base: string;
 
   labels?: {
+    name?: string;
     plural_name?: string;
   };
 };
@@ -48,7 +49,6 @@ export async function getPostTypes(): Promise<PostTypes> {
 
   try {
     const data = (await req.json()) as PostTypesResponse;
-
     return data;
   } catch (err: any) {
     throw new Error(
