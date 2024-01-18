@@ -1,53 +1,10 @@
-import { getAllItems } from "../api/get-all-items";
-import { getPostTypes } from "../api/get-post-types";
-import { getSiteSettings } from "../api/get-site-settings";
-// import { getTaxonomies } from "../api/get-taxonomies";
-// import { debug } from "../utils/debug-log";
+import { getPostTypes } from "../../api/get-post-types";
+import { getSiteSettings } from "../../api/get-site-settings";
 
-/**
- * This function is used to statically generate routes at build time instead of on-demand at request time.
- * To statically generate routes for your WordPress content in Next.js, you can export this function from your dynamic route `src/app/[[...paths]]/page.tsx` file.
- *
- * Read the docs for more info:
- * @see https://www.nextwp.org/packages/nextwp/core/next-app-functions#generate-static-params
- *
- * @example
- * ```ts
- * // src/app/[[...paths]]/page.tsx
- * export { generateStaticParams } from "@nextwp/core";
- * ```
- */
-export async function generateStaticParams({
-  wpUrl = process.env.NEXT_PUBLIC_WP_URL || "",
-  postTypes = ["pages", "posts"], // taxonomies = ["category", "post_tag"],
-}: {
-  /**
-   * The URL of the WP SITE to fetch data from the REST API.
-   */
-  wpUrl?: string;
-  /**
-   * The post types to include in the static generation.
-   */
-  postTypes?: string[];
-}) {
-  if (!wpUrl) {
-    throw new Error(
-      "generateStaticParams: No wpUrl provided. Please set `NEXT_PUBLIC_WP_URL` environment variable or pass `wpUrl` to `generateStaticParams`."
-    );
-  }
-
-  const staticParams: { paths: string[] }[] = [];
-  const allItems = await getAllItems(postTypes);
+export async function getArchiveStaticParams({ postTypes }) {
   const wpPostTypes = await getPostTypes();
   const settings = await getSiteSettings();
-
-  for (const item of allItems) {
-    const pathBreadcrumbs = item.path.split("/").filter((x) => x);
-
-    staticParams.push({
-      paths: [...(pathBreadcrumbs || "/")],
-    });
-  }
+  const staticParams: { paths: string[] }[] = [];
 
   if (settings.page_for_posts) {
     try {
@@ -59,7 +16,7 @@ export async function generateStaticParams({
         paths: [postsPage.slug],
       });
 
-      const paginationInfo = await getPostTypePaginationInfo({
+      const paginationInfo = await getArchivePaginationInfo({
         rest_base: "posts",
         per_page: settings.posts_per_page,
       });
@@ -79,14 +36,13 @@ export async function generateStaticParams({
     const itemKey = Object.keys(wpPostTypes).find(
       (key) => wpPostTypes[key].rest_base === postType
     );
-
     const matchingPostType = wpPostTypes[itemKey];
 
     if (
       matchingPostType.has_archive &&
       typeof matchingPostType.has_archive === "string"
     ) {
-      const paginationInfo = await getPostTypePaginationInfo({
+      const paginationInfo = await getArchivePaginationInfo({
         rest_base: matchingPostType.rest_base,
         per_page: settings.posts_per_page,
       });
@@ -101,6 +57,33 @@ export async function generateStaticParams({
       });
 
       staticParams.push(...postTypeArchiveStaticParams);
+
+      // if (matchingPostType.taxonomies) {
+      //   for (const taxonomy of matchingPostType.taxonomies) {
+      //     const taxonomyStaticParams = getTaxonomyStaticParams({ taxonomy });
+
+      //     // console.log(matchingPostType.slug);
+      //     // console.log({ taxonomy });
+
+      //     // const params = {}
+
+      //     // if (taxonomy.slug === "category") {
+      //     //   params.categories = String(term.id);
+      //     // } else if (taxonomy.slug === "post_tag") {
+      //     //   params.tags = String(term.id);
+      //     // } else {
+      //     //   params[taxonomy.slug] = String(term.id);
+      //     // }
+
+      //     // const taxonomyPaginationInfo = await getArchivePaginationInfo({
+      //     //   rest_base: matchingPostType.rest_base,
+      //     //   per_page: settings.posts_per_page,
+      //     //   params: {
+
+      //     //   },
+      //     // });
+      //   }
+      // }
     }
 
     // todo: check which taxonomies are registered for this post type
@@ -108,24 +91,25 @@ export async function generateStaticParams({
     // todo: then generate static paths for each term
   }
 
-  staticParams.push({
-    paths: ["/"],
-  });
-
-  // console.log(JSON.stringify(staticParams, null, 2));
-
   return staticParams;
 }
 
-async function getPostTypePaginationInfo({
+async function getArchivePaginationInfo({
   rest_base,
   per_page,
+  params = {},
 }: {
   rest_base: string;
   per_page: number;
+  params?: Record<string, string>;
 }) {
+  const queryString = new URLSearchParams({
+    per_page: String(per_page),
+    ...params,
+  }).toString();
+
   try {
-    const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${rest_base}?per_page=${per_page}`;
+    const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${rest_base}?${queryString}`;
     const req = await fetch(endpoint);
 
     // Check if the fetch request was successful

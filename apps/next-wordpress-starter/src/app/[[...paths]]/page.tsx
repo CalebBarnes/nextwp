@@ -23,6 +23,5 @@ export { generateMetadata } from "@nextwp/core";
 export async function generateStaticParams() {
   return nextWpStaticParams({
     postTypes: ["pages", "posts", "product"],
-    taxonomies: ["category", "post_tag", "capacity", "series", "voltage"],
   });
 }
