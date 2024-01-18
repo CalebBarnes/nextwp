@@ -1,7 +1,8 @@
 import { getAllItems } from "../api/get-all-items";
 import { getPostTypes } from "../api/get-post-types";
-import { getTaxonomies } from "../api/get-taxonomies";
-import { debug } from "../utils/debug-log";
+import { getSiteSettings } from "../api/get-site-settings";
+// import { getTaxonomies } from "../api/get-taxonomies";
+// import { debug } from "../utils/debug-log";
 
 /**
  * This function is used to statically generate routes at build time instead of on-demand at request time.
@@ -28,11 +29,6 @@ export async function generateStaticParams({
    * The post types to include in the static generation.
    */
   postTypes?: string[];
-
-  /**
-   * The taxonomies to include in the static generation.
-   */
-  // taxonomies?: string[];
 }) {
   if (!wpUrl) {
     throw new Error(
@@ -42,71 +38,8 @@ export async function generateStaticParams({
 
   const staticParams: { paths: string[] }[] = [];
   const allItems = await getAllItems(postTypes);
-
   const wpPostTypes = await getPostTypes();
-  // console.log(wpPostTypes);
-
-  for (const postType of postTypes) {
-    const itemKey = Object.keys(wpPostTypes).find(
-      (key) => wpPostTypes[key].rest_base === postType
-    );
-
-    const matchingPostType = wpPostTypes[itemKey];
-
-    // console.log({ matchingPostType });
-
-    if (
-      matchingPostType.has_archive &&
-      typeof matchingPostType.has_archive === "string"
-    ) {
-      staticParams.push({
-        paths: [matchingPostType.has_archive],
-      });
-    }
-
-    // todo: fetch first page of this type to check how many pages there are
-    // todo: then generate static paths for each page
-    // todo: example: /blog/page/2 /blog/page/3 etc
-
-    // todo: check which taxonomies are registered for this post type
-    // todo: then fetch all terms for each taxonomy
-    // todo: then generate static paths for each term
-  }
-
-  // for (const key in wpPostTypes) {
-  //   const item = wpPostTypes.find(postType = postType.rest_base === key)
-
-  //   const item = wpPostTypes[key];
-  //   if (item.has_archive && typeof item.has_archive === "string") {
-  //     staticParams.push({
-  //       paths: [item.has_archive],
-  //     });
-  //   }
-  // }
-
-  // debug.log(staticParams);
-
-  // const wpTaxonomies = await getTaxonomies();
-
-  // for (const key in wpTaxonomies) {
-  //   if (!taxonomies.includes(key)) {
-  //     continue;
-  //   }
-
-  //   const item = wpTaxonomies[key];
-  //   const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${item.rest_base}`;
-  //   const req = await fetch(endpoint);
-  //   const data = await req.json();
-
-  //   for (const tax of data) {
-  //     const path = tax.link.replace(wpUrl, "");
-  //     const pathBreadcrumbs = path.split("/").filter((x) => x);
-
-  //     staticParams.push({
-  //       paths: [...pathBreadcrumbs],
-  //     });
-  //   }
-  // }
+  const settings = await getSiteSettings();
 
   for (const item of allItems) {
     const pathBreadcrumbs = item.path.split("/").filter((x) => x);
@@ -116,9 +49,119 @@ export async function generateStaticParams({
     });
   }
 
+  if (settings.page_for_posts) {
+    try {
+      const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/pages/${settings.page_for_posts}`;
+      const req = await fetch(endpoint);
+      const postsPage = await req.json();
+
+      staticParams.push({
+        paths: [postsPage.slug],
+      });
+
+      const paginationInfo = await getPostTypePaginationInfo({
+        rest_base: "posts",
+        per_page: settings.posts_per_page,
+      });
+
+      const postArchiveStaticParams = getStaticParamsFromPaginationInfo({
+        archiveSlug: postsPage.slug,
+        paginationInfo,
+      });
+
+      staticParams.push(...postArchiveStaticParams);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  for (const postType of postTypes) {
+    const itemKey = Object.keys(wpPostTypes).find(
+      (key) => wpPostTypes[key].rest_base === postType
+    );
+
+    const matchingPostType = wpPostTypes[itemKey];
+
+    if (
+      matchingPostType.has_archive &&
+      typeof matchingPostType.has_archive === "string"
+    ) {
+      const paginationInfo = await getPostTypePaginationInfo({
+        rest_base: matchingPostType.rest_base,
+        per_page: settings.posts_per_page,
+      });
+
+      const postTypeArchiveStaticParams = getStaticParamsFromPaginationInfo({
+        archiveSlug: matchingPostType.has_archive,
+        paginationInfo,
+      });
+
+      staticParams.push({
+        paths: [matchingPostType.has_archive],
+      });
+
+      staticParams.push(...postTypeArchiveStaticParams);
+    }
+
+    // todo: check which taxonomies are registered for this post type
+    // todo: then fetch all terms for each taxonomy
+    // todo: then generate static paths for each term
+  }
+
   staticParams.push({
     paths: ["/"],
   });
+
+  // console.log(JSON.stringify(staticParams, null, 2));
+
+  return staticParams;
+}
+
+async function getPostTypePaginationInfo({
+  rest_base,
+  per_page,
+}: {
+  rest_base: string;
+  per_page: number;
+}) {
+  try {
+    const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${rest_base}?per_page=${per_page}`;
+    const req = await fetch(endpoint);
+
+    // Check if the fetch request was successful
+    if (!req.ok) {
+      throw new Error(`HTTP error! status: ${req.status}`);
+    }
+
+    const totalPages = req.headers.get("X-WP-TotalPages")
+      ? Number(req.headers.get("X-WP-TotalPages") || 1)
+      : undefined;
+
+    const totalItems = req.headers.get("X-WP-Total")
+      ? Number(req.headers.get("X-WP-Total") || 0)
+      : undefined;
+
+    return {
+      totalPages,
+      totalItems,
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
+}
+
+function getStaticParamsFromPaginationInfo({ archiveSlug, paginationInfo }) {
+  const staticParams = [];
+
+  for (let i = 1; i <= paginationInfo.totalPages; i++) {
+    if (i === 1) {
+      continue;
+    }
+    staticParams.push({
+      paths: [archiveSlug, String(i)],
+    });
+  }
 
   return staticParams;
 }
