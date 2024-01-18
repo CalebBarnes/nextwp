@@ -1,5 +1,8 @@
 import type { RouteParams, SearchParams } from "@nextwp/core";
-import { WordpressTemplate } from "@nextwp/core";
+import {
+  WordpressTemplate,
+  generateStaticParams as nextWpStaticParams,
+} from "@nextwp/core";
 import templates from "@/templates";
 
 export default function PageRoute(props: {
@@ -15,6 +18,10 @@ export default function PageRoute(props: {
   );
 }
 
-export { generateMetadata, generateStaticParams } from "@nextwp/core";
+export { generateMetadata } from "@nextwp/core";
 
-// export const dynamicParams = true; // true | false,
+export async function generateStaticParams() {
+  return nextWpStaticParams({
+    postTypes: ["pages", "posts", "product"],
+  });
+}
