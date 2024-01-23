@@ -1,4 +1,4 @@
-package main
+package wordpress
 
 import (
 	"bytes"
@@ -6,59 +6,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
-
-	"github.com/joho/godotenv"
-	"github.com/urfave/cli/v2"
 )
 
-func main() {
-	os.Setenv("ENVIRONMENT", "development")
-	err := godotenv.Load(".env.local")
-	if err != nil {
-		os.Setenv("ENVIRONMENT", "production")
-	}
-
-	if os.Getenv("NEXTWP_CLI_WORKING_DIR") != "" {
-		err := os.Chdir(os.Getenv("NEXTWP_CLI_WORKING_DIR"))
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	app := &cli.App{
-		Name:  "@nextwp/cli",
-		Usage: "Next.js + WordPress CLI",
-		Action: func(c *cli.Context) error {
-			println("Hello friend!")
-			return nil
-		},
-		Commands: []*cli.Command{
-			{
-				Name:  "pull-acf-json",
-				Usage: "Pull ACF JSON from WordPress",
-				Action: func(c *cli.Context) error {
-					return pullAcfJson()
-				},
-			},
-			{
-				Name:  "push-acf-json",
-				Usage: "Push ACF JSON to WordPress",
-				Action: func(c *cli.Context) error {
-					return pushAcfJson()
-				},
-			},
-		},
-	}
-
-	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)
-	}
-}
-
-func pullAcfJson() error {
+/*
+* Pulls the acf json from the wordpress site and saves it to the local filesystem
+ */
+func PullAcfJson() error {
 	wpUrl := os.Getenv("WP_URL")
 
 	fmt.Println("Pulling saved acf json from: " + wpUrl)
@@ -82,8 +37,6 @@ func pullAcfJson() error {
 		return err
 	}
 
-	// convert body to json
-	// https://stackoverflow.com/questions/26744873/convert-json-to-map-string-interface
 	var result map[string]interface{}
 	err = json.Unmarshal([]byte(body), &result)
 	if err != nil {
@@ -112,7 +65,10 @@ func pullAcfJson() error {
 	return nil
 }
 
-func pushAcfJson() error {
+/*
+* Pushes the acf json from the local filesystem to the wordpress site
+ */
+func PushAcfJson() error {
 	wpUrl := os.Getenv("WP_URL")
 
 	files, err := os.ReadDir(".")
