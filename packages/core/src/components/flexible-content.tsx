@@ -11,7 +11,8 @@ export interface FlexibleContentProps {
   /**
    * Object of React Components that will be used to render the flexible content
    */
-  blocks?: Record<string, React.ComponentType<Row> | undefined>;
+  blocks?: any;
+  // blocks?: Record<string, React.ComponentType<Row> | undefined>;
   /**
    * Array of acf flexible content rows from the Wordpress API
    */

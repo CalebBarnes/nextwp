@@ -1,14 +1,11 @@
-import type { RouteParams, SearchParams } from "./wordpress-template";
+import type { RouteParams } from "./wordpress-template";
 
-export function RouteParamsDebug(props: {
-  params?: RouteParams;
-  searchParams?: SearchParams;
-}) {
+export function RouteParamsDebug(props: { params?: RouteParams }) {
   const uri = props.params?.paths?.join("/") || "/";
 
   return (
-    <div className="bg-red-500">
-      <h3>Route Params</h3>
+    <div className="m-10 p-10 border-red-500 border">
+      <p>Route Params</p>
 
       <span>
         uri: <code>{uri}</code>

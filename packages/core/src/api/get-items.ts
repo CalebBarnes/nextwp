@@ -24,13 +24,14 @@ export async function getItems({ restBase = "pages" }): Promise<Items> {
 
   while (morePagesAvailable) {
     const params = {
-      per_page: "50",
-      page,
+      per_page: process.env.NEXTWP_PER_PAGE || "40",
+      page: String(page),
     };
 
     const queryString = new URLSearchParams(params).toString();
 
     try {
+      // eslint-disable-next-line no-await-in-loop -- Fetch pages sequentially
       const req = await fetch(
         `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${restBase}?${queryString}&acf_format=standard&_embed`
       );

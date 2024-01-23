@@ -1,6 +1,6 @@
 // nextjs app functions
 export { generateMetadata } from "./src/next-app-functions/generate-meta-data";
-export { generateStaticParams } from "./src/next-app-functions/generate-static-params";
+export { generateStaticParams } from "./src/next-app-functions/generate-static-params/generate-static-params";
 export { generateSitemap } from "./src/next-app-functions/generate-sitemap";
 
 // route handlers
@@ -50,3 +50,5 @@ export type {
   SearchParams,
   RouteParams,
 } from "./src/components/wordpress-template";
+
+export type { WpTerm } from "./src/api/taxonomy/get-term";

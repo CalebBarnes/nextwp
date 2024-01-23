@@ -5,7 +5,6 @@ import type { WpPage } from "../types";
 import type { ArchivePageData } from "../api/get-page-data/get-archive-page";
 import { deepMerge } from "../utils/deep-merge";
 import type { Templates } from "../utils/get-template";
-import { createDataProxy } from "../helpers/data-proxy";
 import { getTemplate } from "../utils/get-template";
 import { getPageData } from "../api/get-page-data/get-page-data";
 import { PreviewToolbar } from "./preview-toolbar";
@@ -22,20 +21,23 @@ export type RouteParams = { paths?: string[] };
  * Read the docs for more info:
  * @see https://www.nextwp.org/packages/nextwp/core/components#wordpress-template
  */
-export async function WordpressTemplate(props: {
+export async function WordpressTemplate({
+  params,
+  templates,
+  searchParams,
+  supressWarnings,
+  ...rest
+}: {
   params?: RouteParams;
   templates: Templates;
   searchParams?: SearchParams;
   supressWarnings?: boolean;
 }) {
-  const { params, templates, searchParams, supressWarnings, ...rest } = props;
   const uri = params?.paths?.join("/") || "/";
-
   const preview = draftMode();
+  const { data, archive, previewData, taxonomy, term } = await getPageData(uri);
 
-  const { data, archive, previewData } = await getPageData(uri, searchParams);
-
-  if (!data && !previewData && !archive) {
+  if (!data && !previewData && !archive && !taxonomy && !term) {
     notFound();
   }
 
@@ -43,6 +45,8 @@ export async function WordpressTemplate(props: {
     uri,
     data,
     archive,
+    taxonomy,
+    term,
     templates,
     supressWarnings,
   });
@@ -51,22 +55,15 @@ export async function WordpressTemplate(props: {
     notFound();
   }
 
-  let mergedData: WpPage | ArchivePageData = data!;
-  if (previewData) {
-    // eslint-disable-next-line no-console -- only logging in preview mode
-    console.log({ previewData });
+  let mergedData = data;
+  if (previewData && mergedData) {
     mergedData = deepMerge<WpPage | ArchivePageData>(mergedData, previewData); // Merge previewData into mergedData
-  }
-  if (archive) {
-    mergedData = createDataProxy(
-      mergedData as ArchivePageData
-    ) as ArchivePageData;
   }
 
   return (
     <>
       {process.env.ROUTE_PARAMS_DEBUG_ENABLED ? (
-        <RouteParamsDebug params={params} searchParams={searchParams} />
+        <RouteParamsDebug params={params} />
       ) : null}
 
       <PageTemplate
@@ -75,6 +72,8 @@ export async function WordpressTemplate(props: {
         isPreview={preview.isEnabled}
         params={params}
         searchParams={searchParams}
+        taxonomy={taxonomy}
+        term={term}
         uri={uri}
         {...rest}
       />
