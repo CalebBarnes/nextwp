@@ -14,10 +14,10 @@ func ConvertJsonToMap(body []byte) map[string]interface{} {
 	return result
 }
 
-func ConvertMapToJson(result interface{}) []byte {
-	jsonBytes, err := json.MarshalIndent(result, "", "  ")
-	if err != nil {
-		log.Fatal(err)
-	}
-	return jsonBytes
-}
+// func ConvertMapToJson(result interface{}) []byte {
+// 	jsonBytes, err := json.MarshalIndent(result, "", "  ")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	return jsonBytes
+// }
