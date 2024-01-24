@@ -8,11 +8,14 @@ function handle_preflight()
     header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
     header("Access-Control-Allow-Headers: Origin, Content-Type, Accept");
 
-    // Check for CORS preflight request headers
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']) || isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
-        // It's a CORS preflight request, handle accordingly
-        status_header(200);
-        exit();
+
+    if ('OPTIONS' == $_SERVER['REQUEST_METHOD']) {
+        // Check for CORS preflight request headers
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']) || isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
+            // It's a CORS preflight request, handle accordingly
+            status_header(200);
+            exit();
+        }
+        // Not a preflight request, let WordPress handle it (possibly a schema request)
     }
-    // Not a preflight request, let WordPress handle it (possibly a schema request)
 }
