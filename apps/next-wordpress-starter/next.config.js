@@ -1,3 +1,5 @@
+const withNextWp = require("@nextwp/core/with-nextwp");
+
 /** @type {import('next').NextConfig} */
 
 const wpBaseUrl = process.env.NEXT_PUBLIC_WP_URL?.replace(
@@ -58,4 +60,6 @@ if (process.env.SINGLE_THREAD_BUILD === "true") {
   nextConfig.experimental.cpus = 1;
 }
 
-module.exports = nextConfig;
+// module.exports = nextConfig;
+
+module.exports = withNextWp(nextConfig);

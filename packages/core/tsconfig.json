@@ -39,7 +39,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/[[...paths]]/page.tsx"
+    "src/app/[[...paths]]/page.tsx",
+    "nextwp-weback-config.js"
   ],
   "exclude": ["node_modules"]
 }

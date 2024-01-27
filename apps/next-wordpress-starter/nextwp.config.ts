@@ -1,4 +1,4 @@
 export default {
-  postTypes: ["page", "post", "project"],
+  postTypes: ["page", "post", "projects"],
   archivePagination: "infinite_scroll",
 };
