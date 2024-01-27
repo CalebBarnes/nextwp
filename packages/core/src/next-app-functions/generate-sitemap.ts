@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllItems } from "../api/get-all-items";
+import { loadConfig } from "../config/config-loader";
 /**
  * This function is used to generate a sitemap.xml file for your WordPress content in Next.js.
  *
@@ -18,6 +19,8 @@ import { getAllItems } from "../api/get-all-items";
 export async function generateSitemap({
   postTypes = ["pages", "posts"],
 }): Promise<MetadataRoute.Sitemap> {
+  const config = await loadConfig();
+  console.log({ config });
   const allItems = await getAllItems(postTypes);
 
   return allItems.map((item) => {
