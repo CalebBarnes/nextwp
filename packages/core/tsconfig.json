@@ -1,6 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "types": ["nextwp-config"],
+    "typeRoots": ["src/config/nextwp-config.d.ts"],
     "composite": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -39,8 +41,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/[[...paths]]/page.tsx",
-    "nextwp-weback-config.js"
+    "src/config/nextwp-config.d.ts"
   ],
   "exclude": ["node_modules"]
 }

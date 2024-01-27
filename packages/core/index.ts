@@ -52,3 +52,4 @@ export type {
 } from "./src/components/wordpress-template";
 
 export type { WpTerm } from "./src/api/taxonomy/get-term";
+export { type NextWpConfig, createConfig } from "./src/config/create-config";

@@ -60,6 +60,4 @@ if (process.env.SINGLE_THREAD_BUILD === "true") {
   nextConfig.experimental.cpus = 1;
 }
 
-// module.exports = nextConfig;
-
 module.exports = withNextWp(nextConfig);
