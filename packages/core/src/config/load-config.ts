@@ -1,21 +1,8 @@
-import { debug } from "../utils/debug-log";
-
-export async function loadConfig() {
-  let userConfig;
-  try {
-    userConfig = await import("nextwp-config").then((module) => module.default);
-    // If you are seeing this error, you need to add "withNextWp" to your next.config.js
-    // and make sure you have a nextwp.config.ts file in your project root.
-    // You can get started easily with @nextwp/cli: nextwp init
-    // read the docs here: https://nextwp.org/
-  } catch (error) {
-    debug.error(`Failed to load nextwp-config.ts: ${error.message}`);
-    throw new Error(
-      "Failed to load nextwp-config. Make sure it exists and is correctly configured."
-    );
-  }
-  return userConfig;
-}
+import config from "nextwp-config";
+// If you are seeing this error, you need to add "withNextWp" to your next.config.js
+// and make sure you have a nextwp.config.ts file in your project root.
+// You can get started easily with @nextwp/cli: nextwp init
+// read the docs here: https://nextwp.org/
 
 export type NextWpConfig = Partial<NextWpConfigRequired>;
 export interface NextWpConfigRequired {
@@ -42,4 +29,8 @@ export interface NextWpConfigRequired {
    * This is where you should put your template files.
    */
   templatesPath: string;
+}
+
+export function loadConfig(): NextWpConfigRequired {
+  return config;
 }
