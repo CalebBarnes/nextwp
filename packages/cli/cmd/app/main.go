@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"log/slog"
 	"os"
 
 	"github.com/CalebBarnes/nextwp/cli/services/typegen"
@@ -10,6 +11,7 @@ import (
 )
 
 func main() {
+
 	os.Setenv("ENVIRONMENT", "development")
 	err := godotenv.Load(".env.local")
 	if err != nil {
@@ -27,7 +29,7 @@ func main() {
 		Name:  "@nextwp/cli",
 		Usage: "NextWP CLI",
 		Action: func(c *cli.Context) error {
-			println("Hello friend!")
+			slog.Info("Welcome to @nextwp/cli")
 			return nil
 		},
 		Commands: []*cli.Command{
