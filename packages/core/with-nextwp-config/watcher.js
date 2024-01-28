@@ -1,5 +1,4 @@
 const fs = require("fs");
-const path = require("path");
 const {
   NEXT_CONFIG_PATH,
   SRC_NEXTWP_CONFIG_FILE_PATH,
