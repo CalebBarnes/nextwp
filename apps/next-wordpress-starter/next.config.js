@@ -1,4 +1,4 @@
-const withNextWp = require("@nextwp/core/with-nextwp");
+const withNextWp = require("@nextwp/core/config");
 
 /** @type {import('next').NextConfig} */
 

@@ -1,9 +1,11 @@
-import { createConfig } from "@nextwp/core/src/config/create-config";
+import type { NextWpConfig } from "@nextwp/core";
 
-export default createConfig({
-  postTypes: ["page", "post"],
+export default {
+  postTypes: ["post", "page", "product"],
   pagination: {
     mode: "paged",
   },
-  templatesPath: "./src/templates",
-});
+  experimental: {
+    autoReloadDev: true,
+  },
+} satisfies NextWpConfig;

@@ -1,7 +1,7 @@
-import config from "nextwp-config";
 import type { MetadataRoute } from "next";
 import { getAllItems } from "../api/get-all-items";
-import { debug } from "../utils/debug-log";
+// import { debug } from "../utils/debug-log";
+// import { loadConfig } from "../config/load-config";
 /**
  * This function is used to generate a sitemap.xml file for your WordPress content in Next.js.
  *
@@ -20,16 +20,16 @@ import { debug } from "../utils/debug-log";
 export async function generateSitemap({
   postTypes = ["pages", "posts"],
 }): Promise<MetadataRoute.Sitemap> {
-  console.log({ config });
+  // const config = loadConfig();
   const allSingleItems = await getAllItems(postTypes);
 
   const allItems = [...allSingleItems];
 
-  if (config.pagination?.mode === "paged") {
-    // handle adding archive and taxonomy pagination routes here
-    // e.g. /blog/page/2, /blog/page/3, etc.
-    debug.info("pagination mode is 'paged'");
-  }
+  // if (config.pagination?.mode === "paged") {
+  //   // handle adding archive and taxonomy pagination routes here
+  //   // e.g. /blog/page/2, /blog/page/3, etc.
+  //   debug.info("pagination mode is 'paged'");
+  // }
 
   // if (config.pagination?.mode === "infinite") {
   //   debug.info("pagination mode is 'infinite'");

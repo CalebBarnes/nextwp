@@ -274,6 +274,9 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.3.3
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@vercel/style-guide':
         specifier: ^5.1.0
@@ -3848,7 +3851,7 @@ packages:
     peerDependencies:
       eslint-plugin-import: '>=1.4.0'
     dependencies:
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.16.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.52.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.16.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
     dev: true
 
   /eslint-import-resolver-node@0.3.9:
@@ -8958,6 +8961,10 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false
+
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false
 
   /zustand@4.3.2(react@18.2.0):
