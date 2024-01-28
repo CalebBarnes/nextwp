@@ -1,12 +1,11 @@
 const withNextWp = require("@nextwp/core/config");
 
-/** @type {import('next').NextConfig} */
-
 const wpBaseUrl = process.env.NEXT_PUBLIC_WP_URL?.replace(
   "https://",
   ""
 )?.replace("http://", "");
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     remotePatterns: [

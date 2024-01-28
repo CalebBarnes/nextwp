@@ -1,8 +1,8 @@
 import type { NextWpConfig } from "@nextwp/core";
 
 export default {
-  postTypes: ["post", "page", "product"],
+  postTypes: ["posts", "pages", "product"],
   pagination: {
-    mode: "infinite",
+    mode: "paged",
   },
 } satisfies NextWpConfig;
