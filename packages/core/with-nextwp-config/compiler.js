@@ -1,7 +1,13 @@
 const fs = require("fs");
 const path = require("path");
 const ts = require("typescript");
-const { colors } = require("./utils");
+const { colors, debug } = require("./utils");
+const vm = require("vm");
+const { validateConfig, applyConfigDefaults } = require("./validate");
+const {
+  SRC_NEXTWP_CONFIG_FILE_PATH,
+  DEST_NEXTWP_CONFIG_FILE_PATH,
+} = require("./constants");
 
 let isCompiling = false;
 function compileConfig() {
@@ -10,36 +16,55 @@ function compileConfig() {
   }
 
   try {
-    const configPath = path.resolve(process.cwd(), "nextwp.config.ts");
-
-    if (!fs.existsSync(configPath)) {
-      console.warn(
-        colors.yellow +
-          "Warning: nextwp.config.ts not found. Ensure the file exists in your project root." +
-          colors.reset
-      );
-      return;
+    if (!fs.existsSync(path.dirname(DEST_NEXTWP_CONFIG_FILE_PATH))) {
+      // create the .next/nextwp directory if it doesn't exist
+      fs.mkdirSync(path.dirname(DEST_NEXTWP_CONFIG_FILE_PATH), {
+        recursive: true,
+      });
     }
 
-    const tsContent = fs.readFileSync(configPath, "utf8");
+    if (!fs.existsSync(SRC_NEXTWP_CONFIG_FILE_PATH)) {
+      debug.warn(
+        `missing nextwp.config.ts.\nFalling back to default NextWP config.\nEnsure you have a nextwp.config.ts file in your project root.\nYou can use @nextwp/cli to generate one with the command "nextwp init"`
+      );
+      return createDefaultConfig();
+    }
+
+    const tsContent = fs.readFileSync(SRC_NEXTWP_CONFIG_FILE_PATH, "utf8");
     const jsContent = ts.transpileModule(tsContent, {
       compilerOptions: { module: ts.ModuleKind.CommonJS },
     }).outputText;
 
-    const tmpDir = path.resolve(process.cwd(), ".next", "nextwp");
-    if (!fs.existsSync(tmpDir)) {
-      fs.mkdirSync(tmpDir, { recursive: true });
+    // we will execute this transpiled config file in a sandbox
+    // so that we can apply default values and validate during compilation.
+    // this will prevent the need for runtime zod validation on each function call
+    const sandbox = {
+      require: require,
+      module: {},
+      exports: {},
+      process: process,
+      console: console,
+      __dirname: __dirname,
+      __filename: __filename,
+    };
+    vm.createContext(sandbox);
+    vm.runInContext(jsContent, sandbox);
+
+    const userConfig = sandbox.exports.default;
+    const configWithDefaults = applyConfigDefaults(userConfig);
+    validateConfig(configWithDefaults);
+
+    fs.writeFileSync(
+      DEST_NEXTWP_CONFIG_FILE_PATH,
+      `module.exports = ${JSON.stringify(configWithDefaults, null, 2)};`,
+      "utf8"
+    );
+
+    if (!fs.existsSync(DEST_NEXTWP_CONFIG_FILE_PATH)) {
+      logErrorAndQuit();
     }
 
-    const outputPath = path.resolve(tmpDir, "nextwp.config.js");
-    fs.writeFileSync(outputPath, jsContent);
-    // check if file is there
-    if (!fs.existsSync(outputPath)) {
-      throw new Error(
-        "Error: nextwp.config.js not found in .next/nextwp/nextwp.config.js"
-      );
-    }
-    return outputPath;
+    return DEST_NEXTWP_CONFIG_FILE_PATH;
   } catch (error) {
     console.error(
       colors.red + "Error processing nextwp.config.ts:" + colors.reset,
@@ -54,3 +79,33 @@ function compileConfig() {
 module.exports = {
   compileConfig,
 };
+
+function logErrorAndQuit() {
+  debug.error(
+    `failed to generate file ${path.basename(
+      DEST_NEXTWP_CONFIG_FILE_PATH
+    )} at ${path.dirname(DEST_NEXTWP_CONFIG_FILE_PATH)}`
+  );
+  process.exit(1);
+}
+
+function createDefaultConfig() {
+  const defaultConfig = applyConfigDefaults({});
+
+  try {
+    fs.writeFileSync(
+      DEST_NEXTWP_CONFIG_FILE_PATH,
+      `module.exports = ${JSON.stringify(defaultConfig, null, 2)};`,
+      "utf8"
+    );
+  } catch (error) {
+    debug.error(error.message);
+    logErrorAndQuit();
+  }
+
+  if (!fs.existsSync(DEST_NEXTWP_CONFIG_FILE_PATH)) {
+    logErrorAndQuit();
+  }
+
+  return DEST_NEXTWP_CONFIG_FILE_PATH;
+}
