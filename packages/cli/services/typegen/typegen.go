@@ -15,6 +15,8 @@ import (
 	"golang.org/x/text/language"
 )
 
+const includeComments = true
+
 func GenerateTypes() error {
 	println("\x1b[32m[@nextwp/cli]\x1b[0m Generating types for " + os.Getenv("WP_URL"))
 	postTypes := wordpress.GetPostTypes()
@@ -83,25 +85,34 @@ func generateTsProperties(schema map[string]interface{}) string {
 
 	for _, propName := range sortedKeys {
 		propDetails := schema[propName]
-
 		if propName == "" {
 			continue // Skip properties with empty names
 		}
 
+		isOptional := false
+		// todo: fetch acf fields from endpoint to get better type info and comments etc (is this still needed? I think I have covered most of them)
 		isAcf := false
-		// todo: fetch acf fields from endpoint to get better type info and comments etc
 		propMap, ok := propDetails.(map[string]interface{})
 		if !ok {
 			continue // or handle error as appropriate
 		}
-		if propMap["required"] == false || propMap["required"] == true {
+		if required, exists := propMap["required"]; exists {
 			isAcf = true
+			if req, ok := required.(bool); ok && !req {
+				isOptional = true
+			}
 		}
 
 		propType := getTsType(propName, propDetails, isAcf)
 
-		propertiesContent += generatePropertyComment(propName, propType, propDetails.(map[string]interface{}), isAcf)
-		propertiesContent += fmt.Sprintf("  %s: %s;\n", propName, propType)
+		if includeComments {
+			propertiesContent += generatePropertyComment(propName, propType, propDetails.(map[string]interface{}), isAcf)
+		}
+		if isOptional {
+			propertiesContent += fmt.Sprintf("  %s?: %s;\n", propName, propType)
+		} else {
+			propertiesContent += fmt.Sprintf("  %s: %s;\n", propName, propType)
+		}
 	}
 	return propertiesContent
 }
@@ -113,6 +124,31 @@ func getTsType(propName string, propDetails interface{}, isAcf bool) string {
 		// return "any" // or handle error as appropriate
 	}
 
+	// Handle 'enum' within 'items' (acf select fields)
+	if items, ok := propMap["items"].(map[string]interface{}); ok {
+		if enumValues, ok := items["enum"].([]interface{}); ok {
+			enumTypes := make([]string, len(enumValues))
+			for i, enumVal := range enumValues {
+				if strVal, isString := enumVal.(string); isString {
+					enumTypes[i] = fmt.Sprintf(`"%s"`, strVal)
+				}
+			}
+			return strings.Join(enumTypes, " | ") + " | null"
+		}
+	}
+
+	// Handling 'array' type with specific item types (taxonomies or specific field types that are arrays like number[] or string[])
+	if propType, ok := propMap["type"]; ok && propType == "array" {
+		if items, ok := propMap["items"].(map[string]interface{}); ok {
+			if itemType, ok := items["type"].(string); ok {
+				tsItemType := basicTypeToTsType(itemType)
+				return tsItemType + "[]"
+			}
+		}
+		return "any[]" // Fallback for arrays with unknown item types
+	}
+
+	// Handling 'acf_fc_layout' field pattern value for flexible content layouts
 	if propMap, ok := propDetails.(map[string]interface{}); ok {
 		if propName == "acf_fc_layout" && propMap["pattern"] != nil {
 			pattern := propMap["pattern"].(string)
@@ -121,6 +157,8 @@ func getTsType(propName string, propDetails interface{}, isAcf bool) string {
 			return "\"" + value + "\""
 		}
 	}
+
+	// Handling 'enum' for string types
 	if enumValues, ok := propMap["enum"].([]interface{}); ok {
 		if typeValue, typeExists := propMap["type"]; typeExists {
 			// Check if the type is "string"
@@ -160,9 +198,8 @@ func getTsType(propName string, propDetails interface{}, isAcf bool) string {
 			return strings.Join(oneOfTypes, " | ")
 		}
 	}
-	// check for properties (nested object)
+	// check for properties (nested object), handle recursively
 	if properties, ok := propMap["properties"].(map[string]interface{}); ok {
-		// This is a nested object, handle recursively
 		return "{\n" + generateTsProperties(properties) + "}"
 	}
 
@@ -220,12 +257,19 @@ func basicTypeToTsType(jsonType string) string {
 		return "string"
 	case "integer", "int":
 		return "number"
+	case "number":
+		return "number"
 	case "boolean":
 		return "boolean"
 	case "null":
 		return "null"
+	case "object":
+		return "any" // this would be an empty object, like the acf field with no subfields
+	case "":
+		return "any // ! @ NOT_IMPLEMENTED_BASIC_TYPE EMPTY_STRING"
 	default:
-		return "any"
+		println("basicTypeToTsType: " + jsonType)
+		return "any // ! @ NOT_IMPLEMENTED_BASIC_TYPE " + jsonType + " @"
 	}
 }
 
@@ -259,22 +303,39 @@ func hasProperties(item interface{}) bool {
 
 func generatePropertyComment(propName string, propType string, propDetails map[string]interface{}, isAcfField bool) string {
 	var propertyComment string
-	if description, ok := propDetails["description"]; ok {
-		if description != "" {
-			propertyComment += "  /**\n"
-			propertyComment += fmt.Sprintf("  * %s\n", description)
-			propertyComment += "  */\n"
-		}
-	}
+	propertyComment += "/**\n"
 
 	if isAcfField {
 		acfFieldType := getAcfFieldType(propName, propDetails)
 		propertyComment += getAcfFieldComment(acfFieldType)
 	}
+
+	if description, ok := propDetails["description"]; ok {
+		if description != "" {
+			propertyComment += fmt.Sprintf("  * %s\n", description)
+		}
+	}
+
+	propertyComment += "*/\n"
+
+	if propertyComment == "/**\n*/\n" {
+		return ""
+	}
+
 	return propertyComment
 }
 
 func getAcfFieldType(propName string, propDetails map[string]interface{}) string {
+
+	if description, ok := propDetails["description"]; ok {
+		if strings.Contains(description.(string), "A `Ymd` formatted date string.") {
+			return "date picker"
+		}
+		if strings.Contains(description.(string), "A `Y-m-d H:i:s` formatted date string.") {
+			return "date time picker"
+		}
+	}
+
 	if items, ok := propDetails["items"].(map[string]interface{}); ok {
 		if oneOf, ok := items["oneOf"].([]interface{}); ok {
 			if len(oneOf) > 0 {
@@ -282,11 +343,19 @@ func getAcfFieldType(propName string, propDetails map[string]interface{}) string
 			}
 		}
 	}
+	if format, ok := propDetails["format"].(string); ok {
+		if format == "email" {
+			return "email"
+		}
+	}
 
-	// todo: fetch acf fields from endpoint to get better type info and comments etc
-	// if propName == "acf_fc_layout" {
-	// 	return "flexible_content"
-	// }
+	propertiesMap, ok := propDetails["properties"].(map[string]interface{})
+	if ok {
+		if propertiesMap["target"] != nil && propertiesMap["title"] != nil && propertiesMap["url"] != nil {
+			return "link"
+		}
+	}
+
 	return ""
 }
 
@@ -295,8 +364,7 @@ func getAcfFieldComment(acfFieldType string) string {
 		return ""
 	}
 
-	comment := `  /**
-	* ACF: ` + cases.Title(language.English).String(acfFieldType) + "\n"
+	comment := `  * ACF: ` + cases.Title(language.English).String(acfFieldType) + "\n"
 	if acfFieldType == "flexible content" {
 		comment += " *\n"
 		comment += ` * Enables the creation of a series of subfields which can be dynamically repeated and ordered.` + "\n"
@@ -307,7 +375,29 @@ func getAcfFieldComment(acfFieldType string) string {
 		comment += ` * Enables the creation of a series of subfields which can be dynamically repeated and ordered.` + "\n"
 		comment += ` * @see https://www.advancedcustomfields.com/resources/repeater/` + "\n"
 	}
-	comment += `*/` + "\n"
+	// if acfFieldType == "date picker" {
+	// 	comment += " *\n"
+	// 	comment += ` * Provides an interface for date selection, allowing a user-friendly way to pick a date.` + "\n"
+	// 	comment += ` * @see https://www.advancedcustomfields.com/resources/date-picker/` + "\n"
+	// }
+
+	// if acfFieldType == "date time picker" {
+	// 	comment += " *\n"
+	// 	comment += ` * Allows users to select both a date and a time, with an intuitive interface for time-sensitive content.` + "\n"
+	// 	comment += ` * @see https://www.advancedcustomfields.com/resources/date-time-picker/` + "\n"
+	// }
+
+	// if acfFieldType == "email" {
+	// 	comment += " *\n"
+	// 	comment += ` * A specialized field for email addresses, ensuring valid email format input.` + "\n"
+	// 	comment += ` * @see https://www.advancedcustomfields.com/resources/email/` + "\n"
+	// }
+
+	// if acfFieldType == "link" {
+	// 	comment += " *\n"
+	// 	comment += ` * A comprehensive field for adding links, including URL, title, and target, for a complete linking solution.` + "\n"
+	// 	comment += ` * @see https://www.advancedcustomfields.com/resources/link/` + "\n"
+	// }
 
 	return comment
 }
