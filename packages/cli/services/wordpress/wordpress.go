@@ -2,7 +2,6 @@ package wordpress
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -12,7 +11,6 @@ import (
 
 func GetPostTypes() map[string]interface{} {
 	endpoint := os.Getenv("WP_URL") + "/wp-json/wp/v2/types"
-	fmt.Println("Get Post Types: " + endpoint + "\n")
 
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
@@ -40,7 +38,6 @@ func GetPostTypes() map[string]interface{} {
 
 func GetSchema(postType string) map[string]interface{} {
 	endpoint := os.Getenv("WP_URL") + "/wp-json/wp/v2/" + postType + "?context=edit"
-	fmt.Println("Get Schema: " + endpoint)
 
 	req, err := http.NewRequest("OPTIONS", endpoint, nil)
 	if err != nil {

@@ -15,5 +15,8 @@
     "bin",
     "dist",
     "scripts"
-  ]
+  ],
+  "dependencies": {
+    "prettier": "^3.0.1"
+  }
 }

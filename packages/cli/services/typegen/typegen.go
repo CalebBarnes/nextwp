@@ -4,18 +4,21 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"log/slog"
 	"os"
+	"path"
+	"sort"
 	"strings"
 
+	"github.com/CalebBarnes/nextwp/cli/services/utils"
 	"github.com/CalebBarnes/nextwp/cli/services/wordpress"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
 
 func GenerateTypes() error {
-	slog.Info("Generating types for post types on your WordPress site: " + os.Getenv("WP_URL"))
+	println("\x1b[32m[@nextwp/cli]\x1b[0m Generating types for " + os.Getenv("WP_URL"))
 	postTypes := wordpress.GetPostTypes()
+	generatedFiles := []string{}
 
 	for key, value := range postTypes {
 		if key == "wp_template" || key == "wp_template_part" || key == "wp_block" || key == "wp_navigation" || key == "nav_menu_item" || key == "attachment" {
@@ -23,30 +26,25 @@ func GenerateTypes() error {
 		}
 		titleCaser := cases.Title(language.English)
 		pascalCaseKey := titleCaser.String(key)
-		fmt.Println("-----------------------------------")
-		fmt.Println(pascalCaseKey)
-		fmt.Println("-----------------------------------")
 
-		// Assuming value is a map
 		if mappedValue, ok := value.(map[string]interface{}); ok {
-			// Now you can index mappedValue
 			restBase := mappedValue["rest_base"].(string)
 			schema := wordpress.GetSchema(restBase)
 
-			generateTypeScriptFile(schema["schema"].(map[string]interface{})["properties"].(map[string]interface{}), pascalCaseKey)
-
+			filePath := generateTypeScriptFile(schema["schema"].(map[string]interface{})["properties"].(map[string]interface{}), pascalCaseKey)
+			generatedFiles = append(generatedFiles, filePath)
 		}
-		fmt.Println("-----------------------------------")
 	}
+	utils.FormatFileWithPrettier(generatedFiles)
 	return nil
 }
 
-func generateTypeScriptFile(schema map[string]interface{}, typeName string) {
+func generateTypeScriptFile(schema map[string]interface{}, typeName string) string {
 	fileContent := "export interface " + typeName + " {\n"
 	fileContent += generateTsProperties(schema)
 	fileContent += "}\n"
 
-	fileName := "./types/" + typeName + ".ts"
+	fileName := strings.ReplaceAll(strings.ToLower("./types/"+typeName+".ts"), " ", "-")
 	file, err := os.Create(fileName)
 	if err != nil {
 		log.Fatalf("Failed to create file: %v", err)
@@ -66,11 +64,26 @@ func generateTypeScriptFile(schema map[string]interface{}, typeName string) {
 	if err != nil {
 		log.Fatalf("Failed to write to file: %v", err)
 	}
+
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Failed to get current working directory: %v", err)
+	}
+	return path.Join(cwd, fileName)
 }
 
 func generateTsProperties(schema map[string]interface{}) string {
 	var propertiesContent string
-	for propName, propDetails := range schema {
+	var sortedKeys []string
+	// sort keys alphabetically
+	for propName := range schema {
+		sortedKeys = append(sortedKeys, propName)
+	}
+	sort.Strings(sortedKeys)
+
+	for _, propName := range sortedKeys {
+		propDetails := schema[propName]
+
 		if propName == "" {
 			continue // Skip properties with empty names
 		}
@@ -100,7 +113,6 @@ func getTsType(propName string, propDetails interface{}, isAcf bool) string {
 		// return "any" // or handle error as appropriate
 	}
 
-	// pattern example: pattern: "^hero$", we want to just return hero
 	if propMap, ok := propDetails.(map[string]interface{}); ok {
 		if propName == "acf_fc_layout" && propMap["pattern"] != nil {
 			pattern := propMap["pattern"].(string)
@@ -248,9 +260,11 @@ func hasProperties(item interface{}) bool {
 func generatePropertyComment(propName string, propType string, propDetails map[string]interface{}, isAcfField bool) string {
 	var propertyComment string
 	if description, ok := propDetails["description"]; ok {
-		propertyComment += "  /**\n"
-		propertyComment += fmt.Sprintf("  * %s\n", description)
-		propertyComment += "  */\n"
+		if description != "" {
+			propertyComment += "  /**\n"
+			propertyComment += fmt.Sprintf("  * %s\n", description)
+			propertyComment += "  */\n"
+		}
 	}
 
 	if isAcfField {
@@ -264,15 +278,15 @@ func getAcfFieldType(propName string, propDetails map[string]interface{}) string
 	if items, ok := propDetails["items"].(map[string]interface{}); ok {
 		if oneOf, ok := items["oneOf"].([]interface{}); ok {
 			if len(oneOf) > 0 {
-				return "repeater"
+				return "flexible content"
 			}
 		}
 	}
 
+	// todo: fetch acf fields from endpoint to get better type info and comments etc
 	// if propName == "acf_fc_layout" {
 	// 	return "flexible_content"
 	// }
-
 	return ""
 }
 
@@ -280,8 +294,20 @@ func getAcfFieldComment(acfFieldType string) string {
 	if acfFieldType == "" {
 		return ""
 	}
+
 	comment := `  /**
-  * acf: ` + acfFieldType + `
-  */` + "\n"
+	* ACF: ` + cases.Title(language.English).String(acfFieldType) + "\n"
+	if acfFieldType == "flexible content" {
+		comment += " *\n"
+		comment += ` * Enables the creation of a series of subfields which can be dynamically repeated and ordered.` + "\n"
+		comment += ` * @see https://www.advancedcustomfields.com/resources/flexible-content/` + "\n"
+	}
+	if acfFieldType == "repeater" {
+		comment += " *\n"
+		comment += ` * Enables the creation of a series of subfields which can be dynamically repeated and ordered.` + "\n"
+		comment += ` * @see https://www.advancedcustomfields.com/resources/repeater/` + "\n"
+	}
+	comment += `*/` + "\n"
+
 	return comment
 }
