@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"log/slog"
 	"os"
@@ -42,8 +41,6 @@ func main() {
 					tg := typegen.TypeGenerator{
 						PostTypes: wordpress.GetPostTypes(),
 					}
-
-					fmt.Println("Generating types123123123...")
 					tg.GenerateTypes()
 					return nil
 				},

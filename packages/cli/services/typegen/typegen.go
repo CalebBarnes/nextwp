@@ -1,7 +1,6 @@
 package typegen
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -15,7 +14,10 @@ import (
 	"golang.org/x/text/language"
 )
 
+var additionalTypesMap = make(map[string]string)
+
 const includeComments = true
+const includeDebugSchema = true
 
 type TypeGenerator struct {
 	PostTypes      map[string]interface{}
@@ -25,11 +27,6 @@ type TypeGenerator struct {
 type Schema struct {
 	Properties map[string]interface{}
 	TypeName   string
-}
-
-type GeneratedContent struct {
-	PropertiesContent string
-	AdditionalTypes   string
 }
 
 func (tg *TypeGenerator) GenerateTypes() error {
@@ -46,8 +43,7 @@ func (tg *TypeGenerator) GenerateTypes() error {
 }
 
 func (tg *TypeGenerator) ProcessPostType(key string, value interface{}) {
-	titleCaser := cases.Title(language.English)
-	pascalCaseKey := titleCaser.String(key)
+	pascalCaseKey := cases.Title(language.English).String(key)
 
 	if mappedValue, ok := value.(map[string]interface{}); ok {
 		restBase := mappedValue["rest_base"].(string)
@@ -58,20 +54,27 @@ func (tg *TypeGenerator) ProcessPostType(key string, value interface{}) {
 			TypeName:   pascalCaseKey,
 		}
 
-		filePath := schema.GenerateTypeScriptFile() // each post type gets its own file
+		generatedProperties := schema.GenerateTSProperties(pascalCaseKey)
+		fmt.Println(additionalTypesMap[pascalCaseKey])
+		// filePath := schema.GenerateTypeScriptFile() // each post type gets its own file
+		filePath := schema.GenerateTypeScriptFile(generatedProperties)
+
 		tg.generatedFiles = append(tg.generatedFiles, filePath)
 	}
 }
 
-func (s *Schema) GenerateTypeScriptFile() string {
-	generatedContent := s.GenerateTSProperties(s.TypeName)
-
+func (s *Schema) GenerateTypeScriptFile(propertiesContent string) string {
 	fileContent := "export interface " + s.TypeName + " {\n"
-	fileContent += generatedContent.PropertiesContent
+	fileContent += propertiesContent
 	fileContent += "}\n"
 
-	if generatedContent.AdditionalTypes != "" {
-		fileContent += "\n" + generatedContent.AdditionalTypes
+	additionalTypes := additionalTypesMap[s.TypeName]
+	if additionalTypes != "" {
+		fileContent += "\n" + additionalTypes
+	}
+
+	if includeDebugSchema {
+		fileContent += GetDebugSchemaString(s.Properties)
 	}
 
 	fileName := strings.ReplaceAll(strings.ToLower("./types/"+s.TypeName+".ts"), " ", "-")
@@ -80,13 +83,6 @@ func (s *Schema) GenerateTypeScriptFile() string {
 		log.Fatalf("Failed to create file: %v", err)
 	}
 	defer file.Close()
-
-	jsonSchema, err := json.MarshalIndent(s.Properties, "", "  ")
-	if err != nil {
-		log.Fatalf("Failed to marshal schema: %v", err)
-	}
-
-	fileContent += "\n\nconst schema = " + string(jsonSchema) + "\n"
 
 	_, err = file.WriteString(fileContent)
 	if err != nil {
@@ -100,9 +96,9 @@ func (s *Schema) GenerateTypeScriptFile() string {
 	return path.Join(cwd, fileName)
 }
 
-func (s *Schema) GenerateTSProperties(parentName string) GeneratedContent {
+func (s *Schema) GenerateTSProperties(postTypeName string) string {
 	var propertiesContent string
-	var additionalTypes string
+
 	var sortedKeys []string
 	// sort keys alphabetically
 	for propName := range s.Properties {
@@ -116,50 +112,7 @@ func (s *Schema) GenerateTSProperties(parentName string) GeneratedContent {
 			continue // Skip properties with empty names
 		}
 
-		// Create individual types for oneOf schemas (flexible content layouts)
-		if oneOfSchemas, ok := ExtractOneOf(propDetails); ok {
-			var moduleTypes []string
-			for _, oneOfSchema := range oneOfSchemas {
-
-				layoutProps := oneOfSchema["properties"].(map[string]interface{})
-				layoutPattern := strings.Trim(layoutProps["acf_fc_layout"].(map[string]interface{})["pattern"].(string), "^$")
-				layoutNameWords := strings.Split(layoutPattern, "-")
-				for i, word := range layoutNameWords {
-					layoutNameWords[i] = cases.Title(language.English).String(word)
-				}
-
-				fmt.Println(layoutNameWords)
-
-				layoutName := strings.Join(layoutNameWords, "")
-				fmt.Println(layoutName)
-
-				// layoutName := fmt.Sprintf("%s%s", "FC_Layout", layoutName)
-
-				// Create a new Schema instance for each oneOf schema
-				oneOfSchemaInstance := Schema{
-					Properties: oneOfSchema,
-					TypeName:   layoutName,
-				}
-
-				// Generate TypeScript properties and additional types for this oneOf schema
-				oneOfGeneratedContent := oneOfSchemaInstance.GenerateTSProperties(layoutName)
-
-				// Add the generated properties content as a new type definition
-				additionalTypes += fmt.Sprintf("type %s = {%s}\n", layoutName, oneOfGeneratedContent.PropertiesContent)
-
-				// Append any additional types generated within the oneOf schema
-				if oneOfGeneratedContent.AdditionalTypes != "" {
-					additionalTypes += oneOfGeneratedContent.AdditionalTypes + "\n"
-				}
-
-				moduleTypes = append(moduleTypes, layoutName)
-			}
-			propertiesContent += fmt.Sprintf("  %s?: %s;\n", propName, strings.Join(moduleTypes, " | "))
-			continue
-		}
-
 		isOptional := false
-		// todo: fetch acf fields from endpoint to get better type info and comments etc (is this still needed? I think I have covered most of them)
 		isAcf := false
 		propMap, ok := propDetails.(map[string]interface{})
 		if !ok {
@@ -172,22 +125,75 @@ func (s *Schema) GenerateTSProperties(parentName string) GeneratedContent {
 			}
 		}
 
-		propType := GetTsType(propName, propDetails, isAcf, parentName)
+		// Create individual types for oneOf schemas (flexible content layouts)
+		if oneOfSchemas, ok := ExtractOneOf(propDetails); ok {
+			var moduleTypes []string
+			for _, oneOfSchema := range oneOfSchemas {
+				oneOfSchemaProperties, ok := oneOfSchema["properties"].(map[string]interface{})
+				if !ok {
+					log.Printf("Warning: 'properties' field not found or invalid in oneOfSchema for '%s'", propName)
+					continue
+				}
 
-		if includeComments {
-			propertiesContent += GeneratePropertyComment(propName, propType, propDetails.(map[string]interface{}), isAcf)
+				layoutPattern := strings.Trim(oneOfSchemaProperties["acf_fc_layout"].(map[string]interface{})["pattern"].(string), "^$")
+				layoutNameWords := strings.Split(layoutPattern, "-")
+				for i, word := range layoutNameWords {
+					layoutNameWords[i] = cases.Title(language.English).String(word)
+				}
+				layoutName := strings.Join(layoutNameWords, "")
+
+				// Create a new Schema instance for each oneOf schema
+				oneOfSchemaInstance := Schema{
+					Properties: oneOfSchemaProperties,
+					TypeName:   layoutName,
+				}
+
+				// Generate TypeScript properties and additional types for this oneOf schema
+				oneOfGeneratedContent := oneOfSchemaInstance.GenerateTSProperties(postTypeName)
+
+				additionalTypesMap[postTypeName] += fmt.Sprintf("export interface %s {%s}", layoutName, oneOfGeneratedContent)
+
+				moduleTypes = append(moduleTypes, layoutName)
+
+			}
+			propertiesContent += fmt.Sprintf("  %s?: %s;\n", propName, strings.Join(moduleTypes, " | "))
+
+			continue
 		}
-		if isOptional {
-			propertiesContent += fmt.Sprintf("  %s?: %s;\n", propName, propType)
+
+		// Handling nested objects (recursive call for nested properties)
+		if properties, ok := propMap["properties"].(map[string]interface{}); ok {
+			nestedSchema := Schema{Properties: properties}
+			nestedContent := nestedSchema.GenerateTSProperties(postTypeName)
+
+			propertiesContent += fmt.Sprintf("  %s: %s;\n", propName, "{\n"+nestedContent+"}\n")
+
 		} else {
-			propertiesContent += fmt.Sprintf("  %s: %s;\n", propName, propType)
+			// Handle non-nested properties using GetTsType
+			propType := GetTsType(propName, propDetails, isAcf, postTypeName)
+			if includeComments {
+				propertiesContent += GeneratePropertyComment(propName, propType, propDetails.(map[string]interface{}), isAcf)
+			}
+			if isOptional {
+				propertiesContent += fmt.Sprintf("  %s?: %s;\n", propName, propType)
+			} else {
+				propertiesContent += fmt.Sprintf("  %s: %s;\n", propName, propType)
+			}
 		}
+
+		// propType := GetTsType(propName, propDetails, isAcf, parentName)
+
+		// if includeComments {
+		// 	propertiesContent += GeneratePropertyComment(propName, propType, propDetails.(map[string]interface{}), isAcf)
+		// }
+		// if isOptional {
+		// 	propertiesContent += fmt.Sprintf("  %s?: %s;\n", propName, propType)
+		// } else {
+		// 	propertiesContent += fmt.Sprintf("  %s: %s;\n", propName, propType)
+		// }
 	}
 
-	return GeneratedContent{
-		PropertiesContent: propertiesContent,
-		AdditionalTypes:   additionalTypes,
-	}
+	return propertiesContent
 }
 
 func GetTsType(propName string, propDetails interface{}, isAcf bool, parentName string) string {
@@ -222,13 +228,6 @@ func GetTsType(propName string, propDetails interface{}, isAcf bool, parentName 
 	// Handling 'enum' for string types
 	if enumValues, ok := propMap["enum"].([]interface{}); ok {
 		return enumToTsType(enumValues)
-	}
-
-	// Handling nested objects (recursive call for nested properties)
-	if properties, ok := propMap["properties"].(map[string]interface{}); ok {
-		nestedSchema := Schema{Properties: properties}
-		nestedContent := nestedSchema.GenerateTSProperties(cases.Title(language.English).String(propName))
-		return "{\n" + nestedContent.PropertiesContent + "}"
 	}
 
 	// Fallback to basic type conversion
