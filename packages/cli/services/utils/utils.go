@@ -27,7 +27,7 @@ func getMainProjectDir() string {
 	return projectDir
 }
 
-func FormatFileWithPrettier(filePaths []string) {
+func FormatFilesWithPrettier(filePaths []string) {
 	projectDir := getMainProjectDir()
 	args := append([]string{projectDir + "/js/format.js"}, filePaths...)
 	cmd := exec.Command("node", args...)

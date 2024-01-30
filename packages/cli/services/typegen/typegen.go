@@ -17,50 +17,76 @@ import (
 
 const includeComments = true
 
-func GenerateTypes() error {
-	println("\x1b[32m[@nextwp/cli]\x1b[0m Generating types for " + os.Getenv("WP_URL"))
-	postTypes := wordpress.GetPostTypes()
-	generatedFiles := []string{}
+type TypeGenerator struct {
+	PostTypes      map[string]interface{}
+	generatedFiles []string
+}
 
-	for key, value := range postTypes {
+type Schema struct {
+	Properties map[string]interface{}
+	TypeName   string
+}
+
+type GeneratedContent struct {
+	PropertiesContent string
+	AdditionalTypes   string
+}
+
+func (tg *TypeGenerator) GenerateTypes() error {
+	println("\x1b[32m[@nextwp/cli]\x1b[0m Generating types for " + os.Getenv("WP_URL"))
+
+	for key, value := range tg.PostTypes {
 		if key == "wp_template" || key == "wp_template_part" || key == "wp_block" || key == "wp_navigation" || key == "nav_menu_item" || key == "attachment" {
 			continue
 		}
-		titleCaser := cases.Title(language.English)
-		pascalCaseKey := titleCaser.String(key)
-
-		if mappedValue, ok := value.(map[string]interface{}); ok {
-			restBase := mappedValue["rest_base"].(string)
-			schema := wordpress.GetSchema(restBase)
-
-			filePath := generateTypeScriptFile(schema["schema"].(map[string]interface{})["properties"].(map[string]interface{}), pascalCaseKey)
-			generatedFiles = append(generatedFiles, filePath)
-		}
+		tg.ProcessPostType(key, value)
 	}
-	utils.FormatFileWithPrettier(generatedFiles)
+	utils.FormatFilesWithPrettier(tg.generatedFiles)
 	return nil
 }
 
-func generateTypeScriptFile(schema map[string]interface{}, typeName string) string {
-	fileContent := "export interface " + typeName + " {\n"
-	fileContent += generateTsProperties(schema)
+func (tg *TypeGenerator) ProcessPostType(key string, value interface{}) {
+	titleCaser := cases.Title(language.English)
+	pascalCaseKey := titleCaser.String(key)
+
+	if mappedValue, ok := value.(map[string]interface{}); ok {
+		restBase := mappedValue["rest_base"].(string)
+		schemaProperties := wordpress.GetSchema(restBase)["schema"].(map[string]interface{})["properties"].(map[string]interface{})
+
+		schema := Schema{
+			Properties: schemaProperties, // Ensure this is defined correctly
+			TypeName:   pascalCaseKey,
+		}
+
+		filePath := schema.GenerateTypeScriptFile() // each post type gets its own file
+		tg.generatedFiles = append(tg.generatedFiles, filePath)
+	}
+}
+
+func (s *Schema) GenerateTypeScriptFile() string {
+	generatedContent := s.GenerateTSProperties(s.TypeName)
+
+	fileContent := "export interface " + s.TypeName + " {\n"
+	fileContent += generatedContent.PropertiesContent
 	fileContent += "}\n"
 
-	fileName := strings.ReplaceAll(strings.ToLower("./types/"+typeName+".ts"), " ", "-")
+	if generatedContent.AdditionalTypes != "" {
+		fileContent += "\n" + generatedContent.AdditionalTypes
+	}
+
+	fileName := strings.ReplaceAll(strings.ToLower("./types/"+s.TypeName+".ts"), " ", "-")
 	file, err := os.Create(fileName)
 	if err != nil {
 		log.Fatalf("Failed to create file: %v", err)
 	}
 	defer file.Close()
 
-	jsonSchema, err := json.MarshalIndent(schema, "", "  ")
+	jsonSchema, err := json.MarshalIndent(s.Properties, "", "  ")
 	if err != nil {
 		log.Fatalf("Failed to marshal schema: %v", err)
 	}
 
-	fileContent += "\n"
-	fileContent += "\n const schema = " + string(jsonSchema)
-	fileContent += "\n"
+	fileContent += "\n\nconst schema = " + string(jsonSchema) + "\n"
 
 	_, err = file.WriteString(fileContent)
 	if err != nil {
@@ -74,19 +100,62 @@ func generateTypeScriptFile(schema map[string]interface{}, typeName string) stri
 	return path.Join(cwd, fileName)
 }
 
-func generateTsProperties(schema map[string]interface{}) string {
+func (s *Schema) GenerateTSProperties(parentName string) GeneratedContent {
 	var propertiesContent string
+	var additionalTypes string
 	var sortedKeys []string
 	// sort keys alphabetically
-	for propName := range schema {
+	for propName := range s.Properties {
 		sortedKeys = append(sortedKeys, propName)
 	}
 	sort.Strings(sortedKeys)
 
 	for _, propName := range sortedKeys {
-		propDetails := schema[propName]
+		propDetails := s.Properties[propName]
 		if propName == "" {
 			continue // Skip properties with empty names
+		}
+
+		// Create individual types for oneOf schemas (flexible content layouts)
+		if oneOfSchemas, ok := ExtractOneOf(propDetails); ok {
+			var moduleTypes []string
+			for _, oneOfSchema := range oneOfSchemas {
+
+				layoutProps := oneOfSchema["properties"].(map[string]interface{})
+				layoutPattern := strings.Trim(layoutProps["acf_fc_layout"].(map[string]interface{})["pattern"].(string), "^$")
+				layoutNameWords := strings.Split(layoutPattern, "-")
+				for i, word := range layoutNameWords {
+					layoutNameWords[i] = cases.Title(language.English).String(word)
+				}
+
+				fmt.Println(layoutNameWords)
+
+				layoutName := strings.Join(layoutNameWords, "")
+				fmt.Println(layoutName)
+
+				// layoutName := fmt.Sprintf("%s%s", "FC_Layout", layoutName)
+
+				// Create a new Schema instance for each oneOf schema
+				oneOfSchemaInstance := Schema{
+					Properties: oneOfSchema,
+					TypeName:   layoutName,
+				}
+
+				// Generate TypeScript properties and additional types for this oneOf schema
+				oneOfGeneratedContent := oneOfSchemaInstance.GenerateTSProperties(layoutName)
+
+				// Add the generated properties content as a new type definition
+				additionalTypes += fmt.Sprintf("type %s = {%s}\n", layoutName, oneOfGeneratedContent.PropertiesContent)
+
+				// Append any additional types generated within the oneOf schema
+				if oneOfGeneratedContent.AdditionalTypes != "" {
+					additionalTypes += oneOfGeneratedContent.AdditionalTypes + "\n"
+				}
+
+				moduleTypes = append(moduleTypes, layoutName)
+			}
+			propertiesContent += fmt.Sprintf("  %s?: %s;\n", propName, strings.Join(moduleTypes, " | "))
+			continue
 		}
 
 		isOptional := false
@@ -103,10 +172,10 @@ func generateTsProperties(schema map[string]interface{}) string {
 			}
 		}
 
-		propType := getTsType(propName, propDetails, isAcf)
+		propType := GetTsType(propName, propDetails, isAcf, parentName)
 
 		if includeComments {
-			propertiesContent += generatePropertyComment(propName, propType, propDetails.(map[string]interface{}), isAcf)
+			propertiesContent += GeneratePropertyComment(propName, propType, propDetails.(map[string]interface{}), isAcf)
 		}
 		if isOptional {
 			propertiesContent += fmt.Sprintf("  %s?: %s;\n", propName, propType)
@@ -114,130 +183,73 @@ func generateTsProperties(schema map[string]interface{}) string {
 			propertiesContent += fmt.Sprintf("  %s: %s;\n", propName, propType)
 		}
 	}
-	return propertiesContent
+
+	return GeneratedContent{
+		PropertiesContent: propertiesContent,
+		AdditionalTypes:   additionalTypes,
+	}
 }
 
-func getTsType(propName string, propDetails interface{}, isAcf bool) string {
+func GetTsType(propName string, propDetails interface{}, isAcf bool, parentName string) string {
 	propMap, ok := propDetails.(map[string]interface{})
 	if !ok {
-		return "@ ERROR @" // or handle error as appropriate
-		// return "any" // or handle error as appropriate
+		return "any"
 	}
 
-	// Handle 'enum' within 'items' (acf select fields)
+	// Handling 'enum' within 'items' (e.g., acf select fields)
 	if items, ok := propMap["items"].(map[string]interface{}); ok {
 		if enumValues, ok := items["enum"].([]interface{}); ok {
-			enumTypes := make([]string, len(enumValues))
-			for i, enumVal := range enumValues {
-				if strVal, isString := enumVal.(string); isString {
-					enumTypes[i] = fmt.Sprintf(`"%s"`, strVal)
-				}
-			}
-			return strings.Join(enumTypes, " | ") + " | null"
+			return enumToTsType(enumValues) + " | null"
 		}
 	}
 
-	// Handling 'array' type with specific item types (taxonomies or specific field types that are arrays like number[] or string[])
+	// Handling 'array' type with specific item types
 	if propType, ok := propMap["type"]; ok && propType == "array" {
 		if items, ok := propMap["items"].(map[string]interface{}); ok {
 			if itemType, ok := items["type"].(string); ok {
-				tsItemType := basicTypeToTsType(itemType)
-				return tsItemType + "[]"
+				return BasicTypeToTsType(itemType) + "[]"
 			}
 		}
 		return "any[]" // Fallback for arrays with unknown item types
 	}
 
-	// Handling 'acf_fc_layout' field pattern value for flexible content layouts
-	if propMap, ok := propDetails.(map[string]interface{}); ok {
-		if propName == "acf_fc_layout" && propMap["pattern"] != nil {
-			pattern := propMap["pattern"].(string)
-			value := strings.ReplaceAll(pattern, "^", "")
-			value = strings.ReplaceAll(value, "$", "")
-			return "\"" + value + "\""
-		}
+	// Handling specific string patterns (e.g., 'acf_fc_layout' field pattern value for flexible content layouts)
+	if propName == "acf_fc_layout" && propMap["pattern"] != nil {
+		pattern := propMap["pattern"].(string)
+		return fmt.Sprintf("\"%s\"", strings.Trim(pattern, "^$"))
 	}
 
 	// Handling 'enum' for string types
 	if enumValues, ok := propMap["enum"].([]interface{}); ok {
-		if typeValue, typeExists := propMap["type"]; typeExists {
-			// Check if the type is "string"
-			if typeStr, isStringType := typeValue.(string); isStringType && typeStr == "string" {
-				// Generate TypeScript type for enum values of type string
-				enumStrings := make([]string, len(enumValues))
-				for i, enumVal := range enumValues {
-					if strVal, isString := enumVal.(string); isString {
-						enumStrings[i] = fmt.Sprintf(`"%s"`, strVal)
-					}
-				}
-				return strings.Join(enumStrings, " | ")
-			}
-			return jsonTypeToTsType(enumValues)
-
-		}
+		return enumToTsType(enumValues)
 	}
 
-	// Handling 'items' for arrays
-	if items, ok := propMap["items"].(map[string]interface{}); ok {
-		typeValue := propMap["type"]
-		// Check if it is an array and items is an object
-		if isTypeArray(typeValue) && hasProperties(items) {
-			itemsType := generateTsProperties(items["properties"].(map[string]interface{}))
-			return fmt.Sprintf("{%s}[] | null", itemsType)
-		}
-	}
-
-	// Check for 'items' with 'oneOf'
-	if items, ok := propMap["items"].(map[string]interface{}); ok {
-		if oneOf, ok := items["oneOf"].([]interface{}); ok {
-			var oneOfTypes []string
-			for _, oneOfProp := range oneOf {
-				oneOfType := getTsType(propName, oneOfProp, isAcf)
-				oneOfTypes = append(oneOfTypes, oneOfType)
-			}
-			return strings.Join(oneOfTypes, " | ")
-		}
-	}
-	// check for properties (nested object), handle recursively
+	// Handling nested objects (recursive call for nested properties)
 	if properties, ok := propMap["properties"].(map[string]interface{}); ok {
-		return "{\n" + generateTsProperties(properties) + "}"
+		nestedSchema := Schema{Properties: properties}
+		nestedContent := nestedSchema.GenerateTSProperties(cases.Title(language.English).String(propName))
+		return "{\n" + nestedContent.PropertiesContent + "}"
 	}
 
-	typeValue, exists := propMap["type"]
-	if !exists {
-		return "@ TYPE VALUE NOT EXISTS @"
-		// return "any"
+	// Fallback to basic type conversion
+	if typeValue, ok := propMap["type"].(string); ok {
+		return BasicTypeToTsType(typeValue)
 	}
 
-	switch v := typeValue.(type) {
-	case string:
-		return jsonTypeToTsType(v)
-	case []interface{}:
-		types := make([]string, len(v))
-		for i, elem := range v {
-			if strType, ok := elem.(string); ok {
-				types[i] = jsonTypeToTsType(strType)
-			} else {
-				types[i] = "@ NOT_IMPLEMENTED_TYPE @" // or handle non-string types as needed
-			}
-		}
-		return strings.Join(types, " | ")
-	default:
-		return "@ NOT_IMPLEMENTED @"
-	}
+	return "any"
 }
 
-func jsonTypeToTsType(jsonType interface{}) string {
+func JsonTypeToTsType(jsonType interface{}) string {
 	switch v := jsonType.(type) {
 	case string:
 		// Handle basic types
-		return basicTypeToTsType(v)
+		return BasicTypeToTsType(v)
 	case []interface{}:
 		// Handle enums and multiple types
 		var types []string
 		for _, elem := range v {
 			if strType, ok := elem.(string); ok {
-				tsType := basicTypeToTsType(strType)
+				tsType := BasicTypeToTsType(strType)
 				typesInterface := make([]interface{}, len(types))
 				if !contains(typesInterface, tsType) {
 					types = append(types, tsType)
@@ -251,7 +263,7 @@ func jsonTypeToTsType(jsonType interface{}) string {
 	}
 }
 
-func basicTypeToTsType(jsonType string) string {
+func BasicTypeToTsType(jsonType string) string {
 	switch jsonType {
 	case "string":
 		return "string"
@@ -273,41 +285,13 @@ func basicTypeToTsType(jsonType string) string {
 	}
 }
 
-// Helper function to check if a slice contains a specific value
-func contains(slice []interface{}, value interface{}) bool {
-	for _, v := range slice {
-		if v == value {
-			return true
-		}
-	}
-	return false
-}
-
-func isTypeArray(typeValue interface{}) bool {
-	if typeValue == "array" {
-		return true
-	}
-	if typeSlice, ok := typeValue.([]interface{}); ok {
-		return contains(typeSlice, "array")
-	}
-	return false
-}
-
-func hasProperties(item interface{}) bool {
-	if itemMap, ok := item.(map[string]interface{}); ok {
-		_, hasProps := itemMap["properties"]
-		return hasProps
-	}
-	return false
-}
-
-func generatePropertyComment(propName string, propType string, propDetails map[string]interface{}, isAcfField bool) string {
+func GeneratePropertyComment(propName string, propType string, propDetails map[string]interface{}, isAcfField bool) string {
 	var propertyComment string
 	propertyComment += "/**\n"
 
 	if isAcfField {
-		acfFieldType := getAcfFieldType(propName, propDetails)
-		propertyComment += getAcfFieldComment(acfFieldType)
+		acfFieldType := GetAcfFieldType(propDetails)
+		propertyComment += GetAcfFieldComment(acfFieldType)
 	}
 
 	if description, ok := propDetails["description"]; ok {
@@ -325,8 +309,7 @@ func generatePropertyComment(propName string, propType string, propDetails map[s
 	return propertyComment
 }
 
-func getAcfFieldType(propName string, propDetails map[string]interface{}) string {
-
+func GetAcfFieldType(propDetails map[string]interface{}) string {
 	if description, ok := propDetails["description"]; ok {
 		if strings.Contains(description.(string), "A `Ymd` formatted date string.") {
 			return "date picker"
@@ -359,7 +342,7 @@ func getAcfFieldType(propName string, propDetails map[string]interface{}) string
 	return ""
 }
 
-func getAcfFieldComment(acfFieldType string) string {
+func GetAcfFieldComment(acfFieldType string) string {
 	if acfFieldType == "" {
 		return ""
 	}
@@ -375,29 +358,27 @@ func getAcfFieldComment(acfFieldType string) string {
 		comment += ` * Enables the creation of a series of subfields which can be dynamically repeated and ordered.` + "\n"
 		comment += ` * @see https://www.advancedcustomfields.com/resources/repeater/` + "\n"
 	}
-	// if acfFieldType == "date picker" {
-	// 	comment += " *\n"
-	// 	comment += ` * Provides an interface for date selection, allowing a user-friendly way to pick a date.` + "\n"
-	// 	comment += ` * @see https://www.advancedcustomfields.com/resources/date-picker/` + "\n"
-	// }
-
-	// if acfFieldType == "date time picker" {
-	// 	comment += " *\n"
-	// 	comment += ` * Allows users to select both a date and a time, with an intuitive interface for time-sensitive content.` + "\n"
-	// 	comment += ` * @see https://www.advancedcustomfields.com/resources/date-time-picker/` + "\n"
-	// }
-
-	// if acfFieldType == "email" {
-	// 	comment += " *\n"
-	// 	comment += ` * A specialized field for email addresses, ensuring valid email format input.` + "\n"
-	// 	comment += ` * @see https://www.advancedcustomfields.com/resources/email/` + "\n"
-	// }
-
-	// if acfFieldType == "link" {
-	// 	comment += " *\n"
-	// 	comment += ` * A comprehensive field for adding links, including URL, title, and target, for a complete linking solution.` + "\n"
-	// 	comment += ` * @see https://www.advancedcustomfields.com/resources/link/` + "\n"
-	// }
 
 	return comment
+}
+
+func ExtractOneOf(propDetails interface{}) ([]map[string]interface{}, bool) {
+	propMap, ok := propDetails.(map[string]interface{})
+	if !ok {
+		return nil, false
+	}
+
+	if items, ok := propMap["items"].(map[string]interface{}); ok {
+		if oneOf, ok := items["oneOf"].([]interface{}); ok {
+			var oneOfSchemas []map[string]interface{}
+			for _, schema := range oneOf {
+				if schemaMap, ok := schema.(map[string]interface{}); ok {
+					oneOfSchemas = append(oneOfSchemas, schemaMap)
+				}
+			}
+			return oneOfSchemas, true
+		}
+	}
+
+	return nil, false
 }

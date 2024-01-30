@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"log/slog"
 	"os"
 
 	"github.com/CalebBarnes/nextwp/cli/services/typegen"
+	"github.com/CalebBarnes/nextwp/cli/services/wordpress"
 	"github.com/joho/godotenv"
 	"github.com/urfave/cli/v2"
 )
@@ -37,23 +39,15 @@ func main() {
 				Name:  "typegen",
 				Usage: "Generate TypeScript types for your WP REST API schema",
 				Action: func(c *cli.Context) error {
-					return typegen.GenerateTypes()
+					tg := typegen.TypeGenerator{
+						PostTypes: wordpress.GetPostTypes(),
+					}
+
+					fmt.Println("Generating types123123123...")
+					tg.GenerateTypes()
+					return nil
 				},
 			},
-			// {
-			// 	Name:  "pull-acf-json",
-			// 	Usage: "Pull ACF JSON from WordPress",
-			// 	Action: func(c *cli.Context) error {
-			// 		return wordpress.PullAcfJson()
-			// 	},
-			// },
-			// {
-			// 	Name:  "push-acf-json",
-			// 	Usage: "Push ACF JSON to WordPress",
-			// 	Action: func(c *cli.Context) error {
-			// 		return wordpress.PushAcfJson()
-			// 	},
-			// },
 		},
 	}
 
