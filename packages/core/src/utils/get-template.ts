@@ -102,7 +102,7 @@ export function getTemplate({
       return;
     }
     const templateName = getTemplateName(data.template || "default");
-    const template = templates[data.type][templateName];
+    const template = templates[data.type || ""][templateName];
 
     if (!template && shouldLog) {
       debug.warn(
