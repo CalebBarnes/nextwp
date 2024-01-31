@@ -51,6 +51,10 @@ export function getTemplate({
   if (taxonomy?.slug) {
     const taxSlug = taxonomy.slug === "post_tag" ? "tag" : taxonomy.slug;
 
+
+    if (!templates.taxonomy) {
+      return
+    }
     if (taxSlug && !(taxSlug in templates.taxonomy)) {
       if (shouldLog) {
         debug.warn(
@@ -73,6 +77,7 @@ export function getTemplate({
   }
 
   if (archive?.slug) {
+
     const templateName = getTemplateName(archive.slug);
     const template = templates.archive[templateName];
 
@@ -86,6 +91,7 @@ export function getTemplate({
     return template;
   }
 
+
   if (!archive && data && typeof data.template === "string") {
     if (data.type && !(data.type in templates)) {
       if (shouldLog) {
@@ -96,7 +102,7 @@ export function getTemplate({
       return;
     }
     const templateName = getTemplateName(data.template || "default");
-    const template = templates[data.type || ""][templateName];
+    const template = templates[data.type][templateName];
 
     if (!template && shouldLog) {
       debug.warn(
@@ -104,12 +110,14 @@ export function getTemplate({
       );
       return;
     }
+
     return template;
   }
 }
 
 function getTemplateName(filename: string): string {
   let templateName = filename;
+
   const dotIndex = filename.lastIndexOf(".");
   if (dotIndex !== -1) {
     templateName = filename.substring(0, dotIndex);
@@ -119,7 +127,7 @@ function getTemplateName(filename: string): string {
     .split(/[_-]/)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join("");
-
   templateName = templateName.charAt(0).toLowerCase() + templateName.slice(1);
+
   return templateName;
 }
