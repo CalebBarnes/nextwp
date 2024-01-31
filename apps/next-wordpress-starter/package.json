@@ -33,7 +33,7 @@
     "@stackbit/types": "^0.10.19",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/typography": "^0.5.10",
-    "@types/node": "^20.8.10",
+    "@types/node": "^20.11.14",
     "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",
     "@vercel/style-guide": "^5.1.0",
