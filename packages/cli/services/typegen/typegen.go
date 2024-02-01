@@ -1,7 +1,6 @@
 package typegen
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -53,14 +52,14 @@ func generateTypeScriptFile(schema map[string]interface{}, typeName string) stri
 	}
 	defer file.Close()
 
-	jsonSchema, err := json.MarshalIndent(schema, "", "  ")
-	if err != nil {
-		log.Fatalf("Failed to marshal schema: %v", err)
-	}
+	// jsonSchema, err := json.MarshalIndent(schema, "", "  ")
+	// if err != nil {
+	// 	log.Fatalf("Failed to marshal schema: %v", err)
+	// }
 
-	fileContent += "\n"
-	fileContent += "\n const schema = " + string(jsonSchema)
-	fileContent += "\n"
+	// fileContent += "\n"
+	// fileContent += "\n const schema = " + string(jsonSchema)
+	// fileContent += "\n"
 
 	_, err = file.WriteString(fileContent)
 	if err != nil {
