@@ -3,6 +3,7 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
+  # args_bin = ["-v"]
   args_bin = ["typegen"]
   bin = "./tmp/main"
   cmd = "go build -o ./tmp/main ./cmd/app"
