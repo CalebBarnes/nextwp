@@ -5,9 +5,9 @@
     //   "path": "." // represents the root of the monorepo
     // },
 
-    {
-      "path": "apps/docs"
-    },
+    // {
+    //   "path": "apps/docs"
+    // },
 
     {
       "name": "nextwp-starter",
@@ -18,21 +18,21 @@
       "name": "@nextwp/core",
       "path": "packages/core"
     },
-    {
-      "name": "@nextwp/addons",
-      "path": "packages/addons"
-    },
     // {
-    //   "name": "@nextwp/cli",
-    //   "path": "packages/cli"
+    //   "name": "@nextwp/addons",
+    //   "path": "packages/addons"
     // },
-
     {
-      "name": "@nextwp/stackbit",
-      "path": "packages/stackbit"
-    },
-    {
-      "path": "packages/create-nextwp-app"
+      "name": "@nextwp/cli",
+      "path": "packages/cli"
     }
+
+    // {
+    //   "name": "@nextwp/stackbit",
+    //   "path": "packages/stackbit"
+    // },
+    // {
+    //   "path": "packages/create-nextwp-app"
+    // }
   ]
 }
