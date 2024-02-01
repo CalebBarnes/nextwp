@@ -1,0 +1,12 @@
+{
+  "folders": [
+    {
+      "name": "nextwp-starter",
+      "path": "apps/next-wordpress-starter"
+    },
+    {
+      "name": "@nextwp/cli",
+      "path": "packages/cli"
+    }
+  ]
+}
