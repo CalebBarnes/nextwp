@@ -6,18 +6,16 @@ import (
 	"os"
 
 	"github.com/CalebBarnes/nextwp/cli/services/typegen"
+	"github.com/CalebBarnes/nextwp/cli/services/wordpress"
 	"github.com/joho/godotenv"
 	"github.com/urfave/cli/v2"
 )
 
+var version = "development" // default value indicating development version
+
 func main() {
-
-	os.Setenv("ENVIRONMENT", "development")
-	err := godotenv.Load(".env.local")
-	if err != nil {
-		os.Setenv("ENVIRONMENT", "production")
-	}
-
+	// load .env.local first for cli development
+	godotenv.Load(".env.local")
 	if os.Getenv("NEXTWP_CLI_WORKING_DIR") != "" {
 		err := os.Chdir(os.Getenv("NEXTWP_CLI_WORKING_DIR"))
 		if err != nil {
@@ -25,39 +23,86 @@ func main() {
 		}
 	}
 
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = godotenv.Load(cwd + "/.env.production")
+	if err != nil {
+		err = godotenv.Load(cwd + "/.env.development")
+		if err != nil {
+			err = godotenv.Load(cwd + "/.env.local")
+			if err != nil {
+				log.Fatal("\x1b[32m[@nextwp/cli]\x1b[0m Error loading .env file (production, development, local)")
+				log.Fatal(err)
+			}
+		}
+	}
+	if os.Getenv("NEXT_PUBLIC_WP_URL") != "" {
+		os.Setenv("WP_URL", os.Getenv("NEXT_PUBLIC_WP_URL"))
+	}
+
 	app := &cli.App{
 		Name:  "@nextwp/cli",
 		Usage: "NextWP CLI",
 		Action: func(c *cli.Context) error {
 			slog.Info("Welcome to @nextwp/cli")
+
 			return nil
+		},
+		Before: func(c *cli.Context) error {
+			if c.Bool("version") {
+				slog.Info("Version: ", version)
+				os.Exit(0)
+			}
+			return nil
+		},
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:               `version`,
+				Aliases:            []string{`v`},
+				DisableDefaultText: true,
+				Usage:              `Check the version of @nextwp/cli`,
+			},
 		},
 		Commands: []*cli.Command{
 			{
 				Name:  "typegen",
-				Usage: "Generate TypeScript types for your WP REST API schema",
+				Usage: "Generate TypeScript types for your WP REST API schema (WIP but works)",
 				Action: func(c *cli.Context) error {
+					CheckRequiredEnvs()
 					return typegen.GenerateTypes()
 				},
 			},
-			// {
-			// 	Name:  "pull-acf-json",
-			// 	Usage: "Pull ACF JSON from WordPress",
-			// 	Action: func(c *cli.Context) error {
-			// 		return wordpress.PullAcfJson()
-			// 	},
-			// },
-			// {
-			// 	Name:  "push-acf-json",
-			// 	Usage: "Push ACF JSON to WordPress",
-			// 	Action: func(c *cli.Context) error {
-			// 		return wordpress.PushAcfJson()
-			// 	},
-			// },
+			{
+				Name:  "pull-acf-json",
+				Usage: "Pull ACF JSON from WordPress (WIP but works)",
+				Action: func(c *cli.Context) error {
+					CheckRequiredEnvs()
+					return wordpress.PullAcfJson()
+				},
+			},
+			{
+				Name:  "push-acf-json",
+				Usage: "Push ACF JSON to WordPress (WIP)",
+				Action: func(c *cli.Context) error {
+					CheckRequiredEnvs()
+					return wordpress.PushAcfJson()
+				},
+			},
 		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func CheckRequiredEnvs() {
+	if os.Getenv("WP_URL") == "" {
+		log.Fatal("\x1b[32m[@nextwp/cli]\x1b[0m WP_URL or NEXT_PUBLIC_WP_URL is not set. You should run this command in the root of your project with a .env file (.env.production, .env.development, .env.local)")
+	}
+	if os.Getenv("WP_APPLICATION_PASSWORD") == "" {
+		log.Fatal("\x1b[32m[@nextwp/cli]\x1b[0m WP_APPLICATION_PASSWORD is not set. You should run this command in the root of your project with a .env file (.env.production, .env.development, .env.local)")
 	}
 }
