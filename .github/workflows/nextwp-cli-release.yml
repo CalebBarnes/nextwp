@@ -16,14 +16,12 @@ jobs:
         with:
           path: artifacts/
 
-          # Optionally, a step to update the installation script with the new version
-          # This would be your custom script or command to update files
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref }}
-          name: Release ${{ github.ref }}
+          name: \@nextwp/cli ${{ github.ref }}
           draft: false
           prerelease: false
           files: artifacts/*
