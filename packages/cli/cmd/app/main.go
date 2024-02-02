@@ -24,24 +24,7 @@ func main() {
 		}
 	}
 
-	cwd, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = godotenv.Load(cwd + "/.env.production")
-	if err != nil {
-		err = godotenv.Load(cwd + "/.env.development")
-		if err != nil {
-			err = godotenv.Load(cwd + "/.env.local")
-			if err != nil {
-				log.Fatal("\x1b[32m[@nextwp/cli]\x1b[0m Error loading .env file (production, development, local)")
-				log.Fatal(err)
-			}
-		}
-	}
-	if os.Getenv("NEXT_PUBLIC_WP_URL") != "" {
-		os.Setenv("WP_URL", os.Getenv("NEXT_PUBLIC_WP_URL"))
-	}
+	loadProjectEnvs()
 
 	app := &cli.App{
 		Name:  "@nextwp/cli",
@@ -72,7 +55,7 @@ func main() {
 				Name:  "typegen",
 				Usage: "Generate TypeScript types for your WP REST API schema (WIP but works)",
 				Action: func(c *cli.Context) error {
-					CheckRequiredEnvs()
+					checkRequiredEnvs()
 					return typegen.GenerateTypes()
 				},
 			},
@@ -80,7 +63,7 @@ func main() {
 				Name:  "pull-acf-json",
 				Usage: "Pull ACF JSON from WordPress (WIP but works)",
 				Action: func(c *cli.Context) error {
-					CheckRequiredEnvs()
+					checkRequiredEnvs()
 					return wordpress.PullAcfJson()
 				},
 			},
@@ -88,7 +71,7 @@ func main() {
 				Name:  "push-acf-json",
 				Usage: "Push ACF JSON to WordPress (WIP)",
 				Action: func(c *cli.Context) error {
-					CheckRequiredEnvs()
+					checkRequiredEnvs()
 					return wordpress.PushAcfJson()
 				},
 			},
@@ -100,7 +83,28 @@ func main() {
 	}
 }
 
-func CheckRequiredEnvs() {
+func loadProjectEnvs() {
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = godotenv.Load(cwd + "/.env.production")
+	if err != nil {
+		err = godotenv.Load(cwd + "/.env.development")
+		if err != nil {
+			err = godotenv.Load(cwd + "/.env.local")
+			if err != nil {
+				log.Fatal("\x1b[32m[@nextwp/cli]\x1b[0m Error loading .env file (production, development, local)")
+				log.Fatal(err)
+			}
+		}
+	}
+	if os.Getenv("NEXT_PUBLIC_WP_URL") != "" {
+		os.Setenv("WP_URL", os.Getenv("NEXT_PUBLIC_WP_URL"))
+	}
+}
+
+func checkRequiredEnvs() {
 	if os.Getenv("WP_URL") == "" {
 		log.Fatal("\x1b[32m[@nextwp/cli]\x1b[0m WP_URL or NEXT_PUBLIC_WP_URL is not set. You should run this command in the root of your project with a .env file (.env.production, .env.development, .env.local)")
 	}
