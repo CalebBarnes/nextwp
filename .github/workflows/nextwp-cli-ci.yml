@@ -1,0 +1,74 @@
+name: CI and Build for NextWP CLI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "nextwp-cli-*"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.21.4"
+      - name: Test
+        run: |
+          cd packages/cli
+          go test ./...
+
+  build-and-release:
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [linux, darwin, windows]
+        arch: [amd64, arm64]
+        include:
+          - os: linux
+            goos: linux
+            extension: ""
+          - os: darwin
+            goos: darwin
+            extension: ""
+          - os: windows
+            goos: windows
+            extension: ".exe"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.21.4"
+      - name: Build CLI and Package with Dependencies
+        run: |
+          VERSION=$(git describe --tags --match "nextwp-cli-*" --always)
+          BINARY_NAME="nextwp-cli${{ matrix.extension }}"
+          ARCHIVE_NAME="nextwp-cli-${{ matrix.goos }}-${{ matrix.arch }}-${VERSION}.zip"
+
+          # Build binary
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.arch }} go build -ldflags "-X main.version=$VERSION" -o $BINARY_NAME ./packages/cli/cmd/app
+
+          # Copy additional files (format.js used for prettier)
+          mkdir package
+          cp $BINARY_NAME package/
+          cp -R packages/cli/js package/js
+
+          # Package into a zip file
+          zip -r $ARCHIVE_NAME package/*
+
+          # Move the archive to a distinct directory for uploading
+          mkdir -p dist
+          mv $ARCHIVE_NAME dist/
+      - uses: actions/upload-artifact@v2
+        with:
+          name: nextwp-cli-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/*
