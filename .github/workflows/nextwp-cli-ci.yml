@@ -1,4 +1,4 @@
-name: \@nextwp/cli CI/CD
+name: "@nextwp/cli CI/CD"
 
 on:
   push:
