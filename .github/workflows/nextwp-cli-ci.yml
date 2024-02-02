@@ -30,7 +30,7 @@ jobs:
 
   build-and-release:
     needs: test
-    name: Build and Release
+    name: Build and Upload Artifacts
     runs-on: ubuntu-latest
     strategy:
       matrix:
