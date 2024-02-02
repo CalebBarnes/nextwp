@@ -4,6 +4,7 @@ import (
 	"log"
 	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/CalebBarnes/nextwp/cli/services/typegen"
 	"github.com/CalebBarnes/nextwp/cli/services/wordpress"
@@ -52,7 +53,8 @@ func main() {
 		},
 		Before: func(c *cli.Context) error {
 			if c.Bool("version") {
-				slog.Info("Version: ", version)
+				version = strings.Replace(version, "nextwp-cli-", "", -1)
+				println(version)
 				os.Exit(0)
 			}
 			return nil
