@@ -3,17 +3,15 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
-  # args_bin = ["-v"]
   args_bin = ["typegen"]
   bin = "./tmp/main"
-  cmd = "go build -o ./tmp/main ./cmd/app"
+  cmd = "./build-dev.sh"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []
   exclude_regex = ["_test.go"]
   exclude_unchanged = false
   follow_symlink = false
-  # full_bin = "./tmp/main push-acf-json"
   include_dir = []
   include_ext = ["go", "tpl", "tmpl", "html"]
   include_file = []
