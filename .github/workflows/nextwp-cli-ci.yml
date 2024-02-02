@@ -61,10 +61,12 @@ jobs:
           # Build binary
           GOOS=${{ matrix.goos }} GOARCH=${{ matrix.arch }} go build -ldflags "-X main.version=$VERSION" -o $BINARY_NAME ./packages/cli/cmd/app
 
-          # Copy additional files (format.js used for prettier)
+          # Copy binary to the package directory
           mkdir package
           cp $BINARY_NAME package/
-          cp -R packages/cli/js package/js
+
+          # Build the format.js bundle and output in to the package directory
+          npx esbuild --bundle --minify --sourcemap --platform=node --target=es2015 --format=esm --outdir=package/js packages/cli/js/format.js
 
           # Package into a zip file
           zip -r $ARCHIVE_NAME package/*
