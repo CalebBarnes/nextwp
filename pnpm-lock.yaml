@@ -193,8 +193,8 @@ importers:
         version: 1.0.7(tailwindcss@3.3.3)
     devDependencies:
       '@stackbit/types':
-        specifier: ^0.10.19
-        version: 0.10.19
+        specifier: ^0.11.0
+        version: 0.11.0
       '@tailwindcss/aspect-ratio':
         specifier: ^0.4.2
         version: 0.4.2(tailwindcss@3.3.3)
@@ -287,8 +287,8 @@ importers:
         specifier: 0.0.1-beta.2
         version: 0.0.1-beta.2(@babel/core@7.23.7)
       '@stackbit/types':
-        specifier: ^0.10.19
-        version: 0.10.19
+        specifier: ^0.11.0
+        version: 0.11.0
     devDependencies:
       typescript:
         specifier: ^5.3.3
@@ -842,7 +842,7 @@ packages:
       '@motionone/easing': 10.16.3
       '@motionone/types': 10.16.3
       '@motionone/utils': 10.16.3
-      tslib: 2.4.0
+      tslib: 2.6.2
     dev: false
 
   /@motionone/dom@10.16.4:
@@ -860,7 +860,7 @@ packages:
     resolution: {integrity: sha512-HWTMZbTmZojzwEuKT/xCdvoMPXjYSyQvuVM6jmM0yoGU6BWzsmYMeB4bn38UFf618fJCNtP9XeC/zxtKWfbr0w==}
     dependencies:
       '@motionone/utils': 10.16.3
-      tslib: 2.4.0
+      tslib: 2.6.2
     dev: false
 
   /@motionone/generators@10.16.4:
@@ -868,7 +868,7 @@ packages:
     dependencies:
       '@motionone/types': 10.16.3
       '@motionone/utils': 10.16.3
-      tslib: 2.4.0
+      tslib: 2.6.2
     dev: false
 
   /@motionone/types@10.16.3:
@@ -880,7 +880,7 @@ packages:
     dependencies:
       '@motionone/types': 10.16.3
       hey-listen: 1.0.8
-      tslib: 2.4.0
+      tslib: 2.6.2
     dev: false
 
   /@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.2:
@@ -1796,8 +1796,8 @@ packages:
       escape-string-regexp: 5.0.0
     dev: false
 
-  /@stackbit/types@0.10.19:
-    resolution: {integrity: sha512-V82FIDmY3GgMkXz1JGPgeZtgAMCprIsn5mZISzjwdOzEwlbvIHxXh9APuXLq4NRBfuU5aXHFnOQgphImXMLb8w==}
+  /@stackbit/types@0.11.0:
+    resolution: {integrity: sha512-f8dzgIjb7z5XEO8qgR3rYOHMevjrNvDFW5HFZfFK7DthgDN/4Ldqh2CPMC++gb9XL0MFNSwpdU035mmYxWSEZw==}
     dependencies:
       content-engine: 0.0.19
     transitivePeerDependencies:
@@ -2952,7 +2952,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001572
+      caniuse-lite: 1.0.30001579
       electron-to-chromium: 1.4.616
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.2)
@@ -3030,7 +3030,6 @@ packages:
 
   /caniuse-lite@1.0.30001579:
     resolution: {integrity: sha512-u5AUVkixruKHJjw/pj9wISlcMpgFWzSrczLZbrqBSxukQixmg0SJ5sZTpvaFvxU0HoQKd4yoyAogyrAz9pzJnA==}
-    dev: false
 
   /ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -5159,7 +5158,7 @@ packages:
     dependencies:
       array-union: 2.1.0
       dir-glob: 3.0.1
-      fast-glob: 3.3.0
+      fast-glob: 3.3.2
       ignore: 5.3.0
       merge2: 1.4.1
       slash: 3.0.0
@@ -5169,7 +5168,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       dir-glob: 3.0.1
-      fast-glob: 3.3.0
+      fast-glob: 3.3.2
       ignore: 5.3.0
       merge2: 1.4.1
       slash: 4.0.0
