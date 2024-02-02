@@ -24,8 +24,6 @@ func main() {
 		}
 	}
 
-	loadProjectEnvs()
-
 	app := &cli.App{
 		Name:  "@nextwp/cli",
 		Usage: "NextWP CLI",
@@ -55,6 +53,7 @@ func main() {
 				Name:  "typegen",
 				Usage: "Generate TypeScript types for your WP REST API schema (WIP but works)",
 				Action: func(c *cli.Context) error {
+					loadProjectEnvs()
 					checkRequiredEnvs()
 					return typegen.GenerateTypes()
 				},
@@ -63,6 +62,7 @@ func main() {
 				Name:  "pull-acf-json",
 				Usage: "Pull ACF JSON from WordPress (WIP but works)",
 				Action: func(c *cli.Context) error {
+					loadProjectEnvs()
 					checkRequiredEnvs()
 					return wordpress.PullAcfJson()
 				},
@@ -71,6 +71,7 @@ func main() {
 				Name:  "push-acf-json",
 				Usage: "Push ACF JSON to WordPress (WIP)",
 				Action: func(c *cli.Context) error {
+					loadProjectEnvs()
 					checkRequiredEnvs()
 					return wordpress.PushAcfJson()
 				},
