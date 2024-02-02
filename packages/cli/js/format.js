@@ -21,10 +21,10 @@ async function formatFile(file, prettierOptions) {
 }
 
 async function formatAll() {
-  console.time(`\x1b[32m[@nextwp/cli]\x1b[0m Prettier completed`);
+  console.time(`\x1b[32m[@nextwp/cli]\x1b[0m Formatted files with prettier`);
   const prettierOptions = (await prettier.resolveConfig(files[0])) || {}; // get prettier optiosn once and re-use for all files
   const formatPromises = files.map((file) => formatFile(file, prettierOptions));
   await Promise.all(formatPromises);
-  console.timeEnd(`\x1b[32m[@nextwp/cli]\x1b[0m Prettier completed`);
+  console.timeEnd(`\x1b[32m[@nextwp/cli]\x1b[0m Formatted files with prettier`);
 }
 formatAll();
