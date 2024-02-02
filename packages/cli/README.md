@@ -15,3 +15,9 @@ curl https://nextwp.org/cli | bash
 - push-acf-json
 - help
 - version
+
+## Usage
+
+```bash
+nextwp --help
+```
