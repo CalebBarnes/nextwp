@@ -6,6 +6,9 @@ on:
       - main
     tags:
       - "nextwp-cli-*"
+    paths:
+      - "packages/cli/**"
+
   pull_request:
     branches:
       - main
