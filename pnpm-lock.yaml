@@ -62,8 +62,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       flexsearch:
-        specifier: ^0.7.31
-        version: 0.7.31
+        specifier: ^0.7.43
+        version: 0.7.43
       framer-motion:
         specifier: 7.8.1
         version: 7.8.1(react-dom@18.2.0)(react@18.2.0)
@@ -4925,8 +4925,8 @@ packages:
   /flatted@3.2.9:
     resolution: {integrity: sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==}
 
-  /flexsearch@0.7.31:
-    resolution: {integrity: sha512-XGozTsMPYkm+6b5QL3Z9wQcJjNYxp0CYn3U1gO7dwD6PAqU1SVWZxI9CCg3z+ml3YfqdPnrBehaBrnH2AGKbNA==}
+  /flexsearch@0.7.43:
+    resolution: {integrity: sha512-c5o/+Um8aqCSOXGcZoqZOm+NqtVwNsvVpWv6lfmSclU954O3wvQKxxK8zj74fPaSJbXpSLTs4PRhh+wnoCXnKg==}
     dev: false
 
   /follow-redirects@1.15.4:
