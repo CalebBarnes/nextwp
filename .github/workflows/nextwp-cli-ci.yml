@@ -76,7 +76,7 @@ jobs:
           GOOS=${{ matrix.goos }} GOARCH=${{ matrix.arch }} go build -ldflags "-X main.version=$VERSION" -o $BINARY_NAME ./packages/cli/cmd/app
 
           # Copy binary to the package directory
-          mkdir package
+          mkdir -p package
           cp $BINARY_NAME package/
 
           # Package into a zip file
