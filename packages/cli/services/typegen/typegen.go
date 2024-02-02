@@ -36,6 +36,14 @@ func GenerateTypes() error {
 			generatedFiles = append(generatedFiles, filePath)
 		}
 	}
+
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Failed to get current working directory: %v", err)
+	}
+	filesString := strings.ReplaceAll(strings.Join(generatedFiles, ", "), cwd+"/", "")
+	println("\x1b[32m[@nextwp/cli]\x1b[0m TypeScript types generated at " + filesString)
+
 	utils.FormatFileWithPrettier(generatedFiles)
 	return nil
 }
