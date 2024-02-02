@@ -248,6 +248,12 @@ importers:
         specifier: ^18.2.14
         version: 18.2.14
 
+  packages/cli:
+    dependencies:
+      prettier:
+        specifier: ^3.0.1
+        version: 3.0.1
+
   packages/core:
     dependencies:
       '@types/node':
@@ -7315,7 +7321,6 @@ packages:
     resolution: {integrity: sha512-fcOWSnnpCrovBsmFZIGIy9UqK2FaI7Hqax+DIO0A9UxeVoY4iweyaFjS5TavZN97Hfehph0nhsZnjlVKzEQSrQ==}
     engines: {node: '>=14'}
     hasBin: true
-    dev: true
 
   /pretty-error@2.1.2:
     resolution: {integrity: sha512-EY5oDzmsX5wvuynAByrmY0P0hcp+QpnAKbJng2A2MPjVKXCxrDSUkzghVJ4ZGPIv+JC4gX8fPUWscC0RtjsWGw==}

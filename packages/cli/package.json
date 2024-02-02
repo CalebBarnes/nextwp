@@ -1,0 +1,22 @@
+{
+  "name": "@nextwp/cli",
+  "version": "1.1.14",
+  "description": "",
+  "bin": "./bin/cli.js",
+  "scripts": {
+    "dev": "air",
+    "build": "GOOS=darwin GOARCH=amd64 go build -o ./dist/cli && GOOS=linux GOARCH=amd64 go build -o ./dist/cli-linux && GOOS=windows GOARCH=amd64 go build -o ./dist/cli.exe",
+    "prepublish": "npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "files": [
+    "bin",
+    "dist",
+    "scripts"
+  ],
+  "dependencies": {
+    "prettier": "^3.0.1"
+  }
+}
