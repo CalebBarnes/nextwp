@@ -1,4 +1,4 @@
-name: CI and Build for NextWP CLI
+name: \@nextwp/cli CI/CD
 
 on:
   push:
