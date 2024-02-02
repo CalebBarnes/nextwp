@@ -17,23 +17,22 @@ func ConvertJsonToMap(body []byte) map[string]interface{} {
 	return result
 }
 
-func getMainProjectDir() string {
+func FormatFileWithPrettier(filePaths []string) {
 	exePath, err := os.Executable()
 	if err != nil {
 		log.Fatalf("Failed to get executable path: %v", err)
 	}
-	exeDir := filepath.Dir(exePath)
-	projectDir := filepath.Dir(exeDir)
-	return projectDir
-}
+	realPath, err := filepath.EvalSymlinks(exePath)
+	if err != nil {
+		log.Fatalf("Failed to get real path: %v", err)
+	}
+	exeDir := filepath.Dir(realPath)
 
-func FormatFileWithPrettier(filePaths []string) {
-	projectDir := getMainProjectDir()
-	args := append([]string{projectDir + "/js/format.js"}, filePaths...)
+	args := append([]string{exeDir + "/js/format.js"}, filePaths...)
 	cmd := exec.Command("node", args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		log.Printf("Failed to format file: %v", err)
 		return // or handle the error as appropriate
