@@ -57,7 +57,7 @@ jobs:
         run: npm install -g pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --prefix packages/cli
 
       - name: Bundle code with esbuild
         run: npx esbuild --bundle --minify --sourcemap --platform=node --target=es2015 --format=esm --outdir=package/js packages/cli/js/format.js
