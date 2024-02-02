@@ -1,4 +1,4 @@
-name: "@nextwp/cli CI/CD"
+name: "CI/CD: @nextwp/cli"
 
 on:
   push:
@@ -30,6 +30,7 @@ jobs:
 
   build-and-release:
     needs: test
+    name: Build and Release
     runs-on: ubuntu-latest
     strategy:
       matrix:
