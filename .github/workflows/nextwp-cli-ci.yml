@@ -48,6 +48,20 @@ jobs:
             extension: ".exe"
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.19.0"
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Bundle code with esbuild
+        run: npx esbuild --bundle --minify --sourcemap --platform=node --target=es2015 --format=esm --outdir=package/js packages/cli/js/format.js
+
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
@@ -64,9 +78,6 @@ jobs:
           # Copy binary to the package directory
           mkdir package
           cp $BINARY_NAME package/
-
-          # Build the format.js bundle and output in to the package directory
-          npx esbuild --bundle --minify --sourcemap --platform=node --target=es2015 --format=esm --outdir=package/js packages/cli/js/format.js
 
           # Package into a zip file
           zip -r $ARCHIVE_NAME package/*
