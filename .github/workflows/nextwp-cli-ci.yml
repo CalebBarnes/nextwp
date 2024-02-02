@@ -69,6 +69,7 @@ jobs:
       - name: Build CLI and Package with Dependencies
         run: |
           VERSION=$(git describe --tags --match "nextwp-cli-*" --always)
+          echo "Building version $VERSION"
           BINARY_NAME="nextwp-cli${{ matrix.extension }}"
           ARCHIVE_NAME="nextwp-cli-${{ matrix.goos }}-${{ matrix.arch }}-${VERSION}.zip"
 
