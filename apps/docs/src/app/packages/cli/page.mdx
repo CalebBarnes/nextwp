@@ -1,0 +1,53 @@
+import Link from 'next/link'
+
+export const metadata = {
+  title: 'create-nextwp-app',
+  description:
+    'A CLI tool that handles typegen and more for your NextWP project.',
+}
+
+# @nextwp/cli
+
+A CLI tool that handles typegen and more for your NextWP project.
+
+## Features
+
+- **Typegen**: Automatically generate types for your NextWP project.
+- **ACF JSON**: Automatically sync ACF fields between your WordPress and Next.js projects.
+
+## Installation
+
+Make sure you have `curl` and `unzip` installed on your system, then run the following command:
+
+<CodeGroup>
+
+```bash
+curl -fsSL https://nextwp.org/cli | bash
+```
+
+</CodeGroup>
+
+## Usage
+
+<Note>
+  Make sure you run the `nextwp` cli in the root of your NextWP project
+  directory.
+</Note>
+
+Lists the available commands and their descriptions.
+
+```bash
+nextwp --help
+```
+
+Generates TS files at `types/${postType}.ts` for the post types and fields for your NextWP project.
+
+```bash
+nextwp typegen
+```
+
+Pulls ACF fields from your WordPress project and saves them to your Next.js project.
+
+```bash
+nextwp pull-acf-json
+```
