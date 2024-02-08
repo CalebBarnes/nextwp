@@ -1,0 +1,92 @@
+name: "CI/CD: @nextwp/cli"
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "nextwp-cli-*"
+    paths:
+      - "packages/cli/**"
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.21.4"
+      - name: Test
+        run: |
+          cd packages/cli
+          go test ./...
+
+  build-and-release:
+    needs: test
+    name: Build and Upload Artifacts
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [linux, darwin, windows]
+        arch: [amd64, arm64]
+        include:
+          - os: linux
+            goos: linux
+            extension: ""
+          - os: darwin
+            goos: darwin
+            extension: ""
+          - os: windows
+            goos: windows
+            extension: ".exe"
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.19.0"
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install --prefix packages/cli
+
+      - name: Bundle code with esbuild
+        run: npx esbuild --bundle --minify --sourcemap --platform=node --target=es2015 --format=esm --outdir=package/js packages/cli/js/format.js
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.21.4"
+      - name: Build CLI and Package with Dependencies
+        run: |
+          VERSION=$(git describe --tags --match "nextwp-cli-*" --always)
+          echo "Building version $VERSION"
+          BINARY_NAME="nextwp-cli${{ matrix.extension }}"
+          ARCHIVE_NAME="nextwp-cli-${{ matrix.goos }}-${{ matrix.arch }}-${VERSION}.zip"
+
+          # Build binary
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.arch }} go build -ldflags "-X main.version=$VERSION" -o $BINARY_NAME ./packages/cli/cmd/app
+
+          # Copy binary to the package directory
+          mkdir -p package
+          cp $BINARY_NAME package/
+
+          # Package into a zip file
+          zip -r $ARCHIVE_NAME package/*
+
+          # Move the archive to a distinct directory for uploading
+          mkdir -p dist
+          mv $ARCHIVE_NAME dist/
+      - uses: actions/upload-artifact@v2
+        with:
+          name: nextwp-cli-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/*

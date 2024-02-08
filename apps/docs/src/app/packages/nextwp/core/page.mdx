@@ -1,3 +1,4 @@
+import Link from 'next/link'
 export const metadata = {
   title: '@nextwp/core',
   description:
@@ -5,6 +6,13 @@ export const metadata = {
 }
 
 # @nextwp/core
+
+<div className="not-prose my-5 flex gap-3">
+  <Link href="https://www.npmjs.com/package/@nextwp/core" target="_blank">
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img src="https://img.shields.io/npm/v/@nextwp/core" alt="npm" />
+  </Link>
+</div>
 
 Welcome to the new era of Headless WordPress development. {{ className: "lead" }}
 
@@ -15,6 +23,7 @@ Choose `@nextwp/core` for its unmatched flexibility, performance, and ease of us
 Get started in just a few minutes using the [create-nextwp-app](/quickstart) cli tool and see the difference it makes! It is truly the best way to build headless WordPress applications with Next.js.
 
 <div className="not-prose mb-16 mt-6 flex gap-3">
+
   <Button href="/quickstart" arrow="right">
     Quickstart
   </Button>

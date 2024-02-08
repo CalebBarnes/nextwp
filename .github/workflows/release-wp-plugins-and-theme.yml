@@ -1,3 +1,5 @@
+name: "Release WP Plugins and Themes"
+
 on:
   push:
     tags:
@@ -39,7 +41,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+          release_name: WP Release ${{ github.ref_name }}
           draft: false
           prerelease: false
 
@@ -57,9 +59,3 @@ jobs:
           done
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
-
-      # Trigger the update-docs-latest-release-links.yml workflow here
-      # - name: Trigger update-docs workflow
-      #   run: gh workflow run update-docs-latest-release-links.yml
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.PAT }}

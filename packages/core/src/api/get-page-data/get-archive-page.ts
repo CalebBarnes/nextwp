@@ -1,38 +1,65 @@
-import type { SearchParams } from "../../components/wordpress-template";
 import type { WpPage } from "../../types";
 import { toCamel } from "../../utils/to-camel";
 import type { PostType } from "../get-post-types";
 import { getSiteSettings } from "../get-site-settings";
 import { getSingleItem } from "../get-single-item";
 
+export type ArchivePage = {
+  /**
+   * The archive page returned from the WP REST API.
+   */
+  data?: ArchivePageData;
+  archive?: PostType;
+};
+
 export type ArchivePageData = {
-  items: WpPage[];
+  /**
+   * The list of single pages/posts/customs returned from the WP REST API for this post type's archive page.
+   */
+  items?: WpPage[];
+  /**
+   * The single page/post/custom returned from the WP REST API that was matching the uri of the archive page uri.
+   */
   page?: WpPage;
-  prevPage?: number;
-  nextPage?: number;
+  /**
+   * The pathname of the previous page.
+   */
+  prevPage?: string;
+  /**
+   * The pathname of the next page.
+   */
+  nextPage?: string;
+  /**
+   * The total number of pages.
+   */
   totalPages?: number;
+  /**
+   * The total number of items.
+   */
   totalItems?: number;
+  /**
+   * The current page number.
+   */
   currentPage?: number;
   [x: string]: any;
 };
 
 export async function getArchivePage({
   archive,
-  searchParams,
+  pageNumber,
 }: {
   archive: PostType;
-  searchParams?: SearchParams;
+  pageNumber?: number;
 }): Promise<{
   data?: ArchivePageData;
   archive?: PostType;
 }> {
   const settings = await getSiteSettings();
-
   const params = {
     per_page: String(settings.posts_per_page || 10),
     _embed: "true",
     acf_format: "standard",
-    page: String(searchParams?.page || "1"),
+    page: String(pageNumber || "1"),
   };
 
   const currentPageQueryString = new URLSearchParams(params).toString();
@@ -45,8 +72,8 @@ export async function getArchivePage({
     let pageForItems;
     if (typeof archive.has_archive === "string") {
       pageForItems = await getSingleItem({
-        slug: archive.has_archive,
-        postTypeRestBase: "pages",
+        uri: archive.has_archive,
+        rest_base: "pages",
       });
     }
 
@@ -56,23 +83,27 @@ export async function getArchivePage({
     const totalItems = Number(
       archiveItemsRequest.headers.get("X-WP-Total") || 0
     );
-    const hasNextPage = Number(totalPages) > Number(searchParams?.page || 1);
+    const hasNextPage = Number(totalPages) > Number(pageNumber || 1);
 
-    const prevPage =
-      Number(searchParams?.page || 1) > 1
-        ? Number(searchParams?.page || 1) - 1
-        : undefined;
+    let prevPage;
+    if (pageNumber) {
+      if (pageNumber > 1) {
+        prevPage = `/${archive.has_archive}/${pageNumber - 1}`;
+      }
+      if (pageNumber === 2) {
+        prevPage = `/${archive.has_archive}`;
+      }
+    }
 
     const nextPage = hasNextPage
-      ? Number(searchParams?.page || 1) + 1
+      ? `/${archive.has_archive}/${Number(pageNumber || 1) + 1}`
       : undefined;
 
-    const currentPage = Number(searchParams?.page || 1);
+    const currentPage = Number(pageNumber || 1);
 
     const data: ArchivePageData = {
       items,
-
-      page: pageForItems,
+      page: pageForItems?.data,
       prevPage,
       nextPage,
       totalPages,
@@ -88,6 +119,13 @@ export async function getArchivePage({
 
     if (archive.labels?.plural_name) {
       const pluralName = toCamel(archive.labels.plural_name);
+      data[pluralName] = items;
+
+      const result = { data, archive };
+      return result;
+    }
+    if (archive.labels?.name) {
+      const pluralName = toCamel(archive.labels.name);
       data[pluralName] = items;
 
       const result = { data, archive };

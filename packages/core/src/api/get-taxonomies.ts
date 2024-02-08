@@ -5,6 +5,7 @@ export type Taxonomy = {
    * The base path for this taxonomy's REST API endpoint.
    */
   rest_base: string;
+  types: string[];
 };
 
 export async function getTaxonomies(): Promise<{

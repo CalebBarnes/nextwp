@@ -10,6 +10,12 @@ const cliTools = [
       'Create a new NextWP project in a single command with this cross platform CLI tool written in Go.',
     logo: logoGo,
   },
+  {
+    href: '/packages/cli',
+    name: '@nextwp/cli',
+    description: 'A cli tool for WP REST API typegen and more.',
+    logo: logoGo,
+  },
 ]
 
 export function CliTools() {

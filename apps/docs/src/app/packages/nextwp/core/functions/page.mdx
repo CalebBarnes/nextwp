@@ -9,19 +9,107 @@ The REST API functions are a set of functions that can be used to retrieve data 
 
 <Note>This is a work in progress. The functions are not yet documented.</Note>
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultricies aliquam, nunc nisl aliquet nunc, quis aliqu
+## getMenuItems {{ tag: 'GET', label: '/wp-json/wp/v2/menus?slug={slug}' }}
 
-## getMenuItems {{ tag: 'GET' }}
+<Row>
+  <Col>
+    This function fetches menu items from a WordPress site based on a specified menu `slug`. It transforms the flat array of menu items returned by the API into a hierarchical structure.
 
+    ### Required environment variables
+
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+    <div className="not-prose">
+      <Button
+          href="/environment-variables"
+          variant="text"
+          arrow="right"
+          target="_blank"
+      >
+          <>Read more about environment variables</>
+      </Button>
+    </div>
+
+    ### Required parameters
+
+    <Properties>
+      <Property name="slug" type="string">
+        The slug of the menu.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    <Properties>
+        <Property name="menuItems" type="WpMenuItem">
+        The menu items of the specified menu.
+        </Property>
+    </Properties>
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/menus?slug={slug}">
+    ```ts
+    import { getMenuItems } from '@nextwp/core'
+
+    const menuItems = await getMenuItems({ slug: "main-menu" });
+    ```
+    </CodeGroup>
+
+    ```ts {{ title: 'Return Type' }}
+    export interface WpMenuItem {
+      id?: number;
+      title?: RenderedObject;
+      status?: string;
+      url?: string;
+      attr_title?: string;
+      description?: string;
+      type?: string;
+      type_label?: string;
+      object?: string;
+      object_id?: number;
+      parent?: number;
+      menu_order?: number;
+      target?: string;
+      classes?: string[];
+      xfn?: string[];
+      invalid?: boolean;
+      meta?: any;
+      menus?: number;
+      _links?: WpLink[];
+      label?: string;
+      path?: string;
+      childItems?: WpMenuItem[];
+    }
+    ```
+
+  </Col>
+</Row>
 ---
 
 ## getSiteSettings {{ tag: 'GET', label: '/wp-json/wp/v2/settings?embed=true' }}
 
 <Row>
   <Col>
-    This function allows you to retrieve your site settings from WordPress. The settings are returned as a JSON object.
+    This function allows you to retrieve your site settings from WordPress.
 
-    ### Environment variables
+    ### Required environment variables
 
     <Properties>
       <Property name="WP_APPLICATION_PASSWORD" type="string">
@@ -44,7 +132,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
     <Properties>
         <Property name="settings" type="WpSettings">
-        The site settings. Refer to the or the `WpSettings` type definition for more information.
+        The site settings.
         </Property>
     </Properties>
 
@@ -70,28 +158,28 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
     ```
     </CodeGroup>
 
-    ```json {{ title: 'Response' }}
-    {
-        "title": "My WordPress Site",
-        "description": "Welcome to my site!",
-        "url": "https://example.com",
-        "posts_per_page": 10,
-        "page_on_front": 1,
-        "page_for_posts": 2,
-        "site_logo": 123,
-        "site_icon": 456,
-        "email": "admin@example.com",
-        "timezone": "America/New_York",
-        "date_format": "F j, Y",
-        "time_format": "g:i a",
-        "start_of_week": 0,
-        "language": "en_US",
-        "use_smilies": true,
-        "default_category": 1,
-        "default_post_format": "standard",
-        "show_on_front": "page",
-        "default_ping_status": "open",
-        "default_comment_status": "open"
+    ```ts {{ title: 'Return Type' }}
+    export interface WpSettings {
+      title?: string;
+      description?: string;
+      url?: string;
+      posts_per_page?: number;
+      page_on_front?: number;
+      page_for_posts?: number;
+      site_logo?: number;
+      site_icon?: number;
+      email?: string;
+      timezone?: string;
+      date_format?: string;
+      time_format?: string;
+      start_of_week?: number;
+      language?: string;
+      use_smilies?: boolean;
+      default_category?: number;
+      default_post_format?: string;
+      show_on_front?: string;
+      default_ping_status?: string;
+      default_comment_status?: string;
     }
     ```
 
@@ -100,22 +188,483 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eg
 
 ---
 
-## getPageData
+## getPageData {{ tag: 'GET', label: '/wp-json/wp/v2/page' }}
+
+<Row>
+  <Col>
+    This function fetches the data of the page that matches the `uri` parameter.
+
+    ### Required environment variables
+
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+    <div className="not-prose">
+    <Button
+        href="/environment-variables"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about environment variables</>
+    </Button>
+    </div>
+
+    ### Required parameters
+
+    <Properties>
+      <Property name="uri" type="string">
+        The uri of the page.
+      </Property>
+    </Properties>
+
+      ### Optional parameters
+
+    <Properties>
+      <Property name="searchParams" type="string">
+        The search parameters.
+      </Property>
+    </Properties>
+
+    ### Returns
+    <Properties>
+      <Property name="data" type="WpPage | ArchivePageData">
+        The data of the page.
+      </Property>
+      <Property name="archive" type="PostType">
+        The post type archive data if applicable.
+      </Property>
+      <Property name="previewData" type="WpPage">
+        The preview data for the requested page.
+      </Property>
+    </Properties>
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/page">
+    ```ts
+    import { getPageData } from '@nextwp/core'
+
+    const page = await getPageData({ uri: "/", searchParams: "?slug=home"});
+    ```
+    </CodeGroup>
+    ```ts {{ title: 'Return Type' }}
+    export interface WpPage {
+      id: number;
+      slug?: string;
+      title?: RenderedObject;
+      content?: RenderedObject;
+      excerpt?: RenderedObject;
+      date?: string;
+      date_gmt?: string;
+      modified?: string;
+      modified_gmt?: string;
+      guid?: RenderedObject;
+      link?: string;
+      status?: "publish" | "future" | "draft" | "pending" | "private";
+      type?: string;
+      author?: number;
+      featured_media?: number;
+      comment_status?: "open" | "closed";
+      ping_status?: "open" | "closed";
+      menu_order?: number;
+      meta?: any;
+      template?: string;
+      yoast_head?: string;
+      yoast_head_json?: YoastHeadJson;
+      _links?: EmbeddedLinks;
+    }
+    ```
+
+  </Col>
+</Row>
+---
+
+## getSingleItem {{ tag: 'GET', label: '/wp-json/wp/v2/{postTypeRestBase}/{id}' }}
+
+<Row>
+  <Col>
+    This function fetches a single item from WordPress based on the `id`, `uri`, or `slug`.
+
+    ### Required environment variables
+
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="/environment-variables"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about environment variables</>
+    </Button>
+    </div>
+
+
+    ### Parameters
+
+    <Properties>
+      <Property name="uri" type="string">
+        The uri of the item.
+      </Property>
+      <Property name="id" type="string | integer">
+        The id of the item.
+      </Property>
+      <Property name="slug" type="string">
+        The slug of the item.
+      </Property>
+      <Property name="postTypeRestBase" type="string">
+        The post type of the item.
+      </Property>
+    </Properties>
+
+
+    ### Returns
+    <Properties>
+        <Property name="data" type="WpPage | undefined">
+        The data of the item.
+        </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/{postTypeRestBase}/{id}">
+    ```ts
+    import { getSingleItem } from '@nextwp/core'
+
+    const singleItem = await getSingleItem({ uri: "/", id: "1", slug: "home", postTypeRestBase: "pages"});
+    ```
+    </CodeGroup>
+    ```ts {{ title: 'Return Type' }}
+    export interface WpPage {
+      id: number;
+      slug?: string;
+      title?: RenderedObject;
+      content?: RenderedObject;
+      excerpt?: RenderedObject;
+      date?: string;
+      date_gmt?: string;
+      modified?: string;
+      modified_gmt?: string;
+      guid?: RenderedObject;
+      link?: string;
+      status?: "publish" | "future" | "draft" | "pending" | "private";
+      type?: string;
+      author?: number;
+      featured_media?: number;
+      comment_status?: "open" | "closed";
+      ping_status?: "open" | "closed";
+      menu_order?: number;
+      meta?: any;
+      template?: string;
+      yoast_head?: string;
+      yoast_head_json?: YoastHeadJson;
+      _links?: EmbeddedLinks;
+    }
+    ```
+
+  </Col>
+</Row>
+---
+
+## getSiteLogo{{ tag: 'GET', label: '/wp-json/wp/v2/media/{settings.site_logo}' }}
+
+<Row>
+  <Col>
+    This function fetches the site logo from a WordPress site.
+
+    ### Required environment variables
+
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="/environment-variables"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about environment variables</>
+    </Button>
+    </div>
+
+    ### Returns
+    <Properties>
+        <Property name="data" type="WpMediaItem">
+        The data of the media item.
+        </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/media/{settings.site_logo}">
+    ```ts
+    import { getSiteLogo } from '@nextwp/core'
+
+    const siteLogo = await getSiteLogo();
+    ```
+    </CodeGroup>
+    ```ts {{ title: 'Return Type' }}
+    export interface WpMediaItem {
+      id?: number;
+      date?: string;
+      date_gmt?: string;
+      guid?: RenderedObject;
+      modified?: string;
+      modified_gmt?: string;
+      slug?: string;
+      status?: string;
+      type?: string;
+      link?: string;
+      title?: RenderedObject;
+      author?: number;
+      comment_status?: string;
+      ping_status?: string;
+      template?: string;
+      meta?: any[];
+      acf?: any[];
+      description?: RenderedObject;
+      caption?: RenderedObject;
+      alt_text?: string;
+      media_type?: string;
+      mime_type?: string;
+      media_details?: {
+        width?: number;
+        height?: number;
+        file?: string;
+        filesize?: number;
+        sizes?: Record<string, ImageSize>;
+        image_meta?: ImageMeta;
+      };
+      post?: any;
+      source_url?: string;
+      _links?: EmbeddedLinks;
+    }
+    ```
+
+  </Col>
+</Row>
 
 ---
 
-## getSingleItem
+## getSiteIcon {{ tag: 'GET', label: '/wp-json/wp/v2/media/{settings.site_icon}' }}
 
+<Row>
+  <Col>
+    This function fetches the site icon from a WordPress site.
+
+    ### Required environment variables
+
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
+
+    <div className="not-prose">
+    <Button
+        href="/environment-variables"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about environment variables</>
+    </Button>
+    </div>
+
+    ### Returns
+    <Properties>
+        <Property name="data" type="WpMediaItem">
+        The data of the media item.
+        </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/wp/v2/media/{settings.site_icon}">
+    ```ts
+    import { getSiteIcon } from '@nextwp/core'
+
+    const siteIcon = await getSiteIcon();
+    ```
+    </CodeGroup>
+    ```ts {{ title: 'Return Type' }}
+    export interface WpMediaItem {
+      id?: number;
+      date?: string;
+      date_gmt?: string;
+      guid?: RenderedObject;
+      modified?: string;
+      modified_gmt?: string;
+      slug?: string;
+      status?: string;
+      type?: string;
+      link?: string;
+      title?: RenderedObject;
+      author?: number;
+      comment_status?: string;
+      ping_status?: string;
+      template?: string;
+      meta?: any[];
+      acf?: any[];
+      description?: RenderedObject;
+      caption?: RenderedObject;
+      alt_text?: string;
+      media_type?: string;
+      mime_type?: string;
+      media_details?: {
+        width?: number;
+        height?: number;
+        file?: string;
+        filesize?: number;
+        sizes?: Record<string, ImageSize>;
+        image_meta?: ImageMeta;
+      };
+      post?: any;
+      source_url?: string;
+      _links?: EmbeddedLinks;
+    }
+    ```
+
+  </Col>
+</Row>
 ---
 
-## getSiteLogo
+## getOptionsPage {{ tag: 'GET', label: '/wp-json/nextwp/v1/options/{slug}' }}
 
----
+<Row>
+  <Col>
+    This function fetches the custom endpoint of the site options page registered by the [`NextWP Toolkit Plugin`](/packages/wordpress/nextwp-toolkit-plugin) in WordPress.
 
-## getSiteIcon
+    ### Environment variables
 
----
+    <Properties>
+      <Property name="WP_APPLICATION_PASSWORD" type="string">
+        The application password for the WordPress user.
+      </Property>
+    </Properties>
 
-## getOptionsPage
+    <div className="not-prose">
+    <Button
+        href="/environment-variables"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about environment variables</>
+    </Button>
+    </div>
 
+    ### Required parameters
+
+    <Properties>
+      <Property name="slug" type="string">
+        The slug of the options page.
+      </Property>
+    </Properties>
+
+
+
+    ### Returns
+    <Properties>
+        <Property name="data" type="WpMediaItem">
+        The data of the options page.
+        </Property>
+    </Properties>
+
+
+    <div className="not-prose">
+    <Button
+        href="https://developer.wordpress.org/rest-api/reference/settings/#schema"
+        variant="text"
+        arrow="right"
+        target="_blank"
+    >
+        <>Read more about the WordPress REST API settings endpoint</>
+    </Button>
+    </div>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/wp-json/nextwp/v1/options/{slug}">
+    ```ts
+    import { getOptionsPage } from '@nextwp/core'
+
+    const optionsPage = await getOptionsPage({ slug: 'my-options-page' })
+    ```
+    </CodeGroup>
+    ```ts {{ title: 'Return Type' }}
+    export interface <object> {
+      {...options page data}
+    }
+    ```
+
+  </Col>
+</Row>
 ---

@@ -79,7 +79,14 @@ export const Header = forwardRef<
       <div className="flex items-center gap-5">
         <nav className="hidden md:block">
           <ul role="list" className="flex items-center gap-8">
-            <TopLevelNavItem href="/">API</TopLevelNavItem>
+            <Link
+              href="https://www.npmjs.com/package/@nextwp/core"
+              target="_blank"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="https://img.shields.io/npm/v/@nextwp/core" alt="npm" />
+            </Link>
+            {/* <TopLevelNavItem href="/">API</TopLevelNavItem> */}
             {/* <TopLevelNavItem href="#">Documentation</TopLevelNavItem> */}
             {/* <TopLevelNavItem href="#">Support</TopLevelNavItem> */}
           </ul>
@@ -91,7 +98,7 @@ export const Header = forwardRef<
         </div>
         <div className="hidden min-[416px]:contents">
           <Button
-            href="https://github.com/CalebBarnes/nextwp/tree/main/packages/core"
+            href="https://github.com/CalebBarnes/nextwp"
             target="_blank"
             className="flex h-8 w-8 items-center justify-center"
           >

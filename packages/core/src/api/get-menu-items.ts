@@ -1,4 +1,16 @@
 import type { WpLink, Menu, WpMenuItem } from "../types";
+import { debug } from "../utils/debug-log";
+
+type MenuJsonResponse = {
+  id: number;
+  description: string;
+  name: string;
+  slug: string;
+  meta: any[];
+  locations: any[];
+  auto_add: boolean;
+  _links: any; // You can define a more specific type if needed
+}[];
 
 type MenuResponse = {
   id: number;
@@ -43,85 +55,62 @@ export async function getMenuItems({
    */
   slug: string;
 }): Promise<WpMenuItem[]> {
-  if (!process.env.WP_APPLICATION_PASSWORD) {
-    throw new Error(`'WP_APPLICATION_PASSWORD' environment variable is required for function 'getMenuItems'.
+  handleRequiredEnvs();
 
-Check your ${
-      process.env.NODE_ENV === "development"
-        ? "local .env file"
-        : "deployment's environment variables."
-    }.
-
-You can generate an application password in your WordPress admin under Users > Your Profile > Application Passwords. 
-Make sure the user has the required permissions to view menus.
-
-${
-  process.env.NEXT_PUBLIC_WP_URL
-    ? `See ${process.env.NEXT_PUBLIC_WP_URL}/wp-admin/profile.php#application-passwords-section`
-    : ""
-}`);
-  }
-
-  // get menu by slug
-  const menu = await fetch(
-    `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/menus?slug=${slug}`,
-    args
-  ).then(async (res) => {
-    try {
-      const json = (await res.json()) as {
-        id: number;
-        name: string;
-        slug: string;
-        items: number[];
-      }[];
-      return json[0];
-    } catch (err) {
-      throw new Error(`Error fetching menu with slug ${slug}: ${err.message}`);
-    }
-  });
-
-  if (!menu.id) {
-    // handle missing menu
-    const availableMenus = await fetch(
-      `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/menus`,
-      args
-    ).then(async (res) => {
-      try {
-        const json = (await res.json()) as {
-          id: number;
-          name: string;
-          slug: string;
-          items: number[];
-        }[];
-        return json.map((menu) => `"${menu.slug}"`);
-      } catch (err) {
-        throw new Error(`Error fetching menus`);
-      }
-    });
-
-    throw new Error(
-      `No menu found with slug "${slug}".\nAvailable menu slugs: ${availableMenus.join(
-        ", "
-      )}`
-    );
-  }
-
-  // get menu items by menu id
-  const req = await fetch(
-    `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/menu-items?menus=${menu.id}&acf_format=standard`,
-    args
-  );
-
-  let data;
   try {
-    data = (await req.json()) as MenuResponse;
-  } catch (err: any) {
-    throw new Error(
-      `Error fetching menu items for menu id ${menu.id}: ${err.message}`
+    const menusRes = await fetch(
+      `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/menus?slug=${slug}`,
+      args
     );
-  }
 
-  return structureMenuItems(data);
+    const menus = (await menusRes.json()) as MenuJsonResponse | [] | undefined;
+
+    if (!menus || menus.length === 0) {
+      const availableMenusReq = await fetch(
+        `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/menus`,
+        args
+      );
+
+      const availableMenus =
+        (await availableMenusReq.json()) as MenuJsonResponse;
+
+      const availableMenusString = availableMenus
+        .map((availableMenu) => `"\x1b[32m${availableMenu.slug}\x1b[33m"`)
+        .join(", ");
+
+      debug.warn(`No menus found with slug "\x1b[31m${slug}\x1b[33m".`);
+      if (availableMenus.length) {
+        debug.warn(`Available menu slugs: ${availableMenusString}\n`);
+      } else {
+        debug.error(
+          `No menus available, make sure you added a menu in WordPress!\n`
+        );
+      }
+
+      return [];
+    }
+
+    const menu = menus[0];
+
+    // get menu items by menu id
+    const req = await fetch(
+      `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/menu-items?menus=${menu.id}&acf_format=standard`,
+      args
+    );
+
+    let data;
+    try {
+      data = (await req.json()) as MenuResponse;
+    } catch (err: any) {
+      throw new Error(
+        `Error fetching menu items for menu id ${menu.id}: ${err.message}`
+      );
+    }
+
+    return structureMenuItems(data);
+  } catch (err: any) {
+    throw new Error(`Error fetching menu with slug ${slug}: ${err.message}`);
+  }
 }
 
 /**
@@ -155,4 +144,28 @@ function structureMenuItems(menuItems: MenuResponse): Menu {
   }
 
   return structuredItems;
+}
+
+function handleRequiredEnvs() {
+  if (!process.env.WP_APPLICATION_PASSWORD) {
+    throw new Error(`'WP_APPLICATION_PASSWORD' environment variable is required for function 'getMenuItems'.
+
+Check your ${
+      process.env.NODE_ENV === "development"
+        ? "local .env file"
+        : "deployment's environment variables."
+    }.
+
+You can generate an application password in your WordPress admin under Users > Your Profile > Application Passwords. 
+Make sure the user has the required permissions to view menus.
+
+${
+  process.env.NEXT_PUBLIC_WP_URL
+    ? `See ${process.env.NEXT_PUBLIC_WP_URL}/wp-admin/profile.php#application-passwords-section`
+    : ""
+}
+
+Read the docs for more info: https://www.nextwp.org/packages/nextwp/core/functions#get-menu-items
+`);
+  }
 }
