@@ -12,10 +12,9 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var version = "development" // default value indicating development version
+var version = "development"
 
 func main() {
-	// load .env.local first for cli development
 	godotenv.Load(".env.local")
 	if os.Getenv("NEXTWP_CLI_WORKING_DIR") != "" {
 		err := os.Chdir(os.Getenv("NEXTWP_CLI_WORKING_DIR"))

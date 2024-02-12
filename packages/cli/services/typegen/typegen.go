@@ -1,6 +1,7 @@
 package typegen
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -15,6 +16,7 @@ import (
 )
 
 const includeComments = true
+const debugSchema = false
 
 func GenerateTypes() error {
 	println("\x1b[32m[@nextwp/cli]\x1b[0m Generating types for " + os.Getenv("WP_URL"))
@@ -44,7 +46,7 @@ func GenerateTypes() error {
 	filesString := strings.ReplaceAll(strings.Join(generatedFiles, ", "), cwd+"/", "")
 	println("\x1b[32m[@nextwp/cli]\x1b[0m TypeScript types generated at " + filesString)
 
-	utils.FormatFileWithPrettier(generatedFiles)
+	utils.FormatFilesWithPrettier("./types")
 	return nil
 }
 
@@ -53,21 +55,28 @@ func generateTypeScriptFile(schema map[string]interface{}, typeName string) stri
 	fileContent += generateTsProperties(schema)
 	fileContent += "}\n"
 
-	fileName := strings.ReplaceAll(strings.ToLower("./types/"+typeName+".ts"), " ", "-")
+	dirName := "./types"
+	fileName := strings.ReplaceAll(strings.ToLower(dirName+"/"+typeName+".ts"), " ", "-")
+	err := os.MkdirAll(dirName, 0755)
+	if err != nil {
+		log.Fatalf("Failed to create directory: %v", err)
+	}
+
 	file, err := os.Create(fileName)
 	if err != nil {
 		log.Fatalf("Failed to create file: %v", err)
 	}
 	defer file.Close()
 
-	// jsonSchema, err := json.MarshalIndent(schema, "", "  ")
-	// if err != nil {
-	// 	log.Fatalf("Failed to marshal schema: %v", err)
-	// }
-
-	// fileContent += "\n"
-	// fileContent += "\n const schema = " + string(jsonSchema)
-	// fileContent += "\n"
+	if debugSchema {
+		jsonSchema, err := json.MarshalIndent(schema, "", "  ")
+		if err != nil {
+			log.Fatalf("Failed to marshal schema: %v", err)
+		}
+		fileContent += "\n"
+		fileContent += "\n const schema = " + string(jsonSchema)
+		fileContent += "\n"
+	}
 
 	_, err = file.WriteString(fileContent)
 	if err != nil {
@@ -84,7 +93,7 @@ func generateTypeScriptFile(schema map[string]interface{}, typeName string) stri
 func generateTsProperties(schema map[string]interface{}) string {
 	var propertiesContent string
 	var sortedKeys []string
-	// sort keys alphabetically
+	// sort keys alphabetically to prevent unnecessary git diffs
 	for propName := range schema {
 		sortedKeys = append(sortedKeys, propName)
 	}
@@ -101,7 +110,7 @@ func generateTsProperties(schema map[string]interface{}) string {
 		isAcf := false
 		propMap, ok := propDetails.(map[string]interface{})
 		if !ok {
-			continue // or handle error as appropriate
+			continue
 		}
 		if required, exists := propMap["required"]; exists {
 			isAcf = true
@@ -127,8 +136,8 @@ func generateTsProperties(schema map[string]interface{}) string {
 func getTsType(propName string, propDetails interface{}, isAcf bool) string {
 	propMap, ok := propDetails.(map[string]interface{})
 	if !ok {
-		return "@ ERROR @" // or handle error as appropriate
-		// return "any" // or handle error as appropriate
+		return "@ ERROR @"
+		// return "any"
 	}
 
 	// Handle 'enum' within 'items' (acf select fields)
@@ -225,7 +234,7 @@ func getTsType(propName string, propDetails interface{}, isAcf bool) string {
 			if strType, ok := elem.(string); ok {
 				types[i] = jsonTypeToTsType(strType)
 			} else {
-				types[i] = "@ NOT_IMPLEMENTED_TYPE @" // or handle non-string types as needed
+				types[i] = "@ NOT_IMPLEMENTED_TYPE @"
 			}
 		}
 		return strings.Join(types, " | ")
@@ -275,7 +284,7 @@ func basicTypeToTsType(jsonType string) string {
 	case "":
 		return "any // ! @ NOT_IMPLEMENTED_BASIC_TYPE EMPTY_STRING"
 	default:
-		println("basicTypeToTsType: " + jsonType)
+		log.Println("UNHANDLED switch case in basicTypeToTsType: " + jsonType)
 		return "any // ! @ NOT_IMPLEMENTED_BASIC_TYPE " + jsonType + " @"
 	}
 }
@@ -333,7 +342,6 @@ func generatePropertyComment(propName string, propType string, propDetails map[s
 }
 
 func getAcfFieldType(propName string, propDetails map[string]interface{}) string {
-
 	if description, ok := propDetails["description"]; ok {
 		if strings.Contains(description.(string), "A `Ymd` formatted date string.") {
 			return "date picker"
@@ -382,6 +390,7 @@ func getAcfFieldComment(acfFieldType string) string {
 		comment += ` * Enables the creation of a series of subfields which can be dynamically repeated and ordered.` + "\n"
 		comment += ` * @see https://www.advancedcustomfields.com/resources/repeater/` + "\n"
 	}
+
 	// if acfFieldType == "date picker" {
 	// 	comment += " *\n"
 	// 	comment += ` * Provides an interface for date selection, allowing a user-friendly way to pick a date.` + "\n"

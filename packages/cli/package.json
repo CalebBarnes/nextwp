@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "air",
     "build": "GOOS=darwin GOARCH=amd64 go build -o ./dist/cli && GOOS=linux GOARCH=amd64 go build -o ./dist/cli-linux && GOOS=windows GOARCH=amd64 go build -o ./dist/cli.exe",
+    "build:esbuild": "esbuild --bundle --minify --sourcemap --platform=node --target=es2015 --format=esm --outdir=dist/js js/format.js",
     "prepublish": "npm run build"
   },
   "keywords": [],
@@ -18,5 +19,8 @@
   ],
   "dependencies": {
     "prettier": "^3.0.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
   }
 }
