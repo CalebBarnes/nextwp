@@ -27,8 +27,7 @@ func GenerateTypes() error {
 		if key == "wp_template" || key == "wp_template_part" || key == "wp_block" || key == "wp_navigation" || key == "nav_menu_item" || key == "attachment" {
 			continue
 		}
-		titleCaser := cases.Title(language.English)
-		pascalCaseKey := titleCaser.String(key)
+		pascalCaseKey := cases.Title(language.English).String(key)
 
 		if mappedValue, ok := value.(map[string]interface{}); ok {
 			restBase := mappedValue["rest_base"].(string)
