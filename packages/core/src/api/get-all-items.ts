@@ -8,7 +8,13 @@ import { getPostTypes } from "./get-post-types";
  * const allItems = await getAllItems(["pages", "posts"]);
  * ```
  */
-export async function getAllItems(postTypes: string[]): Promise<Items> {
+export async function getAllItems(
+  postTypes: string[],
+  options?: {
+    wpUrl?: string;
+    applicationPassword?: string;
+  }
+): Promise<Items> {
   const actualPostTypes = await getPostTypes();
 
   // check if postTypes are valid
@@ -32,7 +38,10 @@ export async function getAllItems(postTypes: string[]): Promise<Items> {
 
   await Promise.all(
     postTypes.map(async (postType) => {
-      const items = await getItems({ restBase: postType });
+      const items = await getItems({
+        restBase: postType,
+        wpUrl: options?.wpUrl,
+      });
       if (items.length > 0) {
         result = result.concat(items);
       }

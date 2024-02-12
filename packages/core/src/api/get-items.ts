@@ -17,7 +17,13 @@ export type Items = {
   [x: string]: any;
 }[];
 
-export async function getItems({ restBase = "pages" }): Promise<Items> {
+export async function getItems({
+  restBase = "pages",
+  wpUrl,
+}: {
+  restBase?: string;
+  wpUrl?: string;
+}): Promise<Items> {
   let allData = [];
   let page = 1;
   let morePagesAvailable = true;
@@ -33,7 +39,9 @@ export async function getItems({ restBase = "pages" }): Promise<Items> {
     try {
       // eslint-disable-next-line no-await-in-loop -- Fetch pages sequentially
       const req = await fetch(
-        `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${restBase}?${queryString}&acf_format=standard&_embed`
+        `${
+          wpUrl || process.env.NEXT_PUBLIC_WP_URL
+        }/wp-json/wp/v2/${restBase}?${queryString}&acf_format=standard&_embed`
       );
 
       const totalPages = req.headers.get("X-WP-TotalPages");

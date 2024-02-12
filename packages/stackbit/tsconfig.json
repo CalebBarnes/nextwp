@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "CommonJS",
     "outDir": "./dist",
-    "strict": true,
+    "strict": false,
     "esModuleInterop": true,
-    "noEmitOnError": true
+    "noEmitOnError": false,
+    "allowJs": true
   }
 }

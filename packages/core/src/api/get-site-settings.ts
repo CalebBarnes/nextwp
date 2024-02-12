@@ -10,14 +10,26 @@ type WpSettingsResponse = {
  * Fetches site settings from WordPress.
  * @see https://www.nextwp.org/packages/nextwp/core/functions#get-site-settings
  */
-export async function getSiteSettings(): Promise<WpSettings> {
+export async function getSiteSettings({
+  wpUrl,
+  applicationPassword,
+}: {
+  wpUrl?: string;
+  applicationPassword?: string;
+}): Promise<WpSettings> {
   handleRequiredEnvs();
 
   try {
     const req = await fetch(
-      `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/settings?embed=true`,
+      `${
+        wpUrl || process.env.NEXT_PUBLIC_WP_URL
+      }/wp-json/wp/v2/settings?embed=true`,
       {
-        headers: getAuthHeaders(),
+        headers: applicationPassword
+          ? {
+              Authorization: `Basic ${btoa(applicationPassword)}`,
+            }
+          : getAuthHeaders(),
       }
     );
 
