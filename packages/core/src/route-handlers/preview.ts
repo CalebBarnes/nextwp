@@ -10,7 +10,7 @@ type PreviewOptions = {
 };
 
 /**
- * This preview route handler should be exported as `PUT` from `src/app/api/draft/[...preview]/route.ts`.
+ * This preview route handler should be exported as `GET` from `src/app/api/draft/[...preview]/route.ts`.
  *
  * Requires the NextWP Toolkit plugin to be
  * installed and activated in WordPress to enable previews.
@@ -20,7 +20,7 @@ type PreviewOptions = {
  * @example
  * ```ts
  * // src/app/api/draft/[...preview]/route.ts
- * export { preview as PUT } from '@nextwp/core'
+ * export { preview as GET } from '@nextwp/core'
  * ```
  */
 function preview(options: PreviewOptions): any;
