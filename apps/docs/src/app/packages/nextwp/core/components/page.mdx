@@ -1,3 +1,5 @@
+import { CodeGroup } from '@/components/Code'
+
 export const metadata = {
   title: 'Components',
   description: '',
@@ -11,8 +13,8 @@ A collection of components for use in NextWP projects. {{ className:"lead"}}
 
 A component used in a Next.js dynamic route to render Wordpress pages and posts.
 
-<CodeGroup>
-```javascript {{title:"src/app/[[...paths]]/page.tsx"}}
+<CodeGroup title={"src/app/[[...paths]]/page.tsx"}>
+```javascript
 import { WordpressTemplate, type RouteParams, type SearchParams } from "@nextwp/core";
 import templates from "@/templates";
 
@@ -71,7 +73,7 @@ const templates = {
     special: SpecialPostTemplate,
   },
   archive:{
-    post: PostArchiveTemplate,
+    posts: PostArchiveTemplate,
     // custom post type archive
     movie: MovieArchiveTemplate,
   },
@@ -231,9 +233,9 @@ The icon uploaded in WordPress will be used as the favicon and app icon.
 
 ### Usage
 
-<CodeGroup>
+<CodeGroup title={"src/app/icon.tsx"}>
 
-```tsx {{ title: 'src/app/icon.tsx' }}
+```tsx
 export { Icon as default } from '@nextwp/core'
 
 export const runtime = 'edge'
@@ -269,9 +271,9 @@ The icon uploaded in WordPress will be used as the favicon and app icon.
 
 ### Usage
 
-<CodeGroup>
+<CodeGroup title={"src/app/apple-icon.tsx"}>
 
-```tsx {{ title: 'src/app/apple-icon.tsx' }}
+```tsx
 export { AppleIcon as default } from '@nextwp/core'
 
 export const runtime = 'edge'
