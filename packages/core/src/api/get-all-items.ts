@@ -1,63 +1,96 @@
+import { getArchiveStaticParams } from "../next-app-functions/generate-static-params/get-archive-static-params";
+import { getTaxonomyStaticParams } from "../next-app-functions/generate-static-params/get-taxonomy-static-params";
 import type { Items } from "./get-items";
 import { getItems } from "./get-items";
 import { getPostTypes } from "./get-post-types";
-import { getTaxonomies } from "./get-taxonomies";
-import { getAllTermsForTaxonomy } from "./taxonomy/get-all-taxonomy-terms";
+
+/**
+ * Get all items from multiple post types
+ * @example
+ * ```
+ * const allItems = await getAllItems(["pages", "posts"]);
+ * ```
+ */
 
 export async function getAllItems(postTypes: string[]): Promise<Items> {
   const actualPostTypes = await getPostTypes();
-  const taxonomies = await getTaxonomies();
 
-  console.log(actualPostTypes);
-  // Validate postTypes
+  // check if postTypes are valid
   postTypes.forEach((postType) => {
-    if (
-      !Object.keys(actualPostTypes).some(
-        (key) => actualPostTypes[key].rest_base === postType
-      )
-    ) {
-      throw new Error(`Invalid post type "${postType}".`);
+    const isPostTypeValid = Object.keys(actualPostTypes).some(
+      (key) => actualPostTypes[key].rest_base === postType
+    );
+
+    if (!isPostTypeValid) {
+      const existingPostTypes = Object.keys(actualPostTypes)
+        .map((key) => actualPostTypes[key].rest_base)
+        .join(", ");
+
+      throw new Error(
+        `Invalid post type "${postType}". Available post types are: ${existingPostTypes}`
+      );
     }
   });
 
   let result: Items = [];
+  const archiveParams = await getArchiveStaticParams({ postTypes });
+  const archiveMetaData = {
+    modified: new Date().toISOString(), // Placeholder, consider fetching actual data
+    modified_gmt: new Date().toISOString(), // Same as above
+    // Add other necessary metadata fields here
+  };
 
-  // Fetch items for each postType in parallel
-  const postTypeItemsPromises = postTypes.map((postType) =>
-    getItems({ restBase: postType })
-  );
+  // Process archive parameters to fit the required structure
+  archiveParams.forEach((param) => {
+    const archiveSlug = param.paths.join("/"); // Handling nested URLs
+    const archiveItem = {
+      id: -1, // Placeholder `id` indicating this is not a typical post item
+      date: archiveMetaData.modified,
+      date_gmt: archiveMetaData.modified_gmt,
+      guid: { rendered: `${process.env.NEXT_PUBLIC_WP_URL}/${archiveSlug}` },
+      modified: archiveMetaData.modified,
+      modified_gmt: archiveMetaData.modified_gmt,
+      slug: archiveSlug,
+      status: "publish",
+      type: "archive",
+      link: `${process.env.NEXT_PUBLIC_WP_URL}/${archiveSlug}`,
+      title: { rendered: archiveSlug.split("/").pop() ?? "Archive" }, // Default title if split yields undefined
+      path: `/${archiveSlug}`,
+    };
+    result.push(archiveItem);
+  });
 
-  const postTypeItems = await Promise.all(postTypeItemsPromises);
+  const taxonomyParams = await getTaxonomyStaticParams({ postTypes });
 
-  result = result.concat(...postTypeItems);
+  // Process taxonomy parameters to fit the required structure
+  taxonomyParams.forEach((param) => {
+    const taxonomySlug = param.paths.join("/"); // Handling nested URLs
+    const taxonomyItem = {
+      id: -1, // Placeholder `id` indicating this is not a typical post item
+      date: archiveMetaData.modified,
+      date_gmt: archiveMetaData.modified_gmt,
+      guid: { rendered: `${process.env.NEXT_PUBLIC_WP_URL}/${taxonomySlug}` },
+      modified: archiveMetaData.modified,
+      modified_gmt: archiveMetaData.modified_gmt,
+      slug: taxonomySlug,
+      status: "publish",
+      type: "taxonomy",
+      link: `${process.env.NEXT_PUBLIC_WP_URL}/${taxonomySlug}`,
+      title: { rendered: taxonomySlug.split("/").pop() ?? "Taxonomy" }, // Default title if split yields undefined
+      path: `/${taxonomySlug}`,
+    };
+    result.push(taxonomyItem);
+  });
 
-  // Process each taxonomy to fetch terms if associated with the postTypes
-  const taxonomyTermsPromises = postTypes.flatMap((postType) =>
-    Object.values(taxonomies).map(async (taxonomy) => {
-      // Adjust postType for singular/plural check
-      const isSingularMatch = taxonomy.types.includes(postType);
-      const singularPostType = postType.endsWith("s")
-        ? postType.slice(0, -1)
-        : postType;
-      const isPluralMatch = taxonomy.types.includes(singularPostType);
+  await Promise.all(
+    postTypes.map(async (postType) => {
+      const items = await getItems({ restBase: postType });
 
-      if (isSingularMatch || isPluralMatch) {
-        const terms = await getAllTermsForTaxonomy(taxonomy.rest_base);
-        return terms.map((term) => ({
-          id: -1, // Placeholder value indicating it's not a real ID
-          slug: `${term.slug}`, // Use the term's slug
-          path: `/${taxonomy.rest_base}/${term.slug}/`,
-          link: `${process.env.NEXT_SITE_URL}/${taxonomy.rest_base}/${term.slug}/`, // Constructed link as a placeholder
-          modified_gmt: new Date().toISOString(),
-        }));
+      if (items.length > 0) {
+        result = result.concat(items);
       }
-      return [];
     })
   );
-
-  const taxonomyTermsResults = await Promise.all(taxonomyTermsPromises.flat());
-
-  result = result.concat(...taxonomyTermsResults);
 
   return result;
 }
