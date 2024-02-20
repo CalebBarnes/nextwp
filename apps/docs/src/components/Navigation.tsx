@@ -1,11 +1,9 @@
 'use client'
-
 import { useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 import { AnimatePresence, motion, useIsPresent } from 'framer-motion'
-
 import { useIsInsideMobileNavigation } from '@/components/MobileNavigation'
 import { useSectionStore } from '@/components/SectionProvider'
 import { Tag } from '@/components/Tag'
@@ -294,7 +292,7 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'Overview', href: '/packages' },
       { title: '@nextwp/core', href: '/packages/nextwp/core' },
-      { title: '@nextwp/addons', href: '/packages/nextwp/addons' },
+      // { title: '@nextwp/addons', href: '/packages/nextwp/addons' },
       // { title: '@nextwp/stackbit', href: '/packages/nextwp/stackbit' },
       {
         title: 'create-nextwp-app',
@@ -315,10 +313,10 @@ export const navigation: Array<NavGroup> = [
         title: 'NextWP Toolkit',
         href: '/packages/wordpress/nextwp-toolkit-plugin',
       },
-      {
-        title: 'ACF to Stackbit Fields',
-        href: '/packages/wordpress/acf-to-stackbit-fields',
-      },
+      // {
+      //   title: 'ACF to Stackbit Fields',
+      //   href: '/packages/wordpress/acf-to-stackbit-fields',
+      // },
     ],
   },
 
@@ -336,20 +334,6 @@ export const navigation: Array<NavGroup> = [
     ],
   },
 ]
-
-// todo: remove this and remove all of these page.mdx files when we no longer need the examples
-if (process.env.NODE_ENV === 'development') {
-  navigation.push({
-    title: 'Dev: Example API Docs',
-    links: [
-      { title: 'Contacts', href: '/contacts' },
-      { title: 'Conversations', href: '/conversations' },
-      { title: 'Messages', href: '/messages' },
-      { title: 'Groups', href: '/groups' },
-      { title: 'Attachments', href: '/attachments' },
-    ],
-  })
-}
 
 export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
   return (

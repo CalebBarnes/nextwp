@@ -1,4 +1,4 @@
-import logoNode from '@/images/logos/node.svg'
+// import logoNode from '@/images/logos/node.svg'
 import { Items } from '@/components/Libraries'
 
 const npmPackages = [
@@ -6,15 +6,15 @@ const npmPackages = [
     href: '/packages/nextwp/core',
     name: '@nextwp/core',
     description:
-      'A Next.js package that allows you to use WordPress as a headless CMS.',
+      'A library for Next.js for building with WordPress as Headless CMS.',
     svg: <NextLogo />,
   },
-  {
-    href: '/packages/nextwp/addons',
-    name: '@nextwp/addons',
-    description: 'Additional components and features for NextWP.',
-    svg: <NextLogo />,
-  },
+  // {
+  //   href: '/packages/nextwp/addons',
+  //   name: '@nextwp/addons',
+  //   description: 'Additional components and features for NextWP.',
+  //   svg: <NextLogo />,
+  // },
   // {
   //   href: '/packages/nextwp/stackbit',
   //   name: '@nextwp/stackbit',

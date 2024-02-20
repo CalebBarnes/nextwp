@@ -87,6 +87,7 @@ export function Items({
     logo?: string
     logoWidth?: number
     logoHeight?: number
+    logoPadding?: string
     svg?: React.ReactNode
   }[]
 }) {
@@ -112,6 +113,9 @@ export function Items({
               src={item.logo}
               alt=""
               className="h-12 w-12"
+              style={{
+                padding: item?.logoPadding || '',
+              }}
               unoptimized
               width={item.logoWidth}
               height={item.logoHeight}

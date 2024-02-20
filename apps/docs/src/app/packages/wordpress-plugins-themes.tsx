@@ -1,20 +1,22 @@
 import { Items } from '@/components/Libraries'
-import logoPhp from '@/images/logos/php.svg'
+import logoWordPress from '@/images/logos/wordpress.svg'
 
 const plugins = [
   {
     href: '/packages/wordpress/nextwp-headless-theme',
     name: 'NextWP Headless Theme',
     description:
-      'A WordPress theme with some good defaults that automatically installs the recommended headless plugins.',
-    logo: logoPhp,
+      'A WordPress theme that automatically installs recommended headless plugins like NextWP Toolkit, Yoast and ACF.',
+    logo: logoWordPress,
+    logoPadding: '5px',
   },
   {
     href: '/packages/wordpress/nextwp-toolkit-plugin',
     name: 'NextWP Toolkit',
     description:
       'A WordPress plugin that adds NextWP specific features to your WordPress site.',
-    logo: logoPhp,
+    logo: logoWordPress,
+    logoPadding: '5px',
   },
 ]
 
