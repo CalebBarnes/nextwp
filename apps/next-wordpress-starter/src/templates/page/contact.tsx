@@ -1,4 +1,4 @@
-export default function ContactPageTemplate(props) {
+export function ContactPageTemplate(props) {
   return (
     <div>
       <h1>Contact page template</h1>
