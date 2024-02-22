@@ -145,7 +145,7 @@ importers:
         version: 2.0.18(react@18.2.0)
       '@nextwp/core':
         specifier: 0.0.1
-        version: link:../../packages/core
+        version: 0.0.1(@babel/core@7.23.7)
       '@radix-ui/react-dropdown-menu':
         specifier: ^2.0.6
         version: 2.0.6(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
@@ -1213,6 +1213,24 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /@nextwp/core@0.0.1(@babel/core@7.23.7):
+    resolution: {integrity: sha512-LUPK1GnbWGgr0afufeIdampuK1aJpxyUVXBayaH9f9OTRSr04gOdMfZgF5jGgHRrVcW/vKaRpNLpn3J2MALEnA==}
+    dependencies:
+      '@types/node': 20.11.16
+      '@types/react': 18.2.33
+      '@types/react-dom': 18.2.14
+      chalk: 5.2.0
+      next: 14.0.3(@babel/core@7.23.7)(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      typescript: 5.3.3
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@opentelemetry/api'
+      - babel-plugin-macros
+      - sass
+    dev: false
 
   /@nextwp/core@0.0.1-beta.2(@babel/core@7.23.7):
     resolution: {integrity: sha512-QN3oKdriALrHHn/HdvEeqpgBs5d6hRMH5YMnTHsJnZ1K8k4/MetTQXjTESXyNKe7vBNxw1LpJ9qf9K14/Iuklw==}
