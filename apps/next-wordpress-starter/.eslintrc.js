@@ -14,7 +14,6 @@ module.exports = {
     "@vercel/style-guide/eslint/typescript",
     "@vercel/style-guide/eslint/react",
     "@vercel/style-guide/eslint/next",
-    // "eslint-config-turbo",
   ].map(require.resolve),
   parserOptions: {
     ecmaVersion: "latest",
@@ -32,7 +31,7 @@ module.exports = {
     },
   },
   ignorePatterns: ["node_modules/", "dist/"],
-  // add rules configurations here
+  // customize rules here
   rules: {
     "no-html-link-for-pages": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
@@ -53,19 +52,18 @@ module.exports = {
     "@typescript-eslint/no-unsafe-argument": "warn",
     "@typescript-eslint/no-floating-promises": "warn",
     "no-case-declarations": "warn",
-    // "turbo/no-undeclared-env-vars": "warn",
     "@typescript-eslint/no-unsafe-call": "warn",
     "@typescript-eslint/no-unnecessary-condition": "warn",
     "@typescript-eslint/no-unsafe-member-access": "warn",
     "@typescript-eslint/no-unsafe-return": "warn",
     "no-console": "warn",
     "@typescript-eslint/no-unsafe-assignment": "off",
-
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
     "import/no-named-as-default-member": "off",
     "import/no-default-export": "off",
     "import/no-extraneous-dependencies": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
     "import/order": [
       "warn",
       {
@@ -93,6 +91,5 @@ module.exports = {
         distinctGroup: false,
       },
     ],
-    "@typescript-eslint/explicit-function-return-type": "off",
   },
 };
