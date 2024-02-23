@@ -1,14 +1,11 @@
-// import { getItems } from "@nextwp/core/src/api/get-items";
+import { type TemplateProps } from "@nextwp/core";
 
-export default function MovieArchive(props) {
+export function MovieArchive(props: TemplateProps) {
   const { uri, data, archive } = props;
-  //   console.log({ data });
 
-  // const req = await fetch(
-  //   `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${archive?.rest_base}`
-  // );
-  // const movies = await req.json();
-  // console.log(movies.length);
+  if ("items" in data) {
+    console.log("items in data");
+  }
 
   return (
     <div>
@@ -17,7 +14,7 @@ export default function MovieArchive(props) {
         <code>{JSON.stringify({ uri }, null, 2)}</code>
       </pre>
 
-      <p>items length: {data.items.length}</p>
+      {data?.items ? <p>items length: {data?.items?.length}</p> : null}
 
       <pre>
         <code>{JSON.stringify({ page: data.page }, null, 2)}</code>

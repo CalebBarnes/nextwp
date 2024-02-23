@@ -12,7 +12,7 @@ interface PageData extends WpPage {
   };
 }
 
-export default function DefaultPageTemplate({ data }: DefaultTemplateProps) {
+export function DefaultPageTemplate({ data }: DefaultTemplateProps) {
   if (!data.acf?.modules) {
     return null;
   }

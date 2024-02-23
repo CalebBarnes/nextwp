@@ -1,4 +1,4 @@
-export default function DefaultPostTemplate({ uri, data }) {
+export function DefaultPostTemplate({ uri, data }) {
   return (
     <div>
       <h1>Default Post Template for {uri}</h1>
