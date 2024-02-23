@@ -38,11 +38,12 @@ export type {
   AcfImage,
   AcfFile,
   AcfVideo,
-  WpSettings,
   WpMenuItem,
   Menu,
   WpMediaItem,
 } from "./src/types";
+
+export type { WpSettings } from "./src/api/get-site-settings";
 
 export type { Templates, TemplateProps } from "./src/utils/get-template";
 

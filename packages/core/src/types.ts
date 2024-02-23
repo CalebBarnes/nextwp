@@ -181,56 +181,6 @@ export type { AcfFile as WpImage };
 export type { AcfFile as AcfImage };
 export type { AcfFile as AcfVideo };
 
-export interface WpSettings {
-  /**
-   * The site title
-   */
-  title?: string;
-  /**
-   * The site tagline
-   */
-  description?: string;
-  /**
-   * The URL of the WordPress site
-   */
-  url?: string;
-  /**
-   * The number of posts to show per page on archive pages
-   */
-  posts_per_page?: number;
-  /**
-   * The ID of the page for the front page
-   */
-  page_on_front?: number;
-  /**
-   * The ID of the page for the blog posts archive
-   */
-  page_for_posts?: number;
-  /**
-   * The ID of the WpMediaItem for the site logo added in the appearance customizer
-   */
-  site_logo?: number;
-  /**
-   * The ID of the WpMediaItem for the site icon added in the appearance customizer
-   */
-  site_icon?: number;
-  /**
-   * The email address for the admin user
-   */
-  email?: string;
-  timezone?: string;
-  date_format?: string;
-  time_format?: string;
-  start_of_week?: number;
-  language?: string;
-  use_smilies?: boolean;
-  default_category?: number;
-  default_post_format?: string;
-  show_on_front?: string;
-  default_ping_status?: string;
-  default_comment_status?: string;
-}
-
 export interface WpMenuItem {
   id?: number;
   title?: RenderedObject;

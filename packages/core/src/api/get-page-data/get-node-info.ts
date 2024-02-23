@@ -1,12 +1,8 @@
-import { debug } from "../../utils/debug-log";
 import type { PostType } from "../get-post-types";
 import { getPostTypes } from "../get-post-types";
 import { getSingleItem } from "../get-single-item";
 import { getSiteSettings } from "../get-site-settings";
-import type { Taxonomy } from "../get-taxonomies";
-import { getTaxonomies } from "../get-taxonomies";
-// import type { WpTerm } from "../taxonomy/get-term";
-// import { getTerm } from "../taxonomy/get-term";
+import { getTaxonomies, type Taxonomy } from "../get-taxonomies";
 
 /**
  * Get post type archive and rest base by uri
