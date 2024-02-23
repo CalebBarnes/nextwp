@@ -33,13 +33,6 @@
     "resolveJsonModule": true
   },
 
-  "include": [
-    "src",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/app/[[...paths]]/page.tsx"
-  ],
+  "include": ["src", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

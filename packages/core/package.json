@@ -2,6 +2,9 @@
   "name": "@nextwp/core",
   "version": "0.0.2",
   "author": "Caleb Barnes <caleb.d.barnes@gmail.com> (https://github.com/CalebBarnes)",
+  "scripts": {
+    "test": "jest --detectOpenHandles --forceExit"
+  },
   "dependencies": {
     "@types/node": "^20.11.16",
     "@types/react": "^18.2.33",
@@ -13,7 +16,12 @@
     "typescript": "^5.2.2"
   },
   "devDependencies": {
-    "@vercel/style-guide": "^5.1.0"
+    "@types/jest": "^29.5.12",
+    "@vercel/style-guide": "^5.1.0",
+    "dotenv": "^16.4.5",
+    "jest": "^29.7.0",
+    "msw": "^2.2.1",
+    "ts-jest": "^29.1.2"
   },
   "repository": {
     "type": "git",
