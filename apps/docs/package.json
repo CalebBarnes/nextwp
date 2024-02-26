@@ -20,7 +20,7 @@
     "@tailwindcss/typography": "^0.5.10",
     "@types/mdx": "^2.0.8",
     "@types/node": "20.11.16",
-    "@types/react": "18.2.18",
+    "@types/react": "18.2.58",
     "@types/react-dom": "18.2.7",
     "@types/react-highlight-words": "^0.16.7",
     "acorn": "^8.8.1",
