@@ -13,7 +13,7 @@ export async function getTaxonomyStaticParams({
 
   for (const postType of postTypes) {
     const itemKey = Object.keys(wpPostTypes).find(
-      (key) => wpPostTypes[key].rest_base === postType
+      (key) => wpPostTypes[key]?.rest_base === postType
     );
     if (!itemKey) {
       continue;
@@ -21,7 +21,7 @@ export async function getTaxonomyStaticParams({
 
     const matchingPostType = wpPostTypes[itemKey];
     const hasArchive =
-      matchingPostType.has_archive &&
+      matchingPostType?.has_archive &&
       typeof matchingPostType.has_archive === "string";
     const isPosts = matchingPostType.rest_base === "posts";
 
@@ -139,13 +139,13 @@ function getStaticParamsFromPaginationInfo({
 }: {
   paths: string[];
   paginationInfo: {
-    totalPages: number;
-    totalItems: number;
+    totalPages?: number;
+    totalItems?: number;
   };
 }) {
   const staticParams = [];
 
-  for (let i = 1; i <= paginationInfo.totalPages; i++) {
+  for (let i = 1; i <= Number(paginationInfo.totalPages); i++) {
     if (i === 1) {
       continue;
     }
