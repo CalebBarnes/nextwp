@@ -39,19 +39,19 @@ export async function getNodeInfo(uri: string): Promise<{
 
   for (const key in postTypes) {
     // get rest base for post type
-    if (uri.startsWith(postTypes[key].slug)) {
-      rest_base = postTypes[key].rest_base;
+    if (uri.startsWith(String(postTypes[key]?.slug))) {
+      rest_base = String(postTypes[key]?.rest_base);
     }
     // check if uri matches a post type archive uri
-    if (postTypes[key].has_archive === uri) {
+    if (postTypes[key]?.has_archive === uri) {
       archive = postTypes[key];
     }
   }
 
   for (const key in taxonomies) {
-    if (uri.startsWith(taxonomies[key].slug)) {
+    if (uri.startsWith(String(taxonomies[key]?.slug))) {
       taxonomy = taxonomies[key];
-      rest_base = taxonomy.rest_base;
+      rest_base = String(taxonomy?.rest_base);
       break;
     }
   }
