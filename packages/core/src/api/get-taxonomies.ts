@@ -24,7 +24,7 @@ export async function getTaxonomies(): Promise<{
   try {
     const data = await req.json();
     return data;
-  } catch (err) {
+  } catch (err: any) {
     throw new Error(`getTaxonomies: Error fetching taxonomies: ${err.message}`);
   }
 }
