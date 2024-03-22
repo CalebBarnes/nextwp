@@ -30,7 +30,7 @@ export async function getArchiveStaticParams({ postTypes }: GetArchivePagination
 
       const paginationInfo = await getArchivePaginationInfo({
         rest_base: "posts",
-        per_page: settings.posts_per_page,
+        per_page: Number(settings.posts_per_page),
       });
 
       const postArchiveStaticParams = getStaticParamsFromPaginationInfo({
@@ -46,17 +46,17 @@ export async function getArchiveStaticParams({ postTypes }: GetArchivePagination
 
   for (const postType of postTypes) {
     const itemKey = Object.keys(wpPostTypes).find(
-      (key) => wpPostTypes[key].rest_base === postType
+      (key) => wpPostTypes[key]?.rest_base === postType
     );
-    const matchingPostType = wpPostTypes[itemKey];
+    const matchingPostType = wpPostTypes[String(itemKey)];
 
     if (
-      matchingPostType.has_archive &&
+      matchingPostType?.has_archive &&
       typeof matchingPostType.has_archive === "string"
     ) {
       const paginationInfo = await getArchivePaginationInfo({
         rest_base: matchingPostType.rest_base,
-        per_page: settings.posts_per_page,
+        per_page: Number(settings.posts_per_page),
       });
 
       const postTypeArchiveStaticParams = getStaticParamsFromPaginationInfo({
@@ -150,7 +150,7 @@ async function getArchivePaginationInfo({
 function getStaticParamsFromPaginationInfo({ archiveSlug, paginationInfo }: GetStaticParamsFromPaginationInfo) {
   const staticParams = [];
 
-  for (let i = 1; i <= paginationInfo.totalPages; i++) {
+  for (let i = 1; i <= Number(paginationInfo?.totalPages); i++) {
     if (i === 1) {
       continue;
     }
