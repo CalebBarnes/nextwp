@@ -38,7 +38,7 @@ export async function revalidate(request: Request) {
         message: `Paths revalidated: ${correctPaths.join(", ")}`,
       })
     );
-  } catch (err) {
+  } catch (err: any) {
     return new Response(JSON.stringify({ message: err.message }));
   }
 }

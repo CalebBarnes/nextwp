@@ -18,7 +18,7 @@ export type Items = {
 }[];
 
 export async function getItems({ restBase = "pages" }): Promise<Items> {
-  let allData = [];
+  let allData: Items = [];
   let page = 1;
   let morePagesAvailable = true;
 

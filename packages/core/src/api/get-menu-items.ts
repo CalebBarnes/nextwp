@@ -94,7 +94,7 @@ export async function getMenuItems({
 
     // get menu items by menu id
     const req = await fetch(
-      `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/menu-items?menus=${menu.id}&acf_format=standard`,
+      `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/menu-items?menus=${menu?.id}&acf_format=standard`,
       args
     );
 
@@ -103,7 +103,7 @@ export async function getMenuItems({
       data = (await req.json()) as MenuResponse;
     } catch (err: any) {
       throw new Error(
-        `Error fetching menu items for menu id ${menu.id}: ${err.message}`
+        `Error fetching menu items for menu id ${menu?.id}: ${err.message}`
       );
     }
 

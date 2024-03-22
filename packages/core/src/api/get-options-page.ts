@@ -64,7 +64,7 @@ code: ${data.code}
 
 ${msg}`);
     }
-  } catch (err) {
+  } catch (err: any) {
     throw new Error(
       `Error getting options page with slug '${slug}': ${err.message}`
     );

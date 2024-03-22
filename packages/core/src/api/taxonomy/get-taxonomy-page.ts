@@ -90,7 +90,7 @@ export async function getTaxonomyPage({
       }
 
       const currentPageQueryString = new URLSearchParams(params).toString();
-      const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${postType.rest_base}?${currentPageQueryString}`;
+      const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${postType?.rest_base}?${currentPageQueryString}`;
 
       const termItemsRequest = await fetch(endpoint);
       try {

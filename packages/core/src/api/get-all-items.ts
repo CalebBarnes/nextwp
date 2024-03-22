@@ -14,12 +14,12 @@ export async function getAllItems(postTypes: string[]): Promise<Items> {
   // check if postTypes are valid
   postTypes.forEach((postType) => {
     const isPostTypeValid = Object.keys(actualPostTypes).some(
-      (key) => actualPostTypes[key].rest_base === postType
+      (key) => actualPostTypes[key]?.rest_base === postType
     );
 
     if (!isPostTypeValid) {
       const existingPostTypes = Object.keys(actualPostTypes)
-        .map((key) => actualPostTypes[key].rest_base)
+        .map((key) => actualPostTypes[key]?.rest_base)
         .join(", ");
 
       throw new Error(
