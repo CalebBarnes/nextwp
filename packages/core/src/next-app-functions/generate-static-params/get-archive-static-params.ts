@@ -1,7 +1,19 @@
 import { getPostTypes } from "../../api/get-post-types";
 import { getSiteSettings } from "../../api/get-site-settings";
 
-export async function getArchiveStaticParams({ postTypes }) {
+interface GetArchivePaginationInfo {
+  postTypes: string[]
+}
+
+interface GetStaticParamsFromPaginationInfo {
+  archiveSlug: string;
+  paginationInfo: {
+    totalPages: number | undefined;
+    totalItems: number | undefined;
+} | null
+}
+
+export async function getArchiveStaticParams({ postTypes }: GetArchivePaginationInfo) {
   const wpPostTypes = await getPostTypes();
   const settings = await getSiteSettings();
   const staticParams: { paths: string[] }[] = [];
@@ -135,7 +147,7 @@ async function getArchivePaginationInfo({
   }
 }
 
-function getStaticParamsFromPaginationInfo({ archiveSlug, paginationInfo }) {
+function getStaticParamsFromPaginationInfo({ archiveSlug, paginationInfo }: GetStaticParamsFromPaginationInfo) {
   const staticParams = [];
 
   for (let i = 1; i <= paginationInfo.totalPages; i++) {
