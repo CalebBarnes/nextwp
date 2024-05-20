@@ -10,7 +10,7 @@
     "stackbit-dev": "stackbit dev"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.18",
+    "@headlessui/react": "^2.0.3",
     "@heroicons/react": "^2.1.1",
     "@nextwp/core": "workspace:*",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
