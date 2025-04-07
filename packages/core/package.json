@@ -1,6 +1,6 @@
 {
   "name": "@nextwp/core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Caleb Barnes <caleb.d.barnes@gmail.com> (https://github.com/CalebBarnes)",
   "dependencies": {
     "@types/node": "^20.11.16",
