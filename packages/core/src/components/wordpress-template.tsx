@@ -34,7 +34,7 @@ export async function WordpressTemplate({
   supressWarnings?: boolean;
 }) {
   const uri = params?.paths?.join("/") || "/";
-  const preview = draftMode();
+  const { isEnabled } = await draftMode();
   const { data, archive, previewData, taxonomy, term } = await getPageData(uri);
 
   if (!data && !previewData && !archive && !taxonomy && !term) {
@@ -69,7 +69,7 @@ export async function WordpressTemplate({
       <PageTemplate
         archive={archive}
         data={mergedData}
-        isPreview={preview.isEnabled}
+        isPreview={isEnabled}
         params={params}
         searchParams={searchParams}
         taxonomy={taxonomy}
@@ -78,7 +78,7 @@ export async function WordpressTemplate({
         {...rest}
       />
 
-      {preview.isEnabled ? (
+      {isEnabled ? (
         <PreviewToolbar
           data={data}
           previewData={previewData}

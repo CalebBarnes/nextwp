@@ -33,9 +33,10 @@ export const getSingleItem = async ({
     _embed: "true", // includes embedded data in the response like (featured image, author, etc.)
   };
 
-  const preview = draftMode();
+  // const preview = draftMode();
+  const { isEnabled } = await draftMode();
   let headers;
-  if (preview.isEnabled) {
+  if (isEnabled) {
     headers = {
       Authorization: `Basic ${btoa(process.env.WP_APPLICATION_PASSWORD!)}`, // allows previewing private posts
     };
@@ -72,10 +73,11 @@ async function getNodeById({
   params: Record<string, string>;
   headers?: Record<string, string>;
 }) {
-  const preview = draftMode();
+  // const preview = draftMode();
+  const { isEnabled } = await draftMode();
   const queryString = new URLSearchParams({
     ...params,
-    status: preview.isEnabled ? "any" : "publish", // allow previewing of non published posts
+    status: isEnabled ? "any" : "publish", // allow previewing of non published posts
   }).toString();
 
   const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${rest_base}/${id}?${queryString}`;
@@ -86,7 +88,7 @@ async function getNodeById({
   try {
     const data = (await req.json()) as WpPage | { code?: string } | undefined;
     if (data && "id" in data) {
-      if (preview.isEnabled) {
+      if (isEnabled) {
         const previewData = await getPreviewData({
           id: data.id,
           rest_base,
@@ -116,12 +118,13 @@ async function getNodeByUri({
   params: Record<string, string>;
   headers?: Record<string, string>;
 }) {
-  const preview = draftMode();
+  // const preview = draftMode();
+  const { isEnabled } = await draftMode();
   const slug = uri.split("/").slice(-1).toString();
   const queryString = new URLSearchParams({
     ...params,
     slug,
-    status: preview.isEnabled ? "any" : "publish", // allow previewing of non published posts
+    status: isEnabled ? "any" : "publish", // allow previewing of non published posts
   }).toString();
 
   const endpoint = `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/wp/v2/${rest_base}?${queryString}`;
@@ -156,7 +159,7 @@ Error Message: ${err.message}`
     );
   }
 
-  if (preview.isEnabled && node) {
+  if (isEnabled && node) {
     const previewData = await getPreviewData({
       id: node.id,
       rest_base,
