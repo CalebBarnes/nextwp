@@ -33,7 +33,6 @@ export const getSingleItem = async ({
     _embed: "true", // includes embedded data in the response like (featured image, author, etc.)
   };
 
-  // const preview = draftMode();
   const { isEnabled } = await draftMode();
   let headers;
   if (isEnabled) {
