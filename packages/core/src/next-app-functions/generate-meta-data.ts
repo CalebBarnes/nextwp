@@ -45,9 +45,9 @@ export async function generateMetadata({
   const { data, archive } = await getPageData(uri);
 
   const yoast =
-    data?.yoast_head_json ||
-    data?.page?.yoast_head_json ||
-    archive?.yoast_head_json;
+    data?.yoast_head_json || // seo data for single items (pages,posts,custom post type singles)
+    data?.page?.yoast_head_json || //  seo data for the page with matching slug to the archive (example, there is a page with slug "all-movies", and a movie post type with archive slug of "all-movies")
+    archive?.yoast_head_json; // seo data for the archive, if there is not a page with the same slug as the archive slug it will fallback to this
 
   return {
     generator: "nextwp.org",
