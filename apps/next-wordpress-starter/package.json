@@ -2,6 +2,7 @@
   "name": "nextwp-starter",
   "version": "1.0.1",
   "private": true,
+  "packageManager": "pnpm@8.15.4",
   "scripts": {
     "dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 next dev",
     "build": "next build",
