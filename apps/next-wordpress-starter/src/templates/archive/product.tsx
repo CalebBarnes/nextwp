@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { swapWpUrl } from "@nextwp/core/src/utils/swap-wp-url";
+
 import { getFeaturedImage } from "@nextwp/core/src/utils/get-featured-image";
 import { stripWpUrl } from "@nextwp/core";
 import type { ArchivePage } from "@nextwp/core/src/api/get-page-data/get-archive-page";
@@ -67,7 +67,7 @@ export function ProductArchive(props: ArchivePage) {
                 </div>
                 <div className="group relative">
                   <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                    <Link href={swapWpUrl(item.link)}>
+                    <Link href={stripWpUrl(item.link)}>
                       <span className="absolute inset-0" />
                       {item?.title?.rendered}
                     </Link>
